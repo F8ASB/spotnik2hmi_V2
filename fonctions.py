@@ -68,9 +68,34 @@ lIn= alsaaudio.Mixer(control='Mic')
 from subprocess import Popen, PIPE
 
 def portcom(portserie,vitesse):
-	global port
-	port=serial.Serial(port='/dev/'+portserie,baudrate=vitesse,timeout=1, writeTimeout=1)
-	print "Port serie: " +portserie+" Vitesse: "+vitesse
+        global port
+        global screentype
+        global porthmi
+
+        port=serial.Serial(port='/dev/'+portserie,baudrate=vitesse,timeout=1, writeTimeout=1)
+        print "Port serie: " +portserie+" Vitesse: "+vitesse
+
+        port.write("\xff\xff\xff")
+        port.write('connect')
+        port.write("\xff\xff\xff")
+        r = port.read(128)
+        print r
+        if 'comok' in r:
+            status, unknown1, model, fwversion, mcucode, serialn, flashSize = r.strip("\xff\x00").split(',')
+            print 'Status: ' + status.split(' ')[0]
+            screentype=model.split(' ')[0][0:10]
+            print 'Model: ' + screentype
+
+def updatehmi():
+    global porthmi
+    print "MAJ ECRAN HMI"
+    print screentype
+    print porthmi
+    port.close()
+    os.system('sudo python /opt/spotnik/spotnik2hmi/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi/nextion/' +screentype+'.tft '+ '/dev/'+porthmi)
+
+
+
 def getspeednet():
 
 	servers = []
@@ -135,14 +160,14 @@ def GetAudioInfo(interfaceaudio):
 	levelOut=levelOut[:-1]
 	print str(levelOut)
 
-        mic ='hIn.val='+str(levelIn)+eof
+    mic ='hIn.val='+str(levelIn)+eof
 	mic2='nIn.val='+str(levelIn)+eof
 	port.write(mic)
 	port.write(mic2)
 	print mic
 	levelOutcor=round(int(levelOut)/1.20)
 	spk ='hOut.val='+(str(levelOutcor)[:-2])+eof
-        spk2 ='nOut.val='+(str(levelOutcor)[:-2])+eof
+    spk2 ='nOut.val='+(str(levelOutcor)[:-2])+eof
 	port.write(spk)
 	port.write(spk2)
 	print spk
@@ -297,7 +322,7 @@ def ecrire(champ,valeur):
         port.write(stringw)
         print stringw
 #Fonction appel de page
-def page(choixnompage):
+def gopage(choixnompage):
     #global choixnompage
     eof = "\xff\xff\xff"
     appelpage = 'page '+choixnompage +eof

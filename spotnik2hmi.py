@@ -95,9 +95,10 @@ print "Maj Call ..."
 #Affichage de la page Dashboard
 print "Page trafic ..."
 #ecrire("trafic.va0.val",str(hotspot))
-page("trafic")
+
 hotpspot()
 checkversion()
+gopage("trafic")
 
 while True:
 #Gestion Date et heure (en FR)	
@@ -279,7 +280,7 @@ while True:
         print"..."
     else:
         print "REBOOT"
-        page("boot")
+        gopage("boot")
         os.system('reboot')
 
 #OUIRESTART#
@@ -288,14 +289,14 @@ while True:
     else:
         print "REDEMARRAGE"
         dtmf("96#")
-        page ("trafic")
+        gopage ("trafic")
                 
 #OUIARRET#
     if s.find("ouiarret")== -1:
         print"..."
     else:
         print "ARRET DU SYSTEM"
-        page("boot")
+        gopage("boot")
         os.system('shutdown -h now')
 
 #OUIWIFI
@@ -359,7 +360,11 @@ while True:
         print"..."
     else:
         print "PAGE MAJ"
-
+#PAGE UPDATE
+    if s.find("checkversion")== -1:
+        print"..."
+    else:
+        os.system('sh /opt/spotnik/spotnik2hmi_v2/maj.sh')
 #MUTE AUDIO
     if s.find("MUTEON")== -1:
         print"..."
