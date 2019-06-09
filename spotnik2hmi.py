@@ -310,7 +310,7 @@ while True:
 #
                                                                               
 #MAJWIFI
-    if s.find("maj")== -1:
+    if s.find("majwifi")== -1:
         print"..."
     else:
         print "MAJ Wifi...."
@@ -361,10 +361,16 @@ while True:
     else:
         print "PAGE MAJ"
 #PAGE UPDATE
-    if s.find("checkversion")== -1:
+    if s.find("majpython")== -1:
         print"..."
     else:
         os.system('sh /opt/spotnik/spotnik2hmi_v2/maj.sh')
+    
+    if s.find("majnextion")== -1:
+        print"..."
+    else:
+        updatehmi()
+
 #MUTE AUDIO
     if s.find("MUTEON")== -1:
         print"..."
