@@ -214,46 +214,46 @@ while True:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
-       
+        salon_current="RRF"
 		
     if tn.find("fon") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")	
-        
+        salon_current="FON"
 	
     if tn.find("tec") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
-        
+        salon_current="TECHNIQUE"
     
     if tn.find("urg") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
-       
+        salon_current="INTERNATIONAL"
     
     if tn.find("stv") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")
-
+        salon_current="BAVARDAGE"
     if tn.find("bav") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
-        
+        salon_current="BAVARDAGE"
     if tn.find("cd2") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")
-
+        salon_current="LOCAL"
     if tn.find("loc") == -1:
         print"..."
     else:
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
-           
+        salon_current="LOCAL"
 
     if tn.find("default") == -1:
         print"..."
@@ -296,7 +296,6 @@ while True:
         print"..."
     else:
         print "ARRET DU SYSTEM"
-        gopage("boot")
         os.system('shutdown -h now')
 
 #OUIWIFI
@@ -441,7 +440,10 @@ while True:
         print"..."
     else:
         print "Page trafic"
-		
+        calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
+        print d.salon[tn[0:3].upper()]['call_current']
+        ecrire("trafic.Txt_call.txt",calltrafic_current)
+
 #DASHBOARD#
     if s.find("dashboard")== -1:
         print"..."
