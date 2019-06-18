@@ -160,7 +160,7 @@ while True:
 
         d.salon[key]['node_list'] = tmp.split(',')
 
-        for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL']:
+        for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON']:
             if n in d.salon[key]['node_list']:
                 d.salon[key]['node_list'].remove(n)
 

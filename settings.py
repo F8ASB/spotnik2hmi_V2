@@ -10,7 +10,7 @@ from fonctions import *
 eof = "\xff\xff\xff"
 today = datetime.now()
 
-versionDash = "2.20"
+versionDash = "2.21"
 wifistatut = 0
 dashlist = ""
 monitor = ""
@@ -90,6 +90,18 @@ salon = {
 
     'LOC': {
         'url': 'http://rrf.f5nlg.ovh/api/svxlink/local', 
+        'transmit': True, 
+        'call_current': '', 
+        'call_previous': '',
+        'node_list': '',
+        'node_list_old': '',
+        'node_list_in': '',
+        'node_count': '',
+        'node_list_out': ''
+    },
+
+    'FON': {
+        'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',

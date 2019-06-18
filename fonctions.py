@@ -87,12 +87,12 @@ def portcom(portserie,vitesse):
             print 'Model: ' + screentype
 
 def updatehmi():
-    global porthmi
+    
     print "MAJ ECRAN HMI"
     print screentype
-    print porthmi
+    
     port.close()
-    os.system('sudo python /opt/spotnik/spotnik2hmi/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi/nextion/' +screentype+'.tft '+ '/dev/'+porthmi)
+    os.system('sudo python /opt/spotnik/spotnik2hmi/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi/nextion/' +screentype+'.tft '+ '/dev/'+portserie)
 
 
 
@@ -160,14 +160,14 @@ def GetAudioInfo(interfaceaudio):
 	levelOut=levelOut[:-1]
 	print str(levelOut)
 
-    mic ='hIn.val='+str(levelIn)+eof
+        mic ='hIn.val='+str(levelIn)+eof
 	mic2='nIn.val='+str(levelIn)+eof
 	port.write(mic)
 	port.write(mic2)
 	print mic
 	levelOutcor=round(int(levelOut)/1.20)
 	spk ='hOut.val='+(str(levelOutcor)[:-2])+eof
-    spk2 ='nOut.val='+(str(levelOutcor)[:-2])+eof
+        spk2 ='nOut.val='+(str(levelOutcor)[:-2])+eof
 	port.write(spk)
 	port.write(spk2)
 	print spk
