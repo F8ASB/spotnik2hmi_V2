@@ -28,6 +28,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 portcom(sys.argv[1],sys.argv[2])
 
+salon_current=""
+dateold=""
+heureSold=""
 #routine ouverture fichier de config
 # config = ConfigParser.RawConfigParser()
 # config.read(svxconfig)
@@ -63,6 +66,7 @@ if 'sun8i' in tmp:
 else:
     board = 'Raspberry Pi'
     #peripheriques audio Out
+    hotpspot()
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]	
@@ -96,9 +100,10 @@ print "Maj Call ..."
 print "Page trafic ..."
 #ecrire("trafic.va0.val",str(hotspot))
 
-hotpspot()
+
 checkversion()
 gopage("trafic")
+os.system ("clear")
 
 while True:
 #Gestion Date et heure (en FR)	
@@ -107,8 +112,13 @@ while True:
     locale.setlocale(locale.LC_TIME,'')	
     date = (d.today.strftime('%d-%m-%Y'))
     heureS =(d.today.strftime('%H:%M'))
-    ecrire("Txt_date.txt",date)
-    ecrire("Txt_heure.txt",heureS)
+    if date != dateold:
+    	ecrire("Txt_date.txt",date)
+    	dateold=date
+    if heureS != heureSold:
+    	ecrire("Txt_heure.txt",heureS)
+    	heureSold= heureS
+
     requete("vis p9,0")
 
     #tmp = datetime.datetime.now()
@@ -140,6 +150,7 @@ while True:
                 d.salon[key]['call_previous'] = d.salon[key]['call_current']
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 ecrire("dashboard.Vtxt_dash.txt",str(dash))
+                print d.monitor
         else:            
             if d.salon[key]['transmit'] is True:
                 d.salon[key]['call_current'] = ''
@@ -147,7 +158,7 @@ while True:
                 d.monitor = timestamp + " " + key + " T OFF"
                 d.salon[key]['transmit'] = False
                 ecrire("monitor.Txt_statut.txt",d.monitor)
-                
+                print d.monitor
 
         # Nodes
 
@@ -196,9 +207,11 @@ while True:
                     if len(d.salon[key]['node_list_in']) > d.MOVE_MAX:
                         d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in'][:(d.MOVE_MAX)])) + '...'
                         ecrire("monitor.Txt_statut.txt",d.monitor)
+                        print d.monitor
                     else:
                         d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in']))
                         ecrire("monitor.Txt_statut.txt",d.monitor)
+                        print d.monitor
                 # Nodes count
                 d.salon[key]['node_count'] = len(d.salon[key]['node_list'])
                 d.monitor = timestamp + ' ' + key + ' = ' + str(d.salon[key]['node_count'])
@@ -210,59 +223,39 @@ while True:
     a = open("/etc/spotnik/network","r")
     tn = a.read()
 
-    if tn.find("rrf") == -1:
-        print"..."
-    else:
+    if tn.find("rrf") != -1 and salon_current!="RRF":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         salon_current="RRF"
 		
-    if tn.find("fon") == -1:
-        print"..."
-    else:
+    if tn.find("fon") != -1 and salon_current!="FON":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")	
         salon_current="FON"
 	
-    if tn.find("tec") == -1:
-        print"..."
-    else:
+    if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TECHNIQUE"
     
-    if tn.find("urg") == -1:
-        print"..."
-    else:
+    if tn.find("urg") != -1 and salon_current!="INTERNATIONNAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INTERNATIONAL"
     
-    if tn.find("stv") == -1:
-        print"..."
-    else:
+    if tn.find("stv") != -1 and salon_current!="BAVARDAGE":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")
         salon_current="BAVARDAGE"
-    if tn.find("bav") == -1:
-        print"..."
-    else:
+    if tn.find("bav") != -1 and salon_current!="BAVARDAGE":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
         salon_current="BAVARDAGE"
-    if tn.find("cd2") == -1:
-        print"..."
-    else:
+    if tn.find("cd2") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")
         salon_current="LOCAL"
-    if tn.find("loc") == -1:
-        print"..."
-    else:
+    if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOCAL"
 
-    if tn.find("default") == -1:
-        print"..."
-    else:
+    if tn.find("default") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
 
-    if tn.find("el") == -1:
-        print"..."
-    else:
+    if tn.find("el") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")    
 	
     a.close()
@@ -276,32 +269,25 @@ while True:
         print len(s)
 
 #OUIREBOOT#
-    if s.find("ouireboot")== -1:
-        print"..."
-    else:
+    if s.find("ouireboot")!= -1:
         print "REBOOT"
         gopage("boot")
         os.system('reboot')
 
 #OUIRESTART#
-    if s.find("ouiredem")== -1:
-        print"..."
-    else:
+    if s.find("ouiredem")!= -1:
         print "REDEMARRAGE"
         dtmf("96#")
         gopage ("trafic")
                 
 #OUIARRET#
-    if s.find("ouiarret")== -1:
-        print"..."
-    else:
+    if s.find("ouiarret")!= -1:
         print "ARRET DU SYSTEM"
         os.system('shutdown -h now')
 
 #OUIWIFI
-    if s.find("ouimajwifi")== -1:
-        print"..."
-    else:
+    if s.find("ouimajwifi")!= -1:
+
         wifi(newssid,newpass)
         page("wifi")
 #
@@ -309,9 +295,8 @@ while True:
 #
                                                                               
 #MAJWIFI
-    if s.find("majwifi")== -1:
-        print"..."
-    else:
+    if s.find("majwifi")!= -1:
+
         print "MAJ Wifi...."
         requete("get t0.txt")
         requete("get t1.txt")
@@ -326,12 +311,11 @@ while True:
                 print "New PASS: "+newpass
                 wifistatut = 0
                 break
-        page("confirm")
+        gopage("confirm")
         ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")		
 #MAJAUDIO
-    if s.find("MAJAUDIO")== -1:
-        print"..."
-    else:
+    if s.find("MAJAUDIO")!= -1:
+  
         print "MAJ AUDIO...."
         requete("get nOut.val")
 
@@ -355,40 +339,29 @@ while True:
                 break
 
 #PAGE MAJ 
-    if s.find("checkversion")== -1:
-        print"..."
-    else:
+    if s.find("checkversion")!= -1:
         print "PAGE MAJ"
 #PAGE UPDATE
-    if s.find("majpython")== -1:
-        print"..."
-    else:
+    if s.find("majpython")!= -1:
+
         os.system('sh /opt/spotnik/spotnik2hmi_v2/maj.sh')
     
-    if s.find("majnextion")== -1:
-        print"..."
-    else:
+    if s.find("majnextion")!= -1:
         updatehmi()
 
 #MUTE AUDIO
-    if s.find("MUTEON")== -1:
-        print"..."
-    else:
+    if s.find("MUTEON")!= -1:
         print "MUTE"
         os.system('amixer -c 0 set ' +audioOut+ ' mute')
 
 #UNMUTE AUDIO
-    if s.find("MUTEOFF")== -1:
-        print"..."
-    else:
+    if s.find("MUTEOFF")!= -1:
         print "UNMUTE"
         os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
         
        
 #INFO#	
-    if s.find("info")== -1:
-        print"..."
-    else:
+    if s.find("info")!= -1:
         print "Detection bouton info"
         cput = '"'+cputemp+' C'+'"' 
         ecrire("info.t14.txt",cputemp)
@@ -408,68 +381,53 @@ while True:
         ecrire("info.t12.txt",str(chargecpu)+" %")
         
 #BALISE#
-    if s.find("balise")== -1:
-        print"..."
-    else:
+    if s.find("balise")!= -1:
         print "Balise vocale"
         dtmf("*#")
 
 #METEO#
-    if s.find("meteo")== -1:
-        print"..."
-    else:
+    if s.find("meteo")!= -1:
         print "Detection bouton meteo"
         get_meteo()
 
 #SPEEDNET#
-    if s.find("starttestNet")== -1:
-        print"..."
-    else:
+    if s.find("starttestNet")!= -1:
         print "Detection page speedNet"
         getspeednet()
 
 #MIXER#
-    if s.find("mixer")== -1:
-        print"..."
-    else:
+    if s.find("mixer")!= -1:
         print "Detection page mixer"
         GetAudioInfo(audioOut)
 						
 #TRAFIC#		
-    if s.find("trafic")== -1:
-        print"..."
-    else:
+    if s.find("trafic")!= -1:
         print "Page trafic"
         calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
         print d.salon[tn[0:3].upper()]['call_current']
         ecrire("trafic.Txt_call.txt",calltrafic_current)
+        ecrire("Txt_date.txt",date)
+        ecrire("Txt_heure.txt",heureS)
 
 #DASHBOARD#
-    if s.find("dashboard")== -1:
-        print"..."
-    else:
+    if s.find("dashboard")!= -1:
         print "Page dashboard"
 		
 #MENU#
-    if s.find("menu")== -1:
-        print"..."
-    else:
+    if s.find("menu")!= -1:
         print "Page menu"
 #MONITOR#
-    if s.find("monitor")== -1:
-        print"..."
-    else:
+    if s.find("monitor")!= -1:
         print "Page monitor"
         ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
         ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
         ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
         ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
         ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
-        #ecrire("monitor.Txt_nbrfon.txt",d.salon[FON]['node_count'])
+        ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
+       
 #SCAN#
-    if s.find("scan")== -1:
-        print"..."
-    else:
+    if s.find("scan")!= -1:
         print "Page scan"
 
         ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
@@ -487,9 +445,8 @@ while True:
 
 
 #WIFI#
-    if s.find("wifi")== -1:
-        print"..."
-    else:
+    if s.find("wifi")!= -1:
+   
         print "Page wifi"
         Json="/etc/spotnik/config.json"
         if d.wifistatut == 0:
@@ -504,9 +461,8 @@ while True:
                 d.wifistatut = 1	
 
 #Numkaypad#
-    if s.find("keypadnum")== -1:
-        print"..."
-    else:
+    if s.find("keypadnum")!= -1:
+   
         print "Page clavier numerique"
 	            
 #Reglage DIM#
@@ -519,63 +475,52 @@ while True:
    #     print rdim
 		
 #QSYSALONRRF#
-    if s.find("qsyrrf")== -1:
-        print"..."
-    else:
+    if s.find("qsyrrf")!= -1:
+
         print "QSY SALON RRF"
         dtmf("96#")
 #QSYFON#
-    if s.find("qsyfon")== -1:
-        print"..."
-    else:
+    if s.find("qsyfon")!= -1:
+
         print "QSY FON"
         dtmf("97#")
 #QSYSALONTECH#
-    if s.find("qsytech")== -1:
-        print"..."
-    else:
+    if s.find("qsytech")!= -1:
         print "QSY SALON TECH"
         dtmf("98#")
 #QSYINTER#
-    if s.find("qsyinter")== -1:
-        print"..."
-    else:
+    if s.find("qsyinter")!= -1:
+    
         print "QSY INTER"
         dtmf("99#")
 #QSYSSTV#
-    if s.find("qsybav")== -1:
-        print"..."
-    else:
+    if s.find("qsybav")!= -1:
+
         print "QSY BAVARDAGE"
         dtmf("100#")
 #QSYCODECS#
-    if s.find("qsyloc")== -1:
-        print"..."
-    else:
+    if s.find("qsyloc")!= -1:
+  
         print "QSY LOCAL"
         dtmf("101#")
 #QSYSAT#
-    if s.find("qsysat")== -1:
-        print"..."
-    else:
+    if s.find("qsysat")!= -1:
+  
         print "QSY SAT"
         dtmf("102#")
 
 #DONNMETEO#
-    if s.find("dmeteo")== -1:
-        print"..."
-    else:
+    if s.find("dmeteo")!= -1:
+
         print "BULETIN METEO"
         dtmf("*51#")
 #PERROQUET
-    if s.find("qsyperroquet")== -1:
-        print"..."
-    else:
+    if s.find("qsyperroquet")!= -1:
+
         print "QSY PERROQUET"
         dtmf("95#")
 #DASHBOARD#
-    if s.find("listdash")== -1 and tn!="rrf" and tn!="fon":
-        print"..."
-    else:
+    if s.find("listdash")!= -1 and tn!="rrf" and tn!="fon":
+
         print "ENVOI DASH"
         ecrire("trafic.g0.txt",d.dashlist)

@@ -138,7 +138,7 @@ def resetHMI():
 def hotpspot():
         global port
         print "Hotpspot detected ..."
-        hotspot ='trafic.va0.val=1' +eof
+        hotspot ='trafic.vasound.val=1' +eof
         port.write(hotspot)
 	
 #Fonction reglage dim du nextion
@@ -320,7 +320,7 @@ def ecrire(champ,valeur):
         eof = "\xff\xff\xff"
         stringw = champ+'="'+valeur+'"' +eof
         port.write(stringw)
-        print stringw
+       # print stringw
 #Fonction appel de page
 def gopage(choixnompage):
     #global choixnompage
