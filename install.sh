@@ -24,7 +24,7 @@ install gcc python-dev python-setuptools
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 pip install requests
-
+pip install speedtest-cli
 
 echo "INSTALLATION scripts python"
 git clone https://github.com/F8ASB/spotnik2hmi_V2.git /opt/spotnik/spotnik2hmi_v2/
