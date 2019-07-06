@@ -20,11 +20,13 @@ fi
 if [ $INSTALL = "SPOTNIK2HMI" ]; then
  
 echo "INSTALLATION DEPENDANCE PYTHON"
-install gcc python-dev python-setuptools
+#install gcc python-dev python-setuptools
+apt-get install python-dev
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 pip install requests
 pip install speedtest-cli
+
 
 echo "INSTALLATION scripts python"
 git clone https://github.com/F8ASB/spotnik2hmi_V2.git /opt/spotnik/spotnik2hmi_v2/
