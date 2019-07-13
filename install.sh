@@ -22,10 +22,13 @@ if [ $INSTALL = "SPOTNIK2HMI" ]; then
 echo "INSTALLATION DEPENDANCE PYTHON"
 #install gcc python-dev python-setuptools
 apt-get install python-dev
+apt-get install python3-pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 pip install requests
 pip install speedtest-cli
+pip3 install pyalsaaudio
+pip install configparser
 
 
 echo "INSTALLATION scripts python"
