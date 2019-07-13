@@ -1,5 +1,6 @@
 #!/bin/bash
-whiptail --title "INFORMATION:" --msgbox "Ce script considere que vous partez d une image disponible par F5NLG du Spotnik 1.9 et fonctionnelle sur Raspberry ou Orange Pi. Il permet d ajouter un ecran Nextion a la distribution. Plus d informations sur http://blog.f8asb.com/spotnik2hmi.                                                                                         Team F0DEI/F5SWB/F8ASB" 15 60
+#VERSION 130719a
+whiptail --title "INFORMATION:" --msgbox "Ce script considere que vous partez d une image disponible par F5NLG du Spotnik 1.95 et fonctionnelle sur Raspberry ou Orange Pi. Il permet d ajouter un ecran Nextion a la distribution. Plus d informations sur http://blog.f8asb.com/spotnik2hmi.                                                                                         Team F0DEI/F5SWB/F8ASB" 15 60
 
 
 #!/bin/bash
@@ -21,9 +22,10 @@ if [ $INSTALL = "SPOTNIK2HMI" ]; then
  
 echo "INSTALLATION DEPENDANCE PYTHON"
 
-apt-get install python-dev
+#apt-get install python-dev
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
+pip install python-devtools
 pip3 install setuptools
 pip3 install requests
 pip3 install speedtest-cli
