@@ -24,11 +24,14 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 apt-get install python-dev
 apt-get install python3-pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
-pip install requests
-pip install speedtest-cli
+#python get-pip.py
+python3 get-pip.py
+pip3 install requests
+pip3 install speedtest-cli
 pip3 install pyalsaaudio
-pip install configparser
+pip3 install configparser
+pip3 install pyserial
+#python3 -m pip install pyserial
 
 
 echo "INSTALLATION scripts python"
