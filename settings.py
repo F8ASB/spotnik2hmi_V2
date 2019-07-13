@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from datetime import  *
 #pour lecture fichier de config
-import ConfigParser, os
+import configparser, os
 from fonctions import *
 
 #Variables
@@ -30,7 +30,7 @@ conf="/etc/NetworkManager/system-connections/SPOTNIK"
 svxlogfile = "/tmp/svxlink.log"   #SVXLink log file 
 
 #routine ouverture fichier de config
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read(svxconfig)
 
 #recuperation indicatif et frequence    
