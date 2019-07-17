@@ -13,7 +13,7 @@ INSTALL=$(whiptail --title "Choisir votre installation" --radiolist \
  
 exitstatus=$?
 
-chemin="/opt/spotnik/spotnik2hmi_v2/"
+pathinstall="/opt/spotnik/spotnik2hmi_v2/"
 
 if [ $exitstatus = 0 ]; then
     echo "Installation de :" $INSTALL
@@ -40,12 +40,12 @@ pip3 install pyserial
 
 
 echo "INSTALLATION scripts python"
-git clone https://github.com/F8ASB/spotnik2hmi_V2.git $chemin
+git clone https://github.com/F8ASB/spotnik2hmi_V2.git $pathinstall
 
-chmod +x $chemin/spotnik2hmi.py
+chmod +x $pathinstall/spotnik2hmi.py
 
 echo "INSTALLATION UTILITAIRE METAR"
-git clone https://github.com/python-metar/python-metar.git $chemin/python-metar/
+git clone https://github.com/python-metar/python-metar.git $pathinstall/python-metar/
 
 
 PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
@@ -57,7 +57,7 @@ PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
 
-sed -i '/make start/a \python $chemin/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
+sed -i '/make start/a \python $pathinstall/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
 
 sed -i '/make start/a \sleep 10' /etc/rc.local
 else
@@ -88,7 +88,7 @@ ECRAN=$(whiptail --title "Choix type d'ecran NEXTION" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
     echo "Type d'écran :" $ECRAN
-python $chemin/nextion/nextion.py $chemin'/nextion/'$ECRAN '/dev/'$PORT
+python $pathinstall/nextion/nextion.py $pathinstall'/nextion/'$ECRAN '/dev/'$PORT
 
 else
     echo "Vous avez annule"
