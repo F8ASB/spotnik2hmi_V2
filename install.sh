@@ -1,6 +1,6 @@
 #!/bin/bash
 #VERSION 130719a
-PATH="/opt/spotnik/spotnik2hmi_v2/"
+
 
 whiptail --title "INFORMATION:" --msgbox "Ce script considere que vous partez d une image disponible par F5NLG du Spotnik 1.95 et fonctionnelle sur Raspberry ou Orange Pi. Il permet d ajouter un ecran Nextion a la distribution. Plus d informations sur http://blog.f8asb.com/spotnik2hmi.                                                                                         Team F0DEI/F5SWB/F8ASB" 15 60
 
@@ -12,6 +12,8 @@ INSTALL=$(whiptail --title "Choisir votre installation" --radiolist \
 "NEXTION" "Programmation ecran Nextion " OFF 3>&1 1>&2 2>&3)
  
 exitstatus=$?
+
+chemin="/opt/spotnik/spotnik2hmi_v2/"
 
 if [ $exitstatus = 0 ]; then
     echo "Installation de :" $INSTALL
@@ -38,12 +40,12 @@ pip3 install pyserial
 
 
 echo "INSTALLATION scripts python"
-git clone https://github.com/F8ASB/spotnik2hmi_V2.git $PATH
+git clone https://github.com/F8ASB/spotnik2hmi_V2.git $chemin
 
-chmod +x /opt/spotnik/spotnik2hmi_v2/spotnik2hmi.py
+chmod +x $chemin/spotnik2hmi.py
 
 echo "INSTALLATION UTILITAIRE METAR"
-git clone https://github.com/python-metar/python-metar.git $PATH/python-metar/
+git clone https://github.com/python-metar/python-metar.git $chemin/python-metar/
 
 
 PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
@@ -55,7 +57,7 @@ PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
 
-sed -i '/make start/a \python $PATH/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
+sed -i '/make start/a \python $chemin/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
 
 sed -i '/make start/a \sleep 10' /etc/rc.local
 else
@@ -86,7 +88,7 @@ ECRAN=$(whiptail --title "Choix type d'ecran NEXTION" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
     echo "Type d'écran :" $ECRAN
-python /opt/spotnik/spotnik2hmi/nextion/nextion.py $PATH'/nextion/'$ECRAN '/dev/'$PORT
+python $chemin/nextion/nextion.py $chemin'/nextion/'$ECRAN '/dev/'$PORT
 
 else
     echo "Vous avez annule"
