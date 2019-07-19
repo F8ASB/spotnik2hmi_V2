@@ -257,8 +257,8 @@ while True:
     if tn.find("default") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
 
-    if tn.find("el") != -1:
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")    
+    if tn.find("sat") != -1:
+        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")          
 	
     a.close()
 
@@ -406,11 +406,13 @@ while True:
 #TRAFIC#		
     if s.find("trafic")!= -1:
         print("Page trafic")
-        calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
-        print(d.salon[tn[0:3].upper()]['call_current'])
-        ecrire("trafic.Txt_call.txt",calltrafic_current)
-        ecrire("Txt_date.txt",date)
-        ecrire("Txt_heure.txt",heureS)
+
+        if tn.find("default") != -1 or tn.find("sat") != -1:
+            calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+            ecrire("Txt_date.txt",date)
+            ecrire("Txt_heure.txt",heureS)
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
