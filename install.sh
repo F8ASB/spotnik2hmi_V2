@@ -27,15 +27,15 @@ if [ $INSTALL = "SPOTNIK2HMI" ]; then
 echo "INSTALLATION DEPENDANCE PYTHON"
 
 #apt-get install python-dev
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3 get-pip.py
-pip3 install python-devtools
-pip3 install setuptools
-pip3 install requests
-pip3 install speedtest-cli
-pip3 install pyalsaaudio
-pip3 install configparser
-pip3 install pyserial
+#curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+#python3 get-pip.py
+#pip3 install python-devtools
+#pip3 install setuptools
+#pip3 install requests
+#pip3 install speedtest-cli
+#pip3 install pyalsaaudio
+#pip3 install configparser
+#pip3 install pyserial
 #python3 -m pip install pyserial
 
 
