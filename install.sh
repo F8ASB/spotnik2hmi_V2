@@ -26,18 +26,24 @@ if [ $INSTALL = "SPOTNIK2HMI" ]; then
  
 echo "INSTALLATION DEPENDANCE PYTHON"
 
-#apt-get install python-dev
-#curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-#python3 get-pip.py
-#pip3 install python-devtools
-#pip3 install setuptools
-#pip3 install requests
-#pip3 install speedtest-cli
-#pip3 install pyalsaaudio
-#pip3 install configparser
-#pip3 install pyserial
-#python3 -m pip install pyserial
+#Dependances necessaire deja presentes dans l'image Spotnik
 
+# Sur image Orange Pi
+
+# apt-get install python3-serial
+# apt install python3-pip
+# pip3 install speedtest-cli
+# apt-get install libpython3-dev
+# apt-get install libasound2-dev
+# pip3 install pyalsaaudio
+
+# Sur image Raspberry (Buster)
+
+# apt-get update
+# apt-get install python3-serial
+# apt install python3-pip
+# pip3 install speedtest-cli
+# pip3 install pyalsaaudio
 
 echo "INSTALLATION scripts python"
 git clone https://github.com/F8ASB/spotnik2hmi_V2.git $pathinstall
@@ -57,7 +63,7 @@ PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
 
-sed -i '/make start/a \python $pathinstall/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
+sed -i '/make start/a \python3 $pathinstall'/spotnik2hmi.py' '$PORT' 9600' /etc/rc.local
 
 sed -i '/make start/a \sleep 10' /etc/rc.local
 else
@@ -88,7 +94,7 @@ ECRAN=$(whiptail --title "Choix type d'ecran NEXTION" --radiolist \
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
     echo "Type d'écran :" $ECRAN
-python $pathinstall/nextion/nextion.py $pathinstall'/nextion/'$ECRAN '/dev/'$PORT
+python $pathinstall'/nextion/nextion.py $pathinstall'/nextion/'$ECRAN '/dev/'$PORT
 
 else
     echo "Vous avez annule"
