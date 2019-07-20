@@ -70,12 +70,13 @@ else:
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]	
+    print("Peripherique audio Out: "+audioOut)
 print(board)
 
 #Envoi des infos 
   
 logo(d.versionDash)
-print("Peripherique audio Out: "+audioOut)
+
 print("Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C") 
 print("Station: "+d.callsign)
 print("Frequence: "+d.freq+" Mhz")
@@ -411,8 +412,8 @@ while True:
             calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
-            ecrire("Txt_date.txt",date)
-            ecrire("Txt_heure.txt",heureS)
+    ecrire("Txt_date.txt",date)
+    ecrire("Txt_heure.txt",heureS)
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
