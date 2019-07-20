@@ -101,9 +101,6 @@ else
 fi
 fi
 
-
-echo ""
-echo "INSTALL TERMINEE AVEC SUCCES"
 echo ""
 echo " ENJOY ;) TEAM:F0DEI,F5SWB,F8ASB"
 echo ""
