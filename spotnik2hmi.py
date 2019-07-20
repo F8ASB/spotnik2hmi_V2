@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #Parametrage port serie
 import settings as d
@@ -10,7 +10,7 @@ import time
 from time import time,sleep
 import requests
 #pour lecture fichier de config
-import ConfigParser, os
+import configparser, os
 #pour adresse ip
 import socket
 #pour CPU
@@ -24,7 +24,7 @@ import os
 import ssl
 
 
-ssl._create_default_https_context = ssl._create_unverified_context
+#ssl._create_default_https_context = ssl._create_unverified_context
 
 portcom(sys.argv[1],sys.argv[2])
 
@@ -66,20 +66,21 @@ if 'sun8i' in tmp:
 else:
     board = 'Raspberry Pi'
     #peripheriques audio Out
-    hotpspot()
+    Call_spot()
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]	
-print board
+    print("Peripherique audio Out: "+audioOut)
+print(board)
 
 #Envoi des infos 
   
 logo(d.versionDash)
-print "Peripherique audio Out: "+audioOut
-print "Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C" 
-print "Station: "+d.callsign
-print "Frequence: "+d.freq+" Mhz"
-print "Spotnik: Version:"+d.version
+
+print("Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C") 
+print("Station: "+d.callsign)
+print("Frequence: "+d.freq+" Mhz")
+print("Spotnik: Version:"+d.version)
 
 #Reset ecran Nextion
 
@@ -87,26 +88,28 @@ resetHMI()
 
 sleep(1);
 
-ecrire("boot.va0.txt",str(d.callsign))
+ecrire("boot.va0.txt",d.callsign)
 ecrire("boot.vascript.txt",d.versionDash)
 ecrire("boot.vaverspotnik",d.version)
+
+#Reglage niveau audio visible si Raspberry
+if board ='Raspberry Pi'
+    ecrireval("trafic.vasound.val","1")
 
 sleep(4);
 
 #envoi indicatif
-print "Maj Call ..."
-
-#Affichage de la page Dashboard
-print "Page trafic ..."
-#ecrire("trafic.va0.val",str(hotspot))
-
+print("Maj Call ...")
 
 checkversion()
+
+print("Page trafic ...")
 gopage("trafic")
+
 os.system ("clear")
 
 while True:
-#Gestion Date et heure (en FR)	
+    #Gestion Date et heure (en FR)
     d.dashlist = ""
     d.today = datetime.now()
     locale.setlocale(locale.LC_TIME,'')	
@@ -128,11 +131,11 @@ while True:
         
         try:
             r = requests.get(d.salon[key]['url'], verify=False, timeout=10)
-            page = r.content
+            page = r.text
         except requests.exceptions.ConnectionError as errc:
-            print ('Error Connecting:', errc)
+            print(('Error Connecting:', errc))
         except requests.exceptions.Timeout as errt:
-            print ('Timeout Error:', errt)    
+            print(('Timeout Error:', errt))    
         # Transmitter
 
         search_start = page.find('TXmit":"')            # Search this pattern
@@ -150,7 +153,7 @@ while True:
                 d.salon[key]['call_previous'] = d.salon[key]['call_current']
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 ecrire("dashboard.Vtxt_dash.txt",str(dash))
-                print d.monitor
+                print(d.monitor)
         else:            
             if d.salon[key]['transmit'] is True:
                 d.salon[key]['call_current'] = ''
@@ -158,7 +161,7 @@ while True:
                 d.monitor = timestamp + " " + key + " T OFF"
                 d.salon[key]['transmit'] = False
                 ecrire("monitor.Txt_statut.txt",d.monitor)
-                print d.monitor
+                print(d.monitor)
 
         # Nodes
 
@@ -207,16 +210,16 @@ while True:
                     if len(d.salon[key]['node_list_in']) > d.MOVE_MAX:
                         d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in'][:(d.MOVE_MAX)])) + '...'
                         ecrire("monitor.Txt_statut.txt",d.monitor)
-                        print d.monitor
+                        print(d.monitor)
                     else:
                         d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in']))
                         ecrire("monitor.Txt_statut.txt",d.monitor)
-                        print d.monitor
+                        print(d.monitor)
                 # Nodes count
                 d.salon[key]['node_count'] = len(d.salon[key]['node_list'])
                 d.monitor = timestamp + ' ' + key + ' = ' + str(d.salon[key]['node_count'])
                 d.salon[key]['node_list_old'] = d.salon[key]['node_list']
-                print d.monitor
+                print(d.monitor)
                 ecrire("monitor.Txt_statut.txt",d.monitor)
 
     #detection connexion salon
@@ -255,34 +258,34 @@ while True:
     if tn.find("default") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
 
-    if tn.find("el") != -1:
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")    
+    if tn.find("sat") != -1:
+        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")          
 	
     a.close()
 
 
 #Gestion des commandes serie reception du Nextion
     s = hmiReadline()
-
-    if len(s)<59 and len(s)>0:
-        print s
-        print len(s)
+    #enlever les # pour voir trames recus et longueur 
+    #if len(s)<59 and len(s)>0:
+        #print(s)
+        #print(len(s))
 
 #OUIREBOOT#
     if s.find("ouireboot")!= -1:
-        print "REBOOT"
+        print("REBOOT")
         gopage("boot")
         os.system('reboot')
 
 #OUIRESTART#
     if s.find("ouiredem")!= -1:
-        print "REDEMARRAGE"
+        print("REDEMARRAGE")
         dtmf("96#")
         gopage ("trafic")
                 
 #OUIARRET#
     if s.find("ouiarret")!= -1:
-        print "ARRET DU SYSTEM"
+        print("ARRET DU SYSTEM")
         os.system('shutdown -h now')
 
 #OUIWIFI
@@ -297,7 +300,7 @@ while True:
 #MAJWIFI
     if s.find("majwifi")!= -1:
 
-        print "MAJ Wifi...."
+        print("MAJ Wifi....")
         requete("get t0.txt")
         requete("get t1.txt")
 
@@ -307,8 +310,8 @@ while True:
                 test= s.split("p")
                 newpass= test[1][:-3]
                 newssid= test[2][:-3]
-                print "New SSID: "+newssid
-                print "New PASS: "+newpass
+                print("New SSID: "+newssid)
+                print("New PASS: "+newpass)
                 wifistatut = 0
                 break
         gopage("confirm")
@@ -316,31 +319,32 @@ while True:
 #MAJAUDIO
     if s.find("MAJAUDIO")!= -1:
   
-        print "MAJ AUDIO...."
+        print("MAJ AUDIO....")
         requete("get nOut.val")
 
         while 1:
             s = hmiReadline()
             if len(s)<71:
-		
-		print "Niveau audio out: "+ str(ord(s[1]))	
-	        audiooutinfo=str(ord(s[1]))
-            break
+                print("Niveau audio out: "+ str(ord(s[1])))	
+                audiooutinfo=str(ord(s[1]))
+                break
 
-	requete("get nIn.val")
+        requete("get nIn.val")
 
         while 1:
             s = hmiReadline()
             if len(s)<71:
                 
-                print "Niveau audio in: "+ str(ord(s[1]))
+                print("Niveau audio in: "+ str(ord(s[1])))
                 audioininfo=str(ord(s[1]))
                 setAudio(audioOut,audiooutinfo,audioininfo)             
                 break
 
 #PAGE MAJ 
     if s.find("checkversion")!= -1:
-        print "PAGE MAJ"
+        print("PAGE MAJ")
+        checkversion()
+
 #PAGE UPDATE
     if s.find("majpython")!= -1:
 
@@ -351,74 +355,76 @@ while True:
 
 #MUTE AUDIO
     if s.find("MUTEON")!= -1:
-        print "MUTE"
+        print("MUTE")
         os.system('amixer -c 0 set ' +audioOut+ ' mute')
 
 #UNMUTE AUDIO
     if s.find("MUTEOFF")!= -1:
-        print "UNMUTE"
+        print("UNMUTE")
         os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
         
        
 #INFO#	
     if s.find("info")!= -1:
-        print "Detection bouton info"
+        print("Detection bouton info")
         cput = '"'+cputemp+' C'+'"' 
         ecrire("info.t14.txt",cputemp)
-        print "Station: "+d.callsign
+        print("Station: "+d.callsign)
         Freq = str(d.freq)+ ' Mhz'
-        print "Frequence: "+d.freq
+        print("Frequence: "+d.freq)
         ecrire("info.t15.txt",Freq)
-        print "Spotnik: "+d.version
+        print("Spotnik: "+d.version)
         ecrire("info.t10.txt",d.version)
-        print "Script Version: "+d.versionDash
+        print("Script Version: "+d.versionDash)
         ecrire("info.t16.txt",d.versionDash)
-        print "Occupation disk: "+(occupdisk)
+        print("Occupation disk: "+(occupdisk))
         ecrire("info.t13.txt",occupdisk)
-        print "IP: "+ip
+        print("IP: "+ip)
         ecrire("info.t0.txt",ip)
-        print "occupation systeme: "+str(chargecpu)
+        print("occupation systeme: "+str(chargecpu))
         ecrire("info.t12.txt",str(chargecpu)+" %")
         
 #BALISE#
     if s.find("balise")!= -1:
-        print "Balise vocale"
+        print("Balise vocale")
         dtmf("*#")
 
 #METEO#
     if s.find("meteo")!= -1:
-        print "Detection bouton meteo"
+        print("Detection bouton meteo")
         get_meteo()
 
 #SPEEDNET#
     if s.find("starttestNet")!= -1:
-        print "Detection page speedNet"
+        print("Detection page speedNet")
         getspeednet()
 
 #MIXER#
     if s.find("mixer")!= -1:
-        print "Detection page mixer"
+        print("Detection page mixer")
         GetAudioInfo(audioOut)
 						
 #TRAFIC#		
     if s.find("trafic")!= -1:
-        print "Page trafic"
-        calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
-        print d.salon[tn[0:3].upper()]['call_current']
-        ecrire("trafic.Txt_call.txt",calltrafic_current)
-        ecrire("Txt_date.txt",date)
-        ecrire("Txt_heure.txt",heureS)
+        print("Page trafic")
+
+        if tn.find("default") != -1 or tn.find("sat") != -1:
+            calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+    ecrire("Txt_date.txt",date)
+    ecrire("Txt_heure.txt",heureS)
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
-        print "Page dashboard"
+        print("Page dashboard")
 		
 #MENU#
     if s.find("menu")!= -1:
-        print "Page menu"
+        print("Page menu")
 #MONITOR#
     if s.find("monitor")!= -1:
-        print "Page monitor"
+        print("Page monitor")
         ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
         ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
         ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
@@ -428,7 +434,7 @@ while True:
        
 #SCAN#
     if s.find("scan")!= -1:
-        print "Page scan"
+        print("Page scan")
 
         ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
         ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
@@ -447,15 +453,15 @@ while True:
 #WIFI#
     if s.find("wifi")!= -1:
    
-        print "Page wifi"
+        print("Page wifi")
         Json="/etc/spotnik/config.json"
         if d.wifistatut == 0:
             with open(Json, 'r') as a:
                 infojson = json.load(a)
                 wifi_ssid = infojson['wifi_ssid']
                 wifi_pass = infojson['wpa_key']
-                print "Envoi SSID actuel sur Nextion: "+wifi_ssid
-                print "Envoi PASS actuel sur Nextion: "+wifi_pass
+                print("Envoi SSID actuel sur Nextion: "+wifi_ssid)
+                print("Envoi PASS actuel sur Nextion: "+wifi_pass)
                 ecrire("wifi.t1.txt",str(wifi_ssid))
                 ecrire("wifi.t0.txt",str(wifi_pass))
                 d.wifistatut = 1	
@@ -463,7 +469,7 @@ while True:
 #Numkaypad#
     if s.find("keypadnum")!= -1:
    
-        print "Page clavier numerique"
+        print("Page clavier numerique")
 	            
 #Reglage DIM#
    # if s.find("regdim")== -1:
@@ -477,50 +483,50 @@ while True:
 #QSYSALONRRF#
     if s.find("qsyrrf")!= -1:
 
-        print "QSY SALON RRF"
+        print("QSY SALON RRF")
         dtmf("96#")
 #QSYFON#
     if s.find("qsyfon")!= -1:
 
-        print "QSY FON"
+        print("QSY FON")
         dtmf("97#")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
-        print "QSY SALON TECH"
+        print("QSY SALON TECH")
         dtmf("98#")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
     
-        print "QSY INTER"
+        print("QSY INTER")
         dtmf("99#")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
 
-        print "QSY BAVARDAGE"
+        print("QSY BAVARDAGE")
         dtmf("100#")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
   
-        print "QSY LOCAL"
+        print("QSY LOCAL")
         dtmf("101#")
 #QSYSAT#
     if s.find("qsysat")!= -1:
   
-        print "QSY SAT"
+        print("QSY SAT")
         dtmf("102#")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
 
-        print "BULETIN METEO"
+        print("BULETIN METEO")
         dtmf("*51#")
 #PERROQUET
     if s.find("qsyperroquet")!= -1:
 
-        print "QSY PERROQUET"
+        print("QSY PERROQUET")
         dtmf("95#")
 #DASHBOARD#
     if s.find("listdash")!= -1 and tn!="rrf" and tn!="fon":
 
-        print "ENVOI DASH"
+        print("ENVOI DASH")
         ecrire("trafic.g0.txt",d.dashlist)
