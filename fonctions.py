@@ -67,7 +67,6 @@ config = configparser.RawConfigParser()
 config.read(svxconfig)
 #reglage audio
 import alsaaudio
-lIn= alsaaudio.Mixer(control='Mic')
 
 #Fonction pour lancement routin console
 
@@ -163,6 +162,7 @@ def setdim(dimv):
 #Fonction info parametres Audio
 #recuperation info niveau 
 def GetAudioInfo(interfaceaudio):
+	lIn= alsaaudio.Mixer(control='Mic')
 	lOut=alsaaudio.Mixer(control=interfaceaudio)
 	templevelIn=lIn.getvolume()
 	templevelOut=lOut.getvolume()
@@ -179,7 +179,7 @@ def GetAudioInfo(interfaceaudio):
 
 #Fonction reglage des niveaux    
 def setAudio(interfaceaudio,levelOut,levelIn):
-	
+	lIn= alsaaudio.Mixer(control='Mic')
 	levelOutcor = int(levelOut)*1.33
 	os.system('amixer -c 0 set' + " Mic " + str(levelIn) + "%")
 	print("Reglage du niveau audio In: "+str(levelIn)+"%")
