@@ -373,14 +373,14 @@ def get_meteo():
 		temperature = config.get('rapport', 'temperature')
 		rose = config.get('rapport', 'dew point')
 		buletin = config.get('rapport', 'time')
-		heure = buletin.split(' ')
-		#freq = config.get('LocationInfo', 'FREQUENCY')
-		print(heure[4])
+		buletin = config.get('rapport', 'time')
+        heure = buletin.split(':')
+        heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
 		print(pression[:-2])
 		print(rose)
 		print(temperature)
 		ecrire("meteo.t1.txt",str(temperature))
-		ecrire("meteo.t3.txt",str(heure[4]))
+		ecrire("meteo.t3.txt",str(heure))
 		ecrire("meteo.t4.txt",str(rose))
 		Pression = pression[:-2]+'hPa'
 		ecrire("meteo.t2.txt",str(Pression))
