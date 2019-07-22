@@ -101,7 +101,8 @@ salon = {
     },
 
     'FON': {
-        'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON', 
+        #'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON',
+        'url': 'f1tzo.com:8008/api/svxlink/FON', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
