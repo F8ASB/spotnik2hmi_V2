@@ -526,7 +526,8 @@ while True:
         print("QSY PERROQUET")
         dtmf("95#")
 #DASHBOARD#
-    if s.find("listdash")!= -1 and tn!="rrf" and tn!="fon":
+    if s.find("listdash")!= -1 and tn!="RRF" and tn!="FON":
 
         print("ENVOI DASH")
+        print(d.dashlist)
         ecrire("trafic.g0.txt",d.dashlist)
