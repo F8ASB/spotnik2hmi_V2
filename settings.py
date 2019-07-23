@@ -53,7 +53,7 @@ salon = {
     },
 
     'BAV': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/bavardage', 
+        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/bavardage', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -65,7 +65,7 @@ salon = {
     },
 
     'TEC': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/technique', 
+        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/technique', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -77,7 +77,7 @@ salon = {
     },
 
     'INT': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/international', 
+        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/international', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -89,7 +89,7 @@ salon = {
     },
 
     'LOC': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/local', 
+        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/local', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -101,8 +101,8 @@ salon = {
     },
 
     'FON': {
-        #'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON',
-        'url': 'f1tzo.com:8008/api/svxlink/FON', 
+#        #'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON',
+        'url': 'http://f1tzo.com:8008/api/svxlink/FON', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
