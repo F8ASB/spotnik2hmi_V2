@@ -13,7 +13,7 @@ INSTALL=$(whiptail --title "Choisir votre installation" --radiolist \
  
 exitstatus=$?
 
-pathinstall="/opt/spotnik/spotnik2hmi_v2"
+pathinstall="/opt/spotnik/spotnik2hmi_V2"
 
 if [ $exitstatus = 0 ]; then
     echo "Installation de :" $INSTALL
