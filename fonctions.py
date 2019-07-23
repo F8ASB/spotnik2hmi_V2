@@ -374,8 +374,8 @@ def get_meteo():
 		rose = config.get('rapport', 'dew point')
 		buletin = config.get('rapport', 'time')
 		buletin = config.get('rapport', 'time')
-        heure = buletin.split(':')
-        heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
+		heure = buletin.split(':')
+		heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
 		print(pression[:-2])
 		print(rose)
 		print(temperature)
