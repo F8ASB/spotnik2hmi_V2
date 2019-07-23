@@ -315,7 +315,24 @@ while True:
                 wifistatut = 0
                 break
         gopage("confirm")
-        ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")		
+        ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")	
+
+#WIFI#
+    if s.find("pagewifi")!= -1:
+   
+        print("Page wifi")
+        Json="/etc/spotnik/config.json"
+        if d.wifistatut == 0:
+            with open(Json, 'r') as a:
+                infojson = json.load(a)
+                wifi_ssid = infojson['wifi_ssid']
+                wifi_pass = infojson['wpa_key']
+                print("Envoi SSID actuel sur Nextion: "+wifi_ssid)
+                print("Envoi PASS actuel sur Nextion: "+wifi_pass)
+                ecrire("wifi.t1.txt",str(wifi_ssid))
+                ecrire("wifi.t0.txt",str(wifi_pass))
+                d.wifistatut = 1
+
 #MAJAUDIO
     if s.find("MAJAUDIO")!= -1:
   
@@ -450,21 +467,7 @@ while True:
         
 
 
-#WIFI#
-    if s.find("wifi")!= -1:
-   
-        print("Page wifi")
-        Json="/etc/spotnik/config.json"
-        if d.wifistatut == 0:
-            with open(Json, 'r') as a:
-                infojson = json.load(a)
-                wifi_ssid = infojson['wifi_ssid']
-                wifi_pass = infojson['wpa_key']
-                print("Envoi SSID actuel sur Nextion: "+wifi_ssid)
-                print("Envoi PASS actuel sur Nextion: "+wifi_pass)
-                ecrire("wifi.t1.txt",str(wifi_ssid))
-                ecrire("wifi.t0.txt",str(wifi_pass))
-                d.wifistatut = 1	
+	
 
 #Numkaypad#
     if s.find("keypadnum")!= -1:
