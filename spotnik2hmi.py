@@ -292,6 +292,7 @@ while True:
     if s.find("ouimajwifi")!= -1:
 
         wifi(newssid,newpass)
+        print("ECRITURE INFO WIFI DANS JSON")
         page("wifi")
 #
 #Gestion commande du Nextion
@@ -365,7 +366,7 @@ while True:
 #PAGE UPDATE
     if s.find("majpython")!= -1:
 
-        os.system('sh /opt/spotnik/spotnik2hmi_v2/maj.sh')
+        os.system('sh /opt/spotnik/spotnik2hmi_V2/maj.sh')
     
     if s.find("majnextion")!= -1:
         updatehmi()
