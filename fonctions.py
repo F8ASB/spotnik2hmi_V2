@@ -325,9 +325,10 @@ def wifi(wifiid,wifipass):
 def ecrire(champ,texte):
 	wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
 	port.write(wcmd)
-
+	print(wcmd)
+	
 def ecrireval(champ,valeur):
-	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+b'"'+ eof
+	wcmdval = str.encode(champ)+b'="'+st(valeur)+b'"'+ eof
 	port.write(wcmdval)
 
 
