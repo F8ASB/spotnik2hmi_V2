@@ -90,11 +90,11 @@ sleep(1);
 
 ecrire("boot.va0.txt",d.callsign)
 ecrire("boot.vascript.txt",d.versionDash)
-ecrire("boot.vaverspotnik",d.version)
+ecrire("boot.vaverspotnik.txt",d.version)
 
 #Reglage niveau audio visible si Raspberry
 if board =='Raspberry Pi':
-    ecrireval("trafic.vasound.val","1")
+    ecrire("trafic.vasound.val","1")
 
 sleep(4);
 
