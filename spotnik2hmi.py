@@ -425,11 +425,41 @@ while True:
     if s.find("trafic")!= -1:
         print("Page trafic")
 
-        if tn.find("default") != -1 or salon_current!="SAT":
-         
-            calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
+        if salon_current=="TEC":
+
+            calltrafic_current=d.salon[tn["TEC"].upper()]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
+
+        if salon_current=="RRF":
+
+            calltrafic_current=d.salon[tn["RRF"].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+        if salon_current=="RRF":
+
+            calltrafic_current=d.salon[tn["FON"].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+        
+        if salon_current=="INT":
+
+            calltrafic_current=d.salon[tn["INT"].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+        if salon_current=="BAV":
+
+            calltrafic_current=d.salon[tn["BAV"].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+
+        if salon_current=="LOC":
+
+            calltrafic_current=d.salon[tn["LOC"].upper()]['call_current']
+            print(d.salon[tn[0:3].upper()]['call_current'])
+            ecrire("trafic.Txt_call.txt",calltrafic_current)
+
+
     ecrire("Txt_date.txt",date)
     ecrire("Txt_heure.txt",heureS)
 
