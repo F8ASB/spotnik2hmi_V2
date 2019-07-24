@@ -524,7 +524,7 @@ while True:
         print("QSY PERROQUET")
         dtmf("95#")
 #DASHBOARD#
-    if s.find("listdash")!= -1 and tn!="RRF" and tn!="FON":
+    if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
 
         print("ENVOI DASH")
         print("*********")
