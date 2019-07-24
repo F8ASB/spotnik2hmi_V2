@@ -532,5 +532,7 @@ while True:
     if s.find("listdash")!= -1 and tn!="RRF" and tn!="FON":
 
         print("ENVOI DASH")
+        print("*********")
         print(d.dashlist)
+        print("*********")
         ecrire("trafic.g0.txt",d.dashlist)
