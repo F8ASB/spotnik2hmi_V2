@@ -41,7 +41,7 @@ freq = get_frequency()
 
 salon = {
     'RRF': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/RRF', 
+        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/RRF3', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
