@@ -305,7 +305,7 @@ def console(cmd):
 
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
-        cfg = configparser.ConfigParser()
+        cfg = conf.ConfigParser()
         cfg.read(conf)
         cfg.set('connection', 'id', wifiid)
         cfg.set('wifi', 'ssid', wifiid)
@@ -327,7 +327,7 @@ def ecrire(champ,texte):
 	port.write(wcmd)
 
 def ecrireval(champ,valeur):
-	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
+	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+b'"'+ eof
 	port.write(wcmdval)
 
 
