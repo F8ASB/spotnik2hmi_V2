@@ -60,7 +60,7 @@ eof=bytes([0xFF,0xFF,0xFF])
 port= 0 
 #Chemin fichier Json
 Json="/etc/spotnik/config.json"
-icao="/opt/spotnik/spotnik2hmi_v2/datas/icao.cfg"
+icao="/opt/spotnik/spotnik2hmi_V2/datas/icao.cfg"
 #routine ouverture fichier de config
 svxconfig="/etc/spotnik/svxlink.cfg"
 config = configparser.RawConfigParser()
