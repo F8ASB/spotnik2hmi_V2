@@ -425,7 +425,8 @@ while True:
     if s.find("trafic")!= -1:
         print("Page trafic")
 
-        if tn.find("default") != -1 or salon_current!="SAT" 
+        if tn.find("default") != -1 or salon_current!="SAT":
+         
             calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
