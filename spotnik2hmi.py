@@ -259,8 +259,13 @@ while True:
     if tn.find("sat") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","") 
-        salon_current="SAT"         
-	
+        salon_current="SAT"   
+
+    if tn.find("el") != -1:
+        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
+        ecrire("trafic.g0.txt","")
+        salon_current="SAT"      
+
     a.close()
 
 
@@ -562,7 +567,7 @@ while True:
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
         
-        if salon_current=="RRF" or salon_current=="FON":
+        if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT":
             ecrire("trafic.g0.txt","")
         else:    
             print("ENVOI DASH:")
