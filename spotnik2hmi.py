@@ -525,7 +525,7 @@ while True:
         dtmf("95#")
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
-
+        print(salon_current)
         print("ENVOI DASH")
         print("*********")
         print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
