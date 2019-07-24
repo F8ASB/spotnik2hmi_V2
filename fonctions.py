@@ -72,18 +72,18 @@ import alsaaudio
 
 from subprocess import Popen, PIPE
 
-def portcom(portserie,vitesse):
+def portcom(portseriel,vitesse):
 	global port
 	global screentype
 	global porthmi
+	
+	porthmi=portseriel
 
-	port=serial.Serial(port='/dev/'+portserie,baudrate=vitesse,timeout=1, writeTimeout=1)
-	print("Port serie: " +portserie+" Vitesse: "+vitesse)
+	port=serial.Serial(port='/dev/'+portseriel,baudrate=vitesse,timeout=1, writeTimeout=1)
+	print("Port serie: " +portseriel+" Vitesse: "+vitesse)
 
 	cmdinfo= eof + b'connect' + eof 
 	port.write(cmdinfo)
-	#port.write(b"connect")
-	#port.write(b"\xFF\xFF\xFF")
 
 	r = port.read(128)
 	
@@ -99,9 +99,9 @@ def updatehmi():
     
     print("MAJ ECRAN HMI")
     print(screentype)
-    
-    port.close()
-    os.system('sudo python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype+'.tft '+ '/dev/'+portserie)
+    print(porthmi)
+	os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype.decode("utf-8") +'.tft '+ '/dev/'+porthmi)
+    os.system('reboot')
 
 def getspeednet():
 
