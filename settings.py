@@ -112,18 +112,6 @@ salon = {
         'node_count': '',
         'node_list_out': ''
     }
-
-    'SAT': {
-        'url': 'http://rrf3.f5nlg.ovh/api/svxlink/sat', 
-        'transmit': True, 
-        'call_current': '', 
-        'call_previous': '',
-        'node_list': '',
-        'node_list_old': '',
-        'node_list_in': '',
-        'node_count': '',
-        'node_list_out': ''
-    },
 }
 
 search_start = ''
