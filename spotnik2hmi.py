@@ -525,11 +525,15 @@ while True:
         dtmf("95#")
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
-        print("ENVOI DASH")
-        print("*********")
-        print(salon_current)
-        print("*********")
-        print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
-        ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
-        print("*********")
+        
+        if salon_current=="RRF" or salon_current=="FON":
+            ecrire("trafic.g0.txt","")
+        else:    
+            print("ENVOI DASH")
+            print("*********")
+            print(salon_current)
+            print("*********")
+            print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
+            ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
+            print("*********")
         
