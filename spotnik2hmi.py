@@ -258,7 +258,8 @@ while True:
 
     if tn.find("sat") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
-        ecrire("trafic.g0.txt","")          
+        ecrire("trafic.g0.txt","") 
+        salon_current="SAT"         
 	
     a.close()
 
@@ -424,7 +425,7 @@ while True:
     if s.find("trafic")!= -1:
         print("Page trafic")
 
-        if tn.find("default") != -1 or tn.find("sat") != -1 or tn.find("SAT") != -1:
+        if tn.find("default") != -1 or salon_current!="SAT" 
             calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
@@ -533,11 +534,8 @@ while True:
         if salon_current=="RRF" or salon_current=="FON":
             ecrire("trafic.g0.txt","")
         else:    
-            print("ENVOI DASH")
-            print("*********")
-            print(salon_current)
-            print("*********")
+            print("ENVOI DASH:")
             print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
             ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
-            print("*********")
+         
         
