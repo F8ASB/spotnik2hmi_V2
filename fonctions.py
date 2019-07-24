@@ -326,10 +326,10 @@ def ecrire(champ,texte):
 	wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
 	port.write(wcmd)
 	print(wcmd)
-	
-def ecrireval(champ,valeur):
-	wcmdval = str.encode(champ)+b'="'+st(valeur)+b'"'+ eof
-	port.write(wcmdval)
+
+#def ecrireval(champ,valeur):
+#	wcmdval = str.encode(champ)+b'="'+st(valeur)+b'"'+ eof
+#	port.write(wcmdval)
 
 
 #Fonction appel de page
