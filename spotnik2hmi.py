@@ -290,7 +290,6 @@ while True:
 
 #OUIWIFI
     if s.find("ouimajwifi")!= -1:
-
         wifi(newssid,newpass)
         print("ECRITURE INFO WIFI DANS JSON")
         page("wifi")
@@ -426,7 +425,7 @@ while True:
     if s.find("trafic")!= -1:
         print("Page trafic")
 
-        if tn.find("default") != -1 or tn.find("sat") != -1:
+        if tn.find("default") != -1 or tn.find("sat") != -1 or tn.find("SAT") != -1:
             calltrafic_current=d.salon[tn[0:3].upper()]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
