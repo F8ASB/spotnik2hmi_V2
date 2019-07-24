@@ -533,6 +533,7 @@ while True:
 
         print("ENVOI DASH")
         print("*********")
-        print(d.salon["TEC"]['node_list'])
+        print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
+        ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
         print("*********")
-        ecrire("trafic.g0.txt",d.dashlist)
+        
