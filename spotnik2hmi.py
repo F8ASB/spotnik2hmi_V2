@@ -236,24 +236,19 @@ while True:
 	
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
-        salon_current="TECHNIQUE"
+        salon_current="TEC"
     
-    if tn.find("urg") != -1 and salon_current!="INTERNATIONNAL":
+    if tn.find("urg") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
-        salon_current="INTERNATIONAL"
+        salon_current="INT"
     
-    if tn.find("stv") != -1 and salon_current!="BAVARDAGE":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")
-        salon_current="BAVARDAGE"
-    if tn.find("bav") != -1 and salon_current!="BAVARDAGE":
+    if tn.find("bav") != -1 and salon_current!="BAV":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
-        salon_current="BAVARDAGE"
-    if tn.find("cd2") != -1 and salon_current!="LOCAL":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")
-        salon_current="LOCAL"
+        salon_current="BAV"
+
     if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
-        salon_current="LOCAL"
+        salon_current="LOC"
 
     if tn.find("default") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
