@@ -90,11 +90,11 @@ sleep(1);
 
 ecrire("boot.va0.txt",d.callsign)
 ecrire("boot.vascript.txt",d.versionDash)
-ecrire("boot.vaverspotnik",d.version)
+ecrire("boot.vaverspotnik.txt",d.version)
 
 #Reglage niveau audio visible si Raspberry
 if board =='Raspberry Pi':
-    ecrireval("trafic.vasound.val","1")
+    ecrire("trafic.vasound.txt","1")
 
 sleep(4);
 
@@ -240,7 +240,7 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TEC"
     
-    if tn.find("urg") != -1 and salon_current!="INT":
+    if tn.find("int") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INT"
     
@@ -264,7 +264,7 @@ while True:
     if tn.find("el") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","")
-        salon_current="SAT"      
+        salon_current="SAT"
 
     a.close()
 
