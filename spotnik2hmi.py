@@ -427,35 +427,35 @@ while True:
 
         if salon_current=="TEC":
 
-            calltrafic_current=d.salon[tn["TEC"].upper()]['call_current']
+            calltrafic_current=d.salon["TEC"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
         if salon_current=="RRF":
 
-            calltrafic_current=d.salon[tn["RRF"].upper()]['call_current']
+            calltrafic_current=d.salon["RRF"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
         if salon_current=="RRF":
 
-            calltrafic_current=d.salon[tn["FON"].upper()]['call_current']
+            calltrafic_current=d.salon["FON"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
         
         if salon_current=="INT":
 
-            calltrafic_current=d.salon[tn["INT"].upper()]['call_current']
+            calltrafic_current=d.salon["INT"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
         if salon_current=="BAV":
 
-            calltrafic_current=d.salon[tn["BAV"].upper()]['call_current']
+            calltrafic_current=d.salon["BAV"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
         if salon_current=="LOC":
 
-            calltrafic_current=d.salon[tn["LOC"].upper()]['call_current']
+            calltrafic_current=d.salon["LOC"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
