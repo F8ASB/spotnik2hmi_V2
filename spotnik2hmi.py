@@ -533,6 +533,6 @@ while True:
 
         print("ENVOI DASH")
         print("*********")
-        print(d.dashlist)
+        print(d.salon["TEC"]['node_list'])
         print("*********")
         ecrire("trafic.g0.txt",d.dashlist)
