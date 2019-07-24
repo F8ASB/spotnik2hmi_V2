@@ -229,10 +229,12 @@ while True:
     if tn.find("rrf") != -1 and salon_current!="RRF":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         salon_current="RRF"
+        ecrire("trafic.g0.txt","")
 		
     if tn.find("fon") != -1 and salon_current!="FON":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")	
         salon_current="FON"
+        ecrire("trafic.g0.txt","")
 	
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
@@ -252,9 +254,11 @@ while True:
 
     if tn.find("default") != -1:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
+        ecrire("trafic.g0.txt","")
 
     if tn.find("sat") != -1:
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")          
+        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
+        ecrire("trafic.g0.txt","")          
 	
     a.close()
 
