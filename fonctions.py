@@ -101,7 +101,7 @@ def updatehmi():
     print(screentype)
     
     port.close()
-    os.system('sudo python /opt/spotnik/spotnik2hmi/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi/nextion/' +screentype+'.tft '+ '/dev/'+portserie)
+    os.system('sudo python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype+'.tft '+ '/dev/'+portserie)
 
 def getspeednet():
 
