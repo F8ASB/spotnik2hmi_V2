@@ -96,8 +96,8 @@ def portcom(portseriel,vitesse):
 		print('Model: ' + screentype.decode("utf-8"))
 
 def updatehmi():
-
-    print("MAJ ECRAN HMI")
+	
+	print("MAJ ECRAN HMI")
 	print(screentype)
 	print(porthmi)
 	os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype.decode("utf-8") +'.tft '+ '/dev/'+porthmi)
