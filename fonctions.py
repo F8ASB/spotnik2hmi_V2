@@ -96,7 +96,7 @@ def portcom(portseriel,vitesse):
 		print('Model: ' + screentype.decode("utf-8"))
 
 def updatehmi():
-	
+
 	print("MAJ ECRAN HMI")
 	print(screentype)
 	print(porthmi)
@@ -325,12 +325,12 @@ def wifi(wifiid,wifipass):
 def ecrire(champ,texte):
 	wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
 	port.write(wcmd)
-	print(wcmd)
+	#print(wcmd)
 
 def ecrireval(champ,valeur):
 	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
 	port.write(wcmdval)
-	print(wcmdval)
+	#print(wcmdval)
 
 
 #Fonction appel de page
