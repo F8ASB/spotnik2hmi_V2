@@ -105,6 +105,7 @@ def upload(ser, filename, checkModel=None):
         exit(1)
 
     print 'File transferred successfully'
+    os.system('reboot')
     exit(0)
 
 if __name__ == "__main__":
