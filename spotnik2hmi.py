@@ -441,7 +441,7 @@ while True:
             calltrafic_current=d.salon["RRF"]['call_current']
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
-        if salon_current=="RRF":
+        if salon_current=="FON":
 
             calltrafic_current=d.salon["FON"]['call_current']
             ecrire("trafic.Txt_call.txt","")
