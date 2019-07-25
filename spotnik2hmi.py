@@ -463,10 +463,11 @@ while True:
             calltrafic_current=d.salon["LOC"]['call_current']
             print(d.salon[tn[0:3].upper()]['call_current'])
             ecrire("trafic.Txt_call.txt",calltrafic_current)
+        
+        ecrire("Txt_date.txt",date)
+        ecrire("Txt_heure.txt",heureS)    
 
-
-    ecrire("Txt_date.txt",date)
-    ecrire("Txt_heure.txt",heureS)
+    
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
