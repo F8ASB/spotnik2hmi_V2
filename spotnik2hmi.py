@@ -272,8 +272,8 @@ while True:
 #Gestion des commandes serie reception du Nextion
     s = hmiReadline()
     #enlever les # pour voir trames recus et longueur 
-    #if len(s)<59 and len(s)>0:
-        #print(s)
+    if len(s)<59 and len(s)>0:
+        print(s)
         #print(len(s))
 
 #OUIREBOOT#
@@ -297,7 +297,7 @@ while True:
     if s.find("ouimajwifi")!= -1:
         wifi(newssid,newpass)
         print("ECRITURE INFO WIFI DANS JSON")
-        page("wifi")
+        gopage("reglage")
 #
 #Gestion commande du Nextion
 #

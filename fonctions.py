@@ -30,7 +30,7 @@ from time import time,sleep
 import locale
 import mmap
 import requests
-
+import configparser, os
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -305,12 +305,12 @@ def console(cmd):
 
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
-        cfg = conf.ConfigParser()
-        cfg.read(conf)
-        cfg.set('connection', 'id', wifiid)
-        cfg.set('wifi', 'ssid', wifiid)
-        cfg.set('wifi-security', 'psk', wifipass)
-        cfg.write(open(conf,'w'))
+#        cfg = conf.ConfigParser()
+        # cfg.read(conf)
+        # cfg.set('connection', 'id', wifiid)
+        # cfg.set('wifi', 'ssid', wifiid)
+        # cfg.set('wifi-security', 'psk', wifipass)
+        # cfg.write(open(conf,'w'))
 
         #lecture de donnees JSON
         with open(Json, 'r') as f:
@@ -330,6 +330,7 @@ def ecrire(champ,texte):
 def ecrireval(champ,valeur):
 	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
 	port.write(wcmdval)
+	print('\x1b[7;30;43m'+"Serial out: "+'\x1b[0m'+champ+"="+valeur) 
 	#print(wcmdval)
 
 
@@ -337,6 +338,7 @@ def ecrireval(champ,valeur):
 def gopage(choixnompage):
 	appelpage = b'page ' + str.encode(choixnompage)+eof
 	port.write(appelpage)
+	print('\x1b[7;30;43m'+"Serial out: "+'\x1b[0m'"page " +choixnompage)
 
 #Fonction recherche de nom de ville selon code ICAO
 def getcity():
