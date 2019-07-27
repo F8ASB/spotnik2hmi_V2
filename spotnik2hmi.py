@@ -66,11 +66,10 @@ if 'sun8i' in tmp:
 else:
     board = 'Raspberry Pi'
     #peripheriques audio Out
-    Call_spot()
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]	
-    print("Peripherique audio Out: "+audioOut)
+    log(("Peripherique audio Out: "+audioOut),"white")
 print(board)
 
 #Envoi des infos 
@@ -99,11 +98,10 @@ if board =='Raspberry Pi':
 sleep(4);
 
 #envoi indicatif
-print("Maj Call ...")
+log("Maj Call ...","red")
 
 checkversion()
 
-print("Page trafic ...")
 gopage("trafic")
 
 os.system ("clear")
@@ -273,30 +271,30 @@ while True:
     s = hmiReadline()
     #enlever les # pour voir trames recus et longueur 
     if len(s)<59 and len(s)>0:
-        print(s)
+        log(s,"blue")
         #print(len(s))
 
 #OUIREBOOT#
     if s.find("ouireboot")!= -1:
-        print("REBOOT")
+        log("REBOOT","red")
         gopage("boot")
         os.system('reboot')
 
 #OUIRESTART#
     if s.find("ouiredem")!= -1:
-        print("REDEMARRAGE")
+        log("REDEMARRAGE","red")
         dtmf("96#")
         gopage ("trafic")
                 
 #OUIARRET#
     if s.find("ouiarret")!= -1:
-        print("ARRET DU SYSTEM")
+        log("ARRET DU SYSTEM","red")
         os.system('shutdown -h now')
 
 #OUIWIFI
     if s.find("ouimajwifi")!= -1:
         wifi(newssid,newpass)
-        print("ECRITURE INFO WIFI DANS JSON")
+        log("ECRITURE INFO WIFI DANS JSON","red")
         gopage("reglage")
 #
 #Gestion commande du Nextion
@@ -305,7 +303,7 @@ while True:
 #MAJWIFI
     if s.find("majwifi")!= -1:
 
-        print("MAJ Wifi....")
+        log("MAJ Wifi....","white")
         requete("get t0.txt")
         requete("get t1.txt")
 
@@ -315,8 +313,8 @@ while True:
                 test= s.split("p")
                 newpass= test[1][:-3]
                 newssid= test[2][:-3]
-                print("New SSID: "+newssid)
-                print("New PASS: "+newpass)
+                log("New SSID: "+newssid,white)
+                log("New PASS: "+newpass,white)
                 wifistatut = 0
                 break
         gopage("confirm")
@@ -325,7 +323,7 @@ while True:
 #WIFI#
     if s.find("pagewifi")!= -1:
    
-        print("Page wifi")
+        log("Page wifi","red")
         Json="/etc/spotnik/config.json"
         if d.wifistatut == 0:
             with open(Json, 'r') as a:
@@ -341,13 +339,13 @@ while True:
 #MAJAUDIO
     if s.find("MAJAUDIO")!= -1:
   
-        print("MAJ AUDIO....")
+        log("MAJ AUDIO....","red")
         requete("get nOut.val")
 
         while 1:
             s = hmiReadline()
             if len(s)<71:
-                print("Niveau audio out: "+ str(ord(s[1])))	
+                log(("Niveau audio out: "+ str(ord(s[1]))),"white")	
                 audiooutinfo=str(ord(s[1]))
                 break
 
@@ -357,14 +355,14 @@ while True:
             s = hmiReadline()
             if len(s)<71:
                 
-                print("Niveau audio in: "+ str(ord(s[1])))
+                log(("Niveau audio in: "+ str(ord(s[1]))),"white")
                 audioininfo=str(ord(s[1]))
                 setAudio(audioOut,audiooutinfo,audioininfo)             
                 break
 
 #PAGE MAJ 
     if s.find("checkversion")!= -1:
-        print("PAGE MAJ")
+        log("PAGE MAJ","red")
         checkversion()
 
 #PAGE UPDATE
@@ -377,12 +375,12 @@ while True:
 
 #MUTE AUDIO
     if s.find("MUTEON")!= -1:
-        print("MUTE")
+        log("MUTE","white")
         os.system('amixer -c 0 set ' +audioOut+ ' mute')
 
 #UNMUTE AUDIO
     if s.find("MUTEOFF")!= -1:
-        print("UNMUTE")
+        log("UNMUTE","white")
         os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
         
        
@@ -413,22 +411,22 @@ while True:
 
 #METEO#
     if s.find("meteo")!= -1:
-        print("Detection bouton meteo")
+        log("Page meteo","red")
         get_meteo()
 
 #SPEEDNET#
     if s.find("starttestNet")!= -1:
-        print("Detection page speedNet")
+        log("Detection page speedNet","red")
         getspeednet()
 
 #MIXER#
     if s.find("mixer")!= -1:
-        print("Detection page mixer")
+        log("Detection page mixer","red")
         GetAudioInfo(audioOut)
 						
 #TRAFIC#		
     if s.find("trafic")!= -1:
-        print("Page trafic")
+        log("Page trafic","red")
 
         if salon_current=="TEC":
 
@@ -471,14 +469,14 @@ while True:
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
-        print("Page dashboard")
+        log("Page dashboard","red")
 		
 #MENU#
     if s.find("menu")!= -1:
-        print("Page menu")
+        log("Page menu","red")
 #MONITOR#
     if s.find("monitor")!= -1:
-        print("Page monitor")
+        log("Page monitor","red")
         ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
         ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
         ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
@@ -488,7 +486,7 @@ while True:
        
 #SCAN#
     if s.find("scan")!= -1:
-        print("Page scan")
+        log("Page scan","red")
 
         ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
         ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
@@ -509,7 +507,7 @@ while True:
 #Numkaypad#
     if s.find("keypadnum")!= -1:
    
-        print("Page clavier numerique")
+        log("Page clavier numerique","red")
 	            
 #Reglage DIM#
    # if s.find("regdim")== -1:

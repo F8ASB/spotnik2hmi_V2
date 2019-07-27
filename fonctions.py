@@ -72,6 +72,22 @@ import alsaaudio
 
 from subprocess import Popen, PIPE
 
+DEBUG=True
+
+#Fonction Debug
+def log(s,color):
+    if DEBUG:
+        if color=="red":
+        	print ('\x1b[7;30;41m'+"DEBUG: "+s+'\x1b[0m')
+        if color=="blue":
+        	print ('\x1b[7;30;44m'+"DEBUG: "+s+'\x1b[0m')
+        if color=="yellow":
+        	print ('\x1b[7;30;43m'+"DEBUG: "+s+'\x1b[0m')
+        if color=="white":
+        	print ('\x1b[7;30;47m'+"DEBUG: "+s+'\x1b[0m')
+        if color=="none":
+        	print (s)	
+
 def portcom(portseriel,vitesse):
 	global port
 	global screentype
@@ -140,16 +156,7 @@ def resetHMI():
 	print("Reset HMI ...")
 	rstcmd=b'rest' + eof
 	port.write(rstcmd)
-	
-  
-def Call_spot():
-	global port
-	print("acces detected ...")
-#	port.write(b"page trafic")
-#	port.write(b"\xFF\xFF\xFF")
-#	valspot =(b'trafic.vasound.val=1') +(b'eof')
-#	port.write([valspot])
-
+	 
 #Fonction reglage dim du nextion
 def setdim(dimv):
 	print("dim debut")
@@ -180,10 +187,10 @@ def setAudio(interfaceaudio,levelOut,levelIn):
 	lIn= alsaaudio.Mixer(control='Mic')
 	levelOutcor = int(levelOut)*1.33
 	os.system('amixer -c 0 set' + " Mic " + str(levelIn) + "%")
-	print("Reglage du niveau audio In: "+str(levelIn)+"%")
-	print(">>>>>>>>>>>>>> INFO" + interfaceaudio)
+	log(("Reglage du niveau audio In: "+str(levelIn)+"%"),white)
+	log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
 	os.system('amixer -c 0 set ' + interfaceaudio +" "+ str(levelOutcor) + "%")
-	print("Reglage du niveau audio Out: "+str(levelOut)+"%")
+	log(("Reglage du niveau audio Out: "+str(levelOut)+"%"),"white")
 
 def requete(valeur):
 	requetesend = str.encode(valeur)+eof
@@ -210,19 +217,16 @@ def checkversion():
         r = requests.get('https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/version')
         
         versions = r.text.replace("\n","").split(':')
-        print("***********")
         hmiversion = versions[1]
-        print (hmiversion)
+        log(hmiversion,"white")
         scriptversion = versions[3]
-        print (scriptversion)
+        log(scriptversion,"white")
         ecrire("maj.Txt_Vhmi.txt",hmiversion)
         ecrire("maj.Txt_Vscript.txt",scriptversion)        
 
 def getCPUuse():
 
 	CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
-
-    #print results
 	print(("CPU Usage = " + CPU_Pct))
 	return(CPU_Pct)
 
@@ -253,7 +257,7 @@ def usage():
     sys.exit(1)
 
 if len(sys.argv) > 2:
-    print("Ok")
+    log("Ok","white")
 else:
     usage()
 
@@ -262,7 +266,7 @@ def dtmf(code):
 	
 	b = open("/tmp/svxlink_dtmf_ctrl_pty","w")
 	b.write(code)
-	print("code DTMF: "+code)
+	log(("code DTMF: "+code),"white")
 	b.close()
 
 #Fonction envoyer le prenom selon le call
@@ -330,15 +334,17 @@ def ecrire(champ,texte):
 def ecrireval(champ,valeur):
 	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
 	port.write(wcmdval)
-	print('\x1b[7;30;43m'+"Serial out: "+'\x1b[0m'+champ+"="+valeur) 
-	#print(wcmdval)
+	infoserialval=champ+"=" +valeur
+	log(infoserialval,"blue") 
+	
 
 
 #Fonction appel de page
 def gopage(choixnompage):
 	appelpage = b'page ' + str.encode(choixnompage)+eof
 	port.write(appelpage)
-	print('\x1b[7;30;43m'+"Serial out: "+'\x1b[0m'"page " +choixnompage)
+	infoserialpage="page " +choixnompage
+	log(infoserialpage,"yellow")
 
 #Fonction recherche de nom de ville selon code ICAO
 def getcity():
@@ -362,13 +368,13 @@ def get_meteo():
 		afind= json.load(b)
 		airport =afind['airport_code']
 		#Info ville Aéroport
-		print("Le code ICAO est: "+airport)
+		log(("Le code ICAO est: "+airport),"white")
 		getcity()
 		fichier = open("/tmp/meteo.txt", "w")
 		fichier.write("[rapport]")
 		fichier.close()
 		result = console('/opt/spotnik/spotnik2hmi_V2/python-metar/get_report.py '+ airport+ '>> /tmp/meteo.txt')
-		print(result)
+		log(result,"white")
 		#routine ouverture fichier de config
 		config = configparser.RawConfigParser()
 		config.read('/tmp/meteo.txt')
@@ -380,9 +386,9 @@ def get_meteo():
 		buletin = config.get('rapport', 'time')
 		heure = buletin.split(':')
 		heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
-		print(pression[:-2])
-		print(rose)
-		print(temperature)
+		log((pression[:-2]),"white")
+		log(rose,"white")
+		log(temperature,"white")
 		ecrire("meteo.t1.txt",str(temperature))
 		ecrire("meteo.t3.txt",str(heure))
 		ecrire("meteo.t4.txt",str(rose))
