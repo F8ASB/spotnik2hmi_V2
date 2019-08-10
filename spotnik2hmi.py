@@ -30,6 +30,8 @@ portcom(sys.argv[1],sys.argv[2])
 salon_current=""
 dateold=""
 heureSold=""
+audiooutinfo=0
+audioininfo=0
 #routine ouverture fichier de config
 # config = ConfigParser.RawConfigParser()
 # config.read(svxconfig)
@@ -346,6 +348,7 @@ while True:
             if len(s)<71:
                 log(("Niveau audio out: "+ str(ord(s[1]))),"white")	
                 audiooutinfo=str(ord(s[1]))
+                setAudio(audioOut,audiooutinfo,audioininfo)
                 break
 
         requete("get nIn.val")
@@ -356,8 +359,10 @@ while True:
                 
                 log(("Niveau audio in: "+ str(ord(s[1]))),"white")
                 audioininfo=str(ord(s[1]))
-                setAudio(audioOut,audiooutinfo,audioininfo)             
+                setAudio(audioOut,audiooutinfo,audioininfo)
                 break
+
+
 
 #PAGE MAJ 
     if s.find("checkversion")!= -1:

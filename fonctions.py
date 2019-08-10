@@ -80,7 +80,7 @@ def log(s,color):
         if color=="red":
         	print ('\x1b[7;30;41m'+"DEBUG: "+s+'\x1b[0m')
         if color=="blue":
-        	print ('\x1b[7;30;44m'+"DEBUG: "+s+'\x1b[0m')
+        	print ('\x1b[7;34;40m'+"DEBUG: "+s+'\x1b[0m')
         if color=="yellow":
         	print ('\x1b[7;30;43m'+"DEBUG: "+s+'\x1b[0m')
         if color=="white":
@@ -195,6 +195,7 @@ def setAudio(interfaceaudio,levelOut,levelIn):
 def requete(valeur):
 	requetesend = str.encode(valeur)+eof
 	port.write(requetesend)
+	log(valeur,"blue")
 	
 #Fonction suivre le log svxlink
 def follow(thefile):
@@ -329,7 +330,8 @@ def wifi(wifiid,wifipass):
 def ecrire(champ,texte):
 	wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
 	port.write(wcmd)
-	#print(wcmd)
+	infoserialtxt=champ+"=" +texte
+	log(infoserialtxt,"blue")
 
 def ecrireval(champ,valeur):
 	wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
