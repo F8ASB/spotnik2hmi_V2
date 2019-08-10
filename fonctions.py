@@ -113,7 +113,7 @@ def portcom(portseriel,vitesse):
 
 def updatehmi():
 
-	print("MAJ ECRAN HMI")
+	log("MAJ ECRAN HMI","red")
 	print(screentype)
 	print(porthmi)
 	os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype.decode("utf-8") +'.tft '+ '/dev/'+porthmi)
@@ -129,40 +129,40 @@ def getspeednet():
 	
 	a=round(downinfo/1000000,2)
 	ecrire("speednet.t0.txt",str(a))
-	print("Download: "+ str(a)+" Mbit/s")
+	log(("Download: "+ str(a)+" Mbit/s"),"white")
 	
 	upinfo=s.upload()
 	b=round(upinfo/1000000,2)
 	ecrire("speednet.t1.txt",str(b))
-	print("Upload: " + str(b)+" Mbit/s")
+	log(("Upload: " + str(b)+" Mbit/s"),"white")
 
 	res = s.results.dict()
 	info= res["client"]
 
 	c =info["isp"]
 	ecrire("speednet.t2.txt",str(c))
-	print("Fournisseur: " + str(c))
+	log(("Fournisseur: " + str(c)),"white")
 
 	d = info["ip"]
 	ecrire("speednet.t3.txt",str(d))
-	print("Adresse IP: "+str(d))
+	log(("Adresse IP: "+str(d)),"white")
 	
 	e = round(res["ping"],2)
 	ecrire("speednet.t4.txt",str(e))
-	print("Ping: "+str(e) + " ms")
+	log(("Ping: "+str(e) + " ms"),"white")
 
 def resetHMI():
 	global port
-	print("Reset HMI ...")
+	log("Reset HMI ...","white")
 	rstcmd=b'rest' + eof
 	port.write(rstcmd)
 	 
 #Fonction reglage dim du nextion
 def setdim(dimv):
-	print("dim debut")
+	log("dim debut","white")
 	dimsend ="dim="+str(dimv)+eof
 	port.write(b'dimsend')
-	print("dim fin")
+	log("dim fin","white")
 
 #Fonction info parametres Audio
 #recuperation info niveau 
@@ -187,7 +187,7 @@ def setAudio(interfaceaudio,levelOut,levelIn):
 	lIn= alsaaudio.Mixer(control='Mic')
 	levelOutcor = int(levelOut)*1.33
 	os.system('amixer -c 0 set' + " Mic " + str(levelIn) + "%")
-	log(("Reglage du niveau audio In: "+str(levelIn)+"%"),white)
+	log(("Reglage du niveau audio In: "+str(levelIn)+"%"),"white")
 	log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
 	os.system('amixer -c 0 set ' + interfaceaudio +" "+ str(levelOutcor) + "%")
 	log(("Reglage du niveau audio Out: "+str(levelOut)+"%"),"white")

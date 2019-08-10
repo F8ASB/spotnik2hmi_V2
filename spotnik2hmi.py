@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#Parametrage port serie
+
+
 import settings as d
 from fonctions import *
 import serial
@@ -23,8 +24,6 @@ import csv
 import os
 import ssl
 
-
-#ssl._create_default_https_context = ssl._create_unverified_context
 
 portcom(sys.argv[1],sys.argv[2])
 
@@ -509,15 +508,6 @@ while True:
    
         log("Page clavier numerique","red")
 	            
-#Reglage DIM#
-   # if s.find("regdim")== -1:
-   #     print"..."
-   # else:
-   #     print "Reglage DIM recu"
-   #     rxdim = s[9:-3]
-   #     rdim = rxdim
-   #     print rdim
-		
 #QSYSALONRRF#
     if s.find("qsyrrf")!= -1:
 
