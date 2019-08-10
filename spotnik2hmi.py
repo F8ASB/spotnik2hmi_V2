@@ -349,7 +349,7 @@ while True:
             log(sa,"blue")
             if len(sa)<71:
                 log(("Niveau audio out: "+ str(ord(sa[1]))),"white")	
-                audiooutinfo=str(ord(sa[2]))
+                audiooutinfo=str(ord(sa[1]))
                 break
 
         requete("get nIn.val")
@@ -360,8 +360,8 @@ while True:
             log(sb,"blue")
             if len(sb)<71:
                 
-                log(("Niveau audio in: "+ str(ord(sb[2]))),"white")
-                audioininfo=str(ord(sb[2]))
+                log(("Niveau audio in: "+ str(ord(sb[1]))),"white")
+                audioininfo=str(ord(sb[1]))
                 setAudio(audioOut,audiooutinfo,audioininfo)
                 break
 
