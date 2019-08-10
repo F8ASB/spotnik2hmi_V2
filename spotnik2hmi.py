@@ -345,20 +345,23 @@ while True:
 
         while 1:
             s = hmiReadline()
-            if len(s)<71:
-                log(("Niveau audio out: "+ str(ord(s[1]))),"white")	
-                audiooutinfo=str(ord(s[1]))
-                setAudio(audioOut,audiooutinfo,audioininfo)
+            sa=s[2:11]
+            log(sa,"blue")
+            if len(sa)<71:
+                log(("Niveau audio out: "+ str(ord(sa[1]))),"white")	
+                audiooutinfo=str(ord(sa[2]))
                 break
 
         requete("get nIn.val")
 
         while 1:
             s = hmiReadline()
-            if len(s)<71:
+            sb=s[2:11]
+            log(sb,"blue")
+            if len(sb)<71:
                 
-                log(("Niveau audio in: "+ str(ord(s[1]))),"white")
-                audioininfo=str(ord(s[1]))
+                log(("Niveau audio in: "+ str(ord(sb[2]))),"white")
+                audioininfo=str(ord(sb[2]))
                 setAudio(audioOut,audiooutinfo,audioininfo)
                 break
 
