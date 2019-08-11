@@ -594,15 +594,13 @@ while True:
 #QSYSALONRRF#
     if s.find("qsyrrf")!= -1:
     	qsystatut=True
-
-        log("QSY SALON RRF","red")
+    	log("QSY SALON RRF","red")
         #dtmf("96#")
         os.system("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
     	qsystatut=True
-
-        log("QSY FON","red")
+    	log("QSY FON","red")
         #dtmf("97#")
         os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
@@ -614,42 +612,36 @@ while True:
 #QSYINTER#
     if s.find("qsyinter")!= -1:
     	qsystatut=True
-    
-        log("QSY INTER","red")
+    	log("QSY INTER","red")
         #dtmf("99#")
         os.system("/etc/spotnik/restart.int")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
     	qsystatut=True
-
-        log("QSY BAVARDAGE","red")
+    	log("QSY BAVARDAGE","red")
         #dtmf("100#")
         os.system("/etc/spotnik/restart.bav")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
     	qsystatut=True
-  
-        log("QSY LOCAL","red")
+    	log("QSY LOCAL","red")
         #dtmf("101#")
         os.system("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
     	qsystatut=True
-  
-        log("QSY SAT","red")
+    	log("QSY SAT","red")
         #dtmf("102#")
         os.system("/etc/spotnik/restart.sat")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
-
-        log("BULETIN METEO","red")
+    	log("BULETIN METEO","red")
         dtmf("*51#")
 #PERROQUET
     if s.find("qsyperroquet")!= -1:
     	qsystatut=True
-
-        log("QSY PERROQUET","red")
+    	log("QSY PERROQUET","red")
         os.system("/etc/spotnik/restart.default")
         
 #DASHBOARD#
