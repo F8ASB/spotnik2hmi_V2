@@ -619,7 +619,7 @@ while True:
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
         log("List dash","red")
-        if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT"or salon_current=="ECH":
+        if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT"or salon_current=="ECH"or salon_current=="PER":
             ecrire("trafic.g0.txt","")
         else:    
             #print("ENVOI DASH:")
