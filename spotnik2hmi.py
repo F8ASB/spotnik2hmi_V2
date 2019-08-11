@@ -8,7 +8,7 @@ import serial
 import sys
 from datetime import  *
 import time
-from time import time,sleep
+from time import sleep
 import requests
 #pour lecture fichier de config
 import configparser, os
@@ -345,26 +345,71 @@ while True:
 
         while 1:
             s = hmiReadline()
-            sa=s[2:11]
+            log(s,"blue")
+            sa=s[2:]
             log(sa,"blue")
+   
+            
+            
             if len(sa)<71:
-                log(("Niveau audio out: "+ str(ord(sa[1]))),"white")	
-                audiooutinfo=str(ord(sa[1]))
-                break
-
+            	if sa[2:3] == "x":
+            		log(("Niveau audio out: "+ str(int(sa[3:5], 16))),"white")	
+            		audiooutinfo=str(int(sa[3:5], 16))
+            		break
+            	elif sa[2:3] == "t":
+            		log("Niveau audio out: "+ "9","white")	
+            		audiooutinfo=9
+            		break
+            	elif sa[2:3] == "n":
+            		log("Niveau audio out: "+ "10","white")	
+            		audiooutinfo=10
+            		break
+            	elif sa[2:3] == "r":
+            		log("Niveau audio out: "+ "13","white")	
+            		audiooutinfo=13
+            		break
+            	else:
+                	log(("Niveau audio out: "+ str(ord(sa[1]))),"white")	
+                	audiooutinfo=str(ord(sa[1]))
+                	break
+		
+        time.sleep(1)
+        
         requete("get nIn.val")
 
         while 1:
+            
             s = hmiReadline()
-            sb=s[2:11]
+            log(s,"blue")
+            sb=s[2:]
             log(sb,"blue")
-            if len(sb)<71:
-                
-                log(("Niveau audio in: "+ str(ord(sb[1]))),"white")
-                audioininfo=str(ord(sb[1]))
-                setAudio(audioOut,audiooutinfo,audioininfo)
-                break
 
+            if len(sb)<71:
+            	if sb[2:3] == "x":
+            		log(("Niveau audio in: "+ str(int(sb[3:5], 16))),"white")	
+            		audioininfo=str(int(sb[3:5], 16))
+            		setAudio(audioOut,audiooutinfo,audioininfo)
+            		break
+            	elif sb[2:3] == "t":
+            		log("Niveau audio in: "+ "9","white")	
+            		audioininfo=9
+            		setAudio(audioOut,audiooutinfo,audioininfo)
+            		break
+            	elif sb[2:3] == "n":
+            		log("Niveau audio in: "+ "10","white")	
+            		audioininfo=10
+            		setAudio(audioOut,audiooutinfo,audioininfo)
+            		break
+            	elif sb[2:3] == "r":
+            		log("Niveau audio in: "+ "13","white")	
+            		audioininfo=13
+            		setAudio(audioOut,audiooutinfo,audioininfo)
+            		break
+            	else:
+                	log(("Niveau audio in: "+ str(ord(sb[1]))),"white")	
+                	audioininfo=str(ord(sb[1]))
+                	setAudio(audioOut,audiooutinfo,audioininfo)
+                	break       
 
 
 #PAGE MAJ 
