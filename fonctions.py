@@ -170,14 +170,17 @@ def GetAudioInfo(interfaceaudio):
 	lIn= alsaaudio.Mixer(control='Mic')
 	lOut=alsaaudio.Mixer(control=interfaceaudio)
 	templevelIn=lIn.getvolume()
+	log(str(templevelIn),"white")
 	templevelOut=lOut.getvolume()
+	log(str(templevelOut),"white")
 	levelIn=str(templevelIn).strip('[]')
 	templevelOut=templevelOut[:-1]
 	levelOut=str(templevelOut).strip('[]')
 	print(levelOut)
+	print(levelIn)
 	ecrireval("hIn.val",str(levelIn))
 	ecrireval("nIn.val",str(levelIn))
-	levelOutcor=round(int(levelOut)/1.20)
+	levelOutcor=round(int(levelOut)/1.240)
 	ecrireval("hOut.val",str(levelOutcor))
 	ecrireval("nOut.val",str(levelOutcor))
 
@@ -185,11 +188,11 @@ def GetAudioInfo(interfaceaudio):
 #Fonction reglage des niveaux    
 def setAudio(interfaceaudio,levelOut,levelIn):
 	lIn= alsaaudio.Mixer(control='Mic')
-	levelOutcor = int(levelOut)*1.33
+	levelOutcor = int(levelOut)*1
 	os.system('amixer -c 0 set' + " Mic " + str(levelIn) + "%")
 	log(("Reglage du niveau audio In: "+str(levelIn)+"%"),"white")
 	log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
-	os.system('amixer -c 0 set ' + interfaceaudio +" "+ str(levelOutcor) + "%")
+	os.system('amixer -c 0 set ' + interfaceaudio +" -M "+ str(levelOutcor) + "%")
 	log(("Reglage du niveau audio Out: "+str(levelOut)+"%"),"white")
 
 def requete(valeur):
