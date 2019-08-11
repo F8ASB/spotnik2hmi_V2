@@ -568,7 +568,7 @@ while True:
 
         log("QSY SALON RRF","red")
         #dtmf("96#")
-        console("/etc/spotnik/restart.rrf")
+        os.system("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
 
@@ -579,31 +579,31 @@ while True:
     if s.find("qsytech")!= -1:
         log("QSY SALON TECH","red")
         #dtmf("98#")
-        console("/etc/spotnik/restart.tec")
+        os.system("/etc/spotnik/restart.tec")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
     
         log("QSY INTER","red")
         #dtmf("99#")
-        console("/etc/spotnik/restart.int")
+        os.system("/etc/spotnik/restart.int")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
 
         log("QSY BAVARDAGE","red")
         #dtmf("100#")
-        console("/etc/spotnik/restart.bav")
+        os.system("/etc/spotnik/restart.bav")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
   
         log("QSY LOCAL","red")
         #dtmf("101#")
-        console("/etc/spotnik/restart.loc")
+        os.system("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
   
         log("QSY SAT","red")
         #dtmf("102#")
-        console("/etc/spotnik/restart.sat")
+        os.system("/etc/spotnik/restart.sat")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
@@ -614,7 +614,7 @@ while True:
     if s.find("qsyperroquet")!= -1:
 
         log("QSY PERROQUET","red")
-        console("/etc/spotnik/restart.default")
+        os.system("/etc/spotnik/restart.default")
         
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
