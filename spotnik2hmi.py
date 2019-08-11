@@ -261,9 +261,9 @@ while True:
         salon_current="SAT"   
 
     if tn.find("el") != -1:
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
+        ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
         ecrire("trafic.g0.txt","")
-        salon_current="SAT"
+        
 
     a.close()
 
