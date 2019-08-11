@@ -380,7 +380,7 @@ def get_meteo():
 		fichier.write("[rapport]")
 		fichier.close()
 		result = console('/opt/spotnik/spotnik2hmi_V2/python-metar/get_report.py '+ airport+ '>> /tmp/meteo.txt')
-		log(result,"white")
+		log(str(result),"white")
 		#routine ouverture fichier de config
 		config = configparser.RawConfigParser()
 		config.read('/tmp/meteo.txt')

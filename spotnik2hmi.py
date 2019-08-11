@@ -30,8 +30,8 @@ portcom(sys.argv[1],sys.argv[2])
 salon_current=""
 dateold=""
 heureSold=""
-audiooutinfo=0
-audioininfo=0
+#audiooutinfo=0
+#audioininfo=0
 #routine ouverture fichier de config
 # config = ConfigParser.RawConfigParser()
 # config.read(svxconfig)
