@@ -251,19 +251,20 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
 
-    if tn.find("default") != -1:
+    if tn.find("default") != -1 and salon_current!="PER":
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         ecrire("trafic.g0.txt","")
+        salon_current="PER" 
 
-    if tn.find("sat") != -1:
+    if tn.find("sat") != -1 and salon_current!="SAT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","") 
         salon_current="SAT"   
 
-    if tn.find("el") != -1:
+    if tn.find("el") != -1 and salon_current!="ECH":
         ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
         ecrire("trafic.g0.txt","")
-        
+        salon_current="ECH"
 
     a.close()
 
@@ -311,12 +312,13 @@ while True:
         while 1:
             s = hmiReadline()
             if len(s)<71:
-                test= s.split("p")
-                newpass= test[1][:-3]
-                newssid= test[2][:-3]
-                log("New SSID: "+newssid,white)
-                log("New PASS: "+newpass,white)
-                wifistatut = 0
+                print(s)
+                wifiinfo= s.split("p")
+                newpass= wifiinfo[1][:-12]
+                newssid= wifiinfo[2][:-13]
+                log(("New SSID: "+newssid),"white")
+                log(("New PASS: "+newpass),"white")
+                d.wifistatut = 0
                 break
         gopage("confirm")
         ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")	
@@ -513,6 +515,7 @@ while True:
             calltrafic_current=d.salon["LOC"]['call_current']
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
+
         
         ecrire("Txt_date.txt",date)
         ecrire("Txt_heure.txt",heureS)    
@@ -564,60 +567,60 @@ while True:
 #QSYSALONRRF#
     if s.find("qsyrrf")!= -1:
 
-        print("QSY SALON RRF")
+        log("QSY SALON RRF","red")
         #dtmf("96#")
         console("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
 
-        print("QSY FON")
+        log("QSY FON","red")
         #dtmf("97#")
         console("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
-        print("QSY SALON TECH")
+        log("QSY SALON TECH","red")
         #dtmf("98#")
         console("/etc/spotnik/restart.tec")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
     
-        print("QSY INTER")
+        log("QSY INTER","red")
         #dtmf("99#")
         console("/etc/spotnik/restart.int")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
 
-        print("QSY BAVARDAGE")
+        log("QSY BAVARDAGE","red")
         #dtmf("100#")
         console("/etc/spotnik/restart.bav")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
   
-        print("QSY LOCAL")
+        log("QSY LOCAL","red")
         #dtmf("101#")
         console("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
   
-        print("QSY SAT")
+        log("QSY SAT","red")
         #dtmf("102#")
         console("/etc/spotnik/restart.sat")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
 
-        print("BULETIN METEO")
+        log("BULETIN METEO","red")
         dtmf("*51#")
 #PERROQUET
     if s.find("qsyperroquet")!= -1:
 
-        print("QSY PERROQUET")
-        dtmf("95#")
+        log("QSY PERROQUET","red")
+        console("/etc/spotnik/restart.default")
         
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
         log("List dash","red")
-        if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT":
+        if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT"or salon_current=="ECH":
             ecrire("trafic.g0.txt","")
         else:    
             #print("ENVOI DASH:")
