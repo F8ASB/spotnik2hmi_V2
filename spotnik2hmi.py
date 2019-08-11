@@ -557,40 +557,34 @@ while True:
     if s.find("menu")!= -1:
         log("Page menu","red")
 #MONITOR#
-    if s.find("monitor")!= -1:
-        log("Page monitor","red")
-        ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
-        ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
-        ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
-        ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
-        ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
-        ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
+	if s.find("monitor")!= -1:
+		log("Page monitor","red")
+		ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
+		ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
+		ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
+		ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
+		ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
+		ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
        
 #SCAN#
-    if s.find("scan")!= -1:
-        log("Page scan","red")
+	if s.find("scan")!= -1:
+		log("Page scan","red")
 
-        ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-        ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-        ecrire("scan.Txt_listint.txt",str(d.salon['INT']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-        ecrire("scan.Txt_listbav.txt",str(d.salon['BAV']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+		ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+		ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+		ecrire("scan.Txt_listint.txt",str(d.salon['INT']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+		ecrire("scan.Txt_listbav.txt",str(d.salon['BAV']['node_list']).replace("'",'').replace(", ",',')[1:-1])
 
-        ecrire("scan.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
-        ecrire("scan.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
-        ecrire("scan.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
-        ecrire("scan.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
-        #ecrire("scan.Txt_nbrfon.txt",d.salon[FON]['node_count'])   
-        
-        
-
-
-	
+		ecrire("scan.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
+		ecrire("scan.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
+		ecrire("scan.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
+		ecrire("scan.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
+		#ecrire("scan.Txt_nbrfon.txt",d.salon[FON]['node_count'])   
 
 #Numkaypad#
-    if s.find("keypadnum")!= -1:
-   
-        log("Page clavier numerique","red")
-	            
+	if s.find("keypadnum")!= -1:
+		log("Page clavier numerique","red")
+
 #QSYSALONRRF#
 	if s.find("qsyrrf")!= -1:
 		qsystatut=True
