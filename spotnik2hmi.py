@@ -565,36 +565,43 @@ while True:
     if s.find("qsyrrf")!= -1:
 
         print("QSY SALON RRF")
-        dtmf("96#")
+        #dtmf("96#")
+        console("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
 
         print("QSY FON")
-        dtmf("97#")
+        #dtmf("97#")
+        console("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
         print("QSY SALON TECH")
-        dtmf("98#")
+        #dtmf("98#")
+        console("/etc/spotnik/restart.tec")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
     
         print("QSY INTER")
-        dtmf("99#")
+        #dtmf("99#")
+        console("/etc/spotnik/restart.int")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
 
         print("QSY BAVARDAGE")
-        dtmf("100#")
+        #dtmf("100#")
+        console("/etc/spotnik/restart.bav")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
   
         print("QSY LOCAL")
-        dtmf("101#")
+        #dtmf("101#")
+        console("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
   
         print("QSY SAT")
-        dtmf("102#")
+        #dtmf("102#")
+        console("/etc/spotnik/restart.sat")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
@@ -606,6 +613,7 @@ while True:
 
         print("QSY PERROQUET")
         dtmf("95#")
+        
 #DASHBOARD#
     if s.find("listdash")!= -1 and salon_current!="RRF" and salon_current!="FON":
         log("List dash","red")
