@@ -26,6 +26,7 @@ import ssl
 
 
 portcom(sys.argv[1],sys.argv[2])
+qsystatut=False
 
 salon_current=""
 dateold=""
@@ -228,42 +229,69 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         salon_current="RRF"
         ecrire("trafic.g0.txt","")
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
 		
     if tn.find("fon") != -1 and salon_current!="FON":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")	
         salon_current="FON"
         ecrire("trafic.g0.txt","")
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
 	
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TEC"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
     
     if tn.find("int") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INT"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
     
     if tn.find("bav") != -1 and salon_current!="BAV":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
         salon_current="BAV"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
 
     if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
 
     if tn.find("default") != -1 and salon_current!="PER":
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         ecrire("trafic.g0.txt","")
-        salon_current="PER" 
+        salon_current="PER"
+        if qsystatut==false:
+        	gopage(qsy) 
+        qsystatut=False
 
     if tn.find("sat") != -1 and salon_current!="SAT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","") 
-        salon_current="SAT"   
+        salon_current="SAT"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False   
 
     if tn.find("el") != -1 and salon_current!="ECH":
         ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
         ecrire("trafic.g0.txt","")
         salon_current="ECH"
+        if qsystatut==false:
+        	gopage(qsy)
+        qsystatut=False
 
     a.close()
 
@@ -565,41 +593,48 @@ while True:
 	            
 #QSYSALONRRF#
     if s.find("qsyrrf")!= -1:
+    	qsystatut=True
 
         log("QSY SALON RRF","red")
         #dtmf("96#")
         os.system("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
+    	qsystatut=True
 
         log("QSY FON","red")
         #dtmf("97#")
         os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
+    	qsystatut=True
         log("QSY SALON TECH","red")
         #dtmf("98#")
         os.system("/etc/spotnik/restart.tec")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
+    	qsystatut=True
     
         log("QSY INTER","red")
         #dtmf("99#")
         os.system("/etc/spotnik/restart.int")
 #QSYSSTV#
     if s.find("qsybav")!= -1:
+    	qsystatut=True
 
         log("QSY BAVARDAGE","red")
         #dtmf("100#")
         os.system("/etc/spotnik/restart.bav")
 #QSYCODECS#
     if s.find("qsyloc")!= -1:
+    	qsystatut=True
   
         log("QSY LOCAL","red")
         #dtmf("101#")
         os.system("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
+    	qsystatut=True
   
         log("QSY SAT","red")
         #dtmf("102#")
@@ -612,6 +647,7 @@ while True:
         dtmf("*51#")
 #PERROQUET
     if s.find("qsyperroquet")!= -1:
+    	qsystatut=True
 
         log("QSY PERROQUET","red")
         os.system("/etc/spotnik/restart.default")
