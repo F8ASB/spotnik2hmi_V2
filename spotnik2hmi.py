@@ -574,7 +574,7 @@ while True:
 
         log("QSY FON","red")
         #dtmf("97#")
-        console("/etc/spotnik/restart.fon")
+        os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
         log("QSY SALON TECH","red")
