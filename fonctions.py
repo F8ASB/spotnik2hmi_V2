@@ -167,22 +167,23 @@ def setdim(dimv):
 #Fonction info parametres Audio
 #recuperation info niveau 
 def GetAudioInfo(interfaceaudio):
+	
+	templevelOut = subprocess.check_output('amixer -c 0 get ' + interfaceaudio +" -M", shell=True)
+	templevelOut =  str(templevelOut).split('[')
+	levelOut=templevelOut[1][:-3]
+
 	lIn= alsaaudio.Mixer(control='Mic')
-	lOut=alsaaudio.Mixer(control=interfaceaudio)
 	templevelIn=lIn.getvolume()
-	log(str(templevelIn),"white")
-	templevelOut=lOut.getvolume()
-	log(str(templevelOut),"white")
 	levelIn=str(templevelIn).strip('[]')
-	templevelOut=templevelOut[:-1]
-	levelOut=str(templevelOut).strip('[]')
-	print(levelOut)
-	print(levelIn)
+	
+	log("Lecture du niveau audio In Alsamixer: "+str(levelIn),"white")
+	log("Lecture du niveau audio Out Alsamixer: "+str(levelOut),"white")
+
 	ecrireval("hIn.val",str(levelIn))
 	ecrireval("nIn.val",str(levelIn))
-	levelOutcor=round(int(levelOut)/1.240)
-	ecrireval("hOut.val",str(levelOutcor))
-	ecrireval("nOut.val",str(levelOutcor))
+	#levelOutcor=round(int(levelOut)/1.240)
+	ecrireval("hOut.val",str(levelOut))
+	ecrireval("nOut.val",str(levelOut))
 
 
 #Fonction reglage des niveaux    
