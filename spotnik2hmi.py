@@ -64,18 +64,16 @@ chargecpu= getCPUuse()
 tmp = os.popen("uname -a").readline()
 if 'sun8i' in tmp:
     board = 'Orange Pi'
-	
 else:
     board = 'Raspberry Pi'
     #peripheriques audio Out
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
-    audioOut=audioinfo[1]	
+    audioOut=audioinfo[1]   
     log(("Peripherique audio Out: "+audioOut),"white")
 print(board)
 
 #Envoi des infos 
-  
 logo(d.versionDash)
 
 print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
@@ -111,23 +109,23 @@ while True:
     #Gestion Date et heure (en FR)
     d.dashlist = ""
     d.today = datetime.now()
-    locale.setlocale(locale.LC_TIME,'')	
+    locale.setlocale(locale.LC_TIME,'') 
     date = (d.today.strftime('%d-%m-%Y'))
     heureS =(d.today.strftime('%H:%M'))
     if date != dateold:
-    	ecrire("Txt_date.txt",date)
-    	dateold=date
+        ecrire("Txt_date.txt",date)
+        dateold=date
     if heureS != heureSold:
-    	ecrire("Txt_heure.txt",heureS)
-    	heureSold= heureS
+        ecrire("Txt_heure.txt",heureS)
+        heureSold= heureS
 
     requete("vis p9,0")
 
     #tmp = datetime.datetime.now()
     timestamp = d.today.strftime('%d-%m-%Y %H:%M:%S')
-    
+
     for key in d.salon:
-        
+
         try:
             r = requests.get(d.salon[key]['url'], verify=False, timeout=10)
             page = r.text
@@ -229,68 +227,68 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         salon_current="RRF"
         ecrire("trafic.g0.txt","")
-        if qsystatut==false:
-        	gopage(qsy)
-        qsystatut=False
-		
+        if qsystatut==False:
+            gopage("qsy")
+            qsystatut=False
+        
     if tn.find("fon") != -1 and salon_current!="FON":
-        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")	
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
         salon_current="FON"
         ecrire("trafic.g0.txt","")
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
-	
+    
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TEC"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
-    
+
     if tn.find("int") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INT"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
-    
+
     if tn.find("bav") != -1 and salon_current!="BAV":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
         salon_current="BAV"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
 
     if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
 
     if tn.find("default") != -1 and salon_current!="PER":
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         ecrire("trafic.g0.txt","")
         salon_current="PER"
-        if qsystatut==false:
-        	gopage(qsy) 
+        if qsystatut==False:
+            gopage("qsy") 
         qsystatut=False
 
     if tn.find("sat") != -1 and salon_current!="SAT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","") 
         salon_current="SAT"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False   
 
     if tn.find("el") != -1 and salon_current!="ECH":
         ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
         ecrire("trafic.g0.txt","")
         salon_current="ECH"
-        if qsystatut==false:
-        	gopage(qsy)
+        if qsystatut==False:
+            gopage("qsy")
         qsystatut=False
 
     a.close()
@@ -298,10 +296,9 @@ while True:
 
 #Gestion des commandes serie reception du Nextion
     s = hmiReadline()
-    #enlever les # pour voir trames recus et longueur 
     if len(s)<59 and len(s)>0:
         log(s,"blue")
-        #print(len(s))
+
 
 #OUIREBOOT#
     if s.find("ouireboot")!= -1:
@@ -314,7 +311,7 @@ while True:
         log("REDEMARRAGE","red")
         dtmf("96#")
         gopage ("trafic")
-                
+
 #OUIARRET#
     if s.find("ouiarret")!= -1:
         log("ARRET DU SYSTEM","red")
@@ -335,7 +332,7 @@ while True:
         log("MAJ Wifi....","white")
         requete("get t0.txt")
         requete("get t1.txt")
-
+    
         while 1:
             s = hmiReadline()
             if len(s)<71:
@@ -348,11 +345,11 @@ while True:
                 d.wifistatut = 0
                 break
         gopage("confirm")
-        ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")	
+        ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")  
 
 #WIFI#
     if s.find("pagewifi")!= -1:
-   
+
         log("Page wifi","red")
         Json="/etc/spotnik/config.json"
         if d.wifistatut == 0:
@@ -381,64 +378,64 @@ while True:
             
             
             if len(sa)<71:
-            	if sa[2:3] == "x":
-            		log(("Niveau audio out: "+ str(int(sa[3:5], 16))),"white")	
-            		audiooutinfo=str(int(sa[3:5], 16))
-            		break
-            	elif sa[2:3] == "t":
-            		log("Niveau audio out: "+ "9","white")	
-            		audiooutinfo=9
-            		break
-            	elif sa[2:3] == "n":
-            		log("Niveau audio out: "+ "10","white")	
-            		audiooutinfo=10
-            		break
-            	elif sa[2:3] == "r":
-            		log("Niveau audio out: "+ "13","white")	
-            		audiooutinfo=13
-            		break
-            	else:
-                	log(("Niveau audio out: "+ str(ord(sa[1]))),"white")	
-                	audiooutinfo=str(ord(sa[1]))
-                	break
-		
-        time.sleep(1)
+                if sa[2:3] == "x":
+                    log(("Niveau audio out: "+ str(int(sa[3:5], 16))),"white")  
+                    audiooutinfo=str(int(sa[3:5], 16))
+                    break
+                elif sa[2:3] == "t":
+                    log("Niveau audio out: "+ "9","white")  
+                    audiooutinfo=9
+                    break
+                elif sa[2:3] == "n":
+                    log("Niveau audio out: "+ "10","white") 
+                    audiooutinfo=10
+                    break
+                elif sa[2:3] == "r":
+                    log("Niveau audio out: "+ "13","white") 
+                    audiooutinfo=13
+                    break
+                else:
+                    log(("Niveau audio out: "+ str(ord(sa[1]))),"white")    
+                    audiooutinfo=str(ord(sa[1]))
+                    break
         
+        time.sleep(1)
+
         requete("get nIn.val")
 
         while 1:
-            
+
             s = hmiReadline()
             log(s,"blue")
             sb=s[2:]
             log(sb,"blue")
 
             if len(sb)<71:
-            	if sb[2:3] == "x":
-            		log(("Niveau audio in: "+ str(int(sb[3:5], 16))),"white")	
-            		audioininfo=str(int(sb[3:5], 16))
-            		setAudio(audioOut,audiooutinfo,audioininfo)
-            		break
-            	elif sb[2:3] == "t":
-            		log("Niveau audio in: "+ "9","white")	
-            		audioininfo=9
-            		setAudio(audioOut,audiooutinfo,audioininfo)
-            		break
-            	elif sb[2:3] == "n":
-            		log("Niveau audio in: "+ "10","white")	
-            		audioininfo=10
-            		setAudio(audioOut,audiooutinfo,audioininfo)
-            		break
-            	elif sb[2:3] == "r":
-            		log("Niveau audio in: "+ "13","white")	
-            		audioininfo=13
-            		setAudio(audioOut,audiooutinfo,audioininfo)
-            		break
-            	else:
-                	log(("Niveau audio in: "+ str(ord(sb[1]))),"white")	
-                	audioininfo=str(ord(sb[1]))
-                	setAudio(audioOut,audiooutinfo,audioininfo)
-                	break       
+                if sb[2:3] == "x":
+                    log(("Niveau audio in: "+ str(int(sb[3:5], 16))),"white")   
+                    audioininfo=str(int(sb[3:5], 16))
+                    setAudio(audioOut,audiooutinfo,audioininfo)
+                    break
+                elif sb[2:3] == "t":
+                    log("Niveau audio in: "+ "9","white")   
+                    audioininfo=9
+                    setAudio(audioOut,audiooutinfo,audioininfo)
+                    break
+                elif sb[2:3] == "n":
+                    log("Niveau audio in: "+ "10","white")  
+                    audioininfo=10
+                    setAudio(audioOut,audiooutinfo,audioininfo)
+                    break
+                elif sb[2:3] == "r":
+                    log("Niveau audio in: "+ "13","white")  
+                    audioininfo=13
+                    setAudio(audioOut,audiooutinfo,audioininfo)
+                    break
+                else:
+                    log(("Niveau audio in: "+ str(ord(sb[1]))),"white") 
+                    audioininfo=str(ord(sb[1]))
+                    setAudio(audioOut,audiooutinfo,audioininfo)
+                    break       
 
 
 #PAGE MAJ 
@@ -463,9 +460,8 @@ while True:
     if s.find("MUTEOFF")!= -1:
         log("UNMUTE","white")
         os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
-        
-       
-#INFO#	
+
+#INFO#  
     if s.find("info")!= -1:
         print("Detection bouton info")
         cput = '"'+cputemp+' C'+'"' 
@@ -484,7 +480,7 @@ while True:
         ecrire("info.t0.txt",ip)
         print("occupation systeme: "+str(chargecpu))
         ecrire("info.t12.txt",str(chargecpu)+" %")
-        
+
 #BALISE#
     if s.find("balise")!= -1:
         print("Balise vocale")
@@ -504,8 +500,8 @@ while True:
     if s.find("mixer")!= -1:
         log("Detection page mixer","red")
         GetAudioInfo(audioOut)
-						
-#TRAFIC#		
+                        
+#TRAFIC#        
     if s.find("trafic")!= -1:
         log("Page trafic","red")
 
@@ -531,6 +527,7 @@ while True:
             calltrafic_current=d.salon["INT"]['call_current']
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
+        
         if salon_current=="BAV":
 
             calltrafic_current=d.salon["BAV"]['call_current']
@@ -551,87 +548,87 @@ while True:
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
-        log("Page dashboard","red")
-		
+        og("Page dashboard","red")
+        
 #MENU#
     if s.find("menu")!= -1:
         log("Page menu","red")
 #MONITOR#
-	if s.find("monitor")!= -1:
-		log("Page monitor","red")
-		ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
-		ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
-		ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
-		ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
-		ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
-		ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
-       
+    if s.find("monitor")!= -1:
+        log("Page monitor","red")
+        ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
+        ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
+        ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
+        ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
+        ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
+        ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
+
 #SCAN#
-	if s.find("scan")!= -1:
-		log("Page scan","red")
+    if s.find("scan")!= -1:
+        log("Page scan","red")
 
-		ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-		ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-		ecrire("scan.Txt_listint.txt",str(d.salon['INT']['node_list']).replace("'",'').replace(", ",',')[1:-1])
-		ecrire("scan.Txt_listbav.txt",str(d.salon['BAV']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+        ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+        ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+        ecrire("scan.Txt_listint.txt",str(d.salon['INT']['node_list']).replace("'",'').replace(", ",',')[1:-1])
+        ecrire("scan.Txt_listbav.txt",str(d.salon['BAV']['node_list']).replace("'",'').replace(", ",',')[1:-1])
 
-		ecrire("scan.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
-		ecrire("scan.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
-		ecrire("scan.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
-		ecrire("scan.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
-		#ecrire("scan.Txt_nbrfon.txt",d.salon[FON]['node_count'])   
+        ecrire("scan.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
+        ecrire("scan.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
+        ecrire("scan.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
+        ecrire("scan.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
+       
 
 #Numkaypad#
-	if s.find("keypadnum")!= -1:
-		log("Page clavier numerique","red")
+    if s.find("keypadnum")!= -1:
+        log("Page clavier numerique","red")
 
 #QSYSALONRRF#
-	if s.find("qsyrrf")!= -1:
-		qsystatut=True
-		log("QSY SALON RRF","red")
-		os.system("/etc/spotnik/restart.rrf")
+    if s.find("qsyrrf")!= -1:
+        qsystatut=True
+        log("QSY SALON RRF","red")
+        os.system("/etc/spotnik/restart.rrf")
 #QSYFON#
-	if s.find("qsyfon")!= -1:
-		qsystatut=True
-		log("QSY FON","red")
-		os.system("/etc/spotnik/restart.fon")
+    if s.find("qsyfon")!= -1:
+        qsystatut=True
+        log("QSY FON","red")
+        os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
-	if s.find("qsytech")!= -1:
-		qsystatut=True
-		log("QSY SALON TECH","red")
-		os.system("/etc/spotnik/restart.tec")
+    if s.find("qsytech")!= -1:
+        qsystatut=True
+        log("QSY SALON TECH","red")
+        os.system("/etc/spotnik/restart.tec")
 #QSYINTER#
-	if s.find("qsyinter")!= -1:
-		qsystatut=True
-		log("QSY INTER","red")
-		os.system("/etc/spotnik/restart.int")
+    if s.find("qsyinter")!= -1:
+        qsystatut=True
+        log("QSY INTER","red")
+        os.system("/etc/spotnik/restart.int")
 #QSYSSTV#
-	if s.find("qsybav")!= -1:
-		qsystatut=True
-		log("QSY BAVARDAGE","red")
-		#dtmf("100#")
-		os.system("/etc/spotnik/restart.bav")
+    if s.find("qsybav")!= -1:
+        qsystatut=True
+        log("QSY BAVARDAGE","red")
+        #dtmf("100#")
+        os.system("/etc/spotnik/restart.bav")
 #QSYCODECS#
-	if s.find("qsyloc")!= -1:
-		qsystatut=True
-		log("QSY LOCAL","red")
-		#dtmf("101#")
-		os.system("/etc/spotnik/restart.loc")
+    if s.find("qsyloc")!= -1:
+        qsystatut=True
+        log("QSY LOCAL","red")
+        #dtmf("101#")
+        os.system("/etc/spotnik/restart.loc")
 #QSYSAT#
-	if s.find("qsysat")!= -1:
-		qsystatut=True
-		log("QSY SAT","red")
-		#dtmf("102#")
-		os.system("/etc/spotnik/restart.sat")
+    if s.find("qsysat")!= -1:
+        qsystatut=True
+        log("QSY SAT","red")
+        #dtmf("102#")
+        os.system("/etc/spotnik/restart.sat")
 
 #DONNMETEO#
-	if s.find("dmeteo")!= -1:
-    	log("BULETIN METEO","red")
+    if s.find("dmeteo")!= -1:
+        log("BULETIN METEO","red")
         dtmf("*51#")
 #PERROQUET
-	if s.find("qsyperroquet")!= -1:
-    	qsystatut=True
-    	log("QSY PERROQUET","red")
+    if s.find("qsyperroquet")!= -1:
+        qsystatut=True
+        log("QSY PERROQUET","red")
         os.system("/etc/spotnik/restart.default")
         
 #DASHBOARD#
@@ -640,8 +637,5 @@ while True:
         if salon_current=="RRF" or salon_current=="FON"or salon_current=="SAT"or salon_current=="ECH"or salon_current=="PER":
             ecrire("trafic.g0.txt","")
         else:    
-            #print("ENVOI DASH:")
-            #print(str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
-            ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])
-         
-        
+            ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])                
+
