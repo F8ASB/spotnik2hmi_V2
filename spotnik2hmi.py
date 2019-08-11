@@ -77,12 +77,11 @@ print(board)
   
 logo(d.versionDash)
 
-print("Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C") 
-print("Station: "+d.callsign)
-print("Frequence: "+d.freq+" Mhz")
-print("Spotnik: Version:"+d.version)
-
-#Reset ecran Nextion
+print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
+print("     +    "+"Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C"+ "    +   " + "Spotnik: Version:"+d.version+"  +")
+print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
+print("     +   " +"Station: "+d.callsign + "       Frequence: "+d.freq+" Mhz"+"    +")
+print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
 
 resetHMI()
 
