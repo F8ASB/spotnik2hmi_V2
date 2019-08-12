@@ -31,6 +31,7 @@ qsystatut=False
 salon_current=""
 dateold=""
 heureSold=""
+statutradio=""
 #audiooutinfo=0
 #audioininfo=0
 #routine ouverture fichier de config
@@ -220,6 +221,7 @@ while True:
                 ecrire("monitor.Txt_statut.txt",d.monitor)
 
     #detection connexion salon
+
     a = open("/etc/spotnik/network","r")
     tn = a.read()
 
@@ -290,6 +292,41 @@ while True:
         if qsystatut==False:
             gopage("qsy")
         qsystatut=False
+
+#Gestion salon Perroquet TX et RX
+    if tn.find("default") != -1 and salon_current=="PER":
+        
+        p= open("/sys/class/gpio/gpio18/value","r")
+        gpiorx_value = p.read()
+        
+        if gpiorx_value.find("1") != -1 and statutradio!="RX":
+             log("RX Detected","white")
+             statutradio="RX"
+             requete("vis p2,1")
+             
+
+        elif gpiorx_value.find("0") != -1 and statutradio!="TX" and statutradio!="":
+             log("RX OFF","white")
+             requete("vis p2,0")
+             statutradio=""
+
+        p.close()
+
+        q= open("/sys/class/gpio/gpio17/value","r")
+        gpiotx_value = q.read()
+        
+        if gpiotx_value.find("1") != -1 and statutradio!="TX":
+             log("Tx ON","white")
+             statutradio="TX"
+             requete("vis p3,1")
+             
+        elif gpiotx_value.find("0") != -1 and statutradio!="RX" and statutradio!="":
+             log("Tx OFF","white")
+             requete("vis p3,0")
+             statutradio=""
+
+
+        q.close()
 
     a.close()
 
