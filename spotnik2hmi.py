@@ -32,6 +32,7 @@ salon_current=""
 dateold=""
 heureSold=""
 statutradio=""
+firstboot= True
 #audiooutinfo=0
 #audioininfo=0
 #routine ouverture fichier de config
@@ -229,7 +230,7 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         salon_current="RRF"
         ecrire("trafic.g0.txt","")
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
             qsystatut=False
         
@@ -237,35 +238,35 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
         salon_current="FON"
         ecrire("trafic.g0.txt","")
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
     
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TEC"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
 
     if tn.find("int") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INT"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
 
     if tn.find("bav") != -1 and salon_current!="BAV":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
         salon_current="BAV"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
 
     if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
 
@@ -273,7 +274,7 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         ecrire("trafic.g0.txt","")
         salon_current="PER"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy") 
         qsystatut=False
 
@@ -281,7 +282,7 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         ecrire("trafic.g0.txt","") 
         salon_current="SAT"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False   
 
@@ -289,7 +290,7 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
         ecrire("trafic.g0.txt","")
         salon_current="ECH"
-        if qsystatut==False:
+        if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
 
@@ -675,4 +676,4 @@ while True:
             ecrire("trafic.g0.txt","")
         else:    
             ecrire("trafic.g0.txt",str(d.salon[salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1])                
-
+    firstboot= False
