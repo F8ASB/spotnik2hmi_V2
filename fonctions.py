@@ -105,7 +105,6 @@ def portcom(portseriel,vitesse):
     
     if b'comok' in r:
         print(r)
-        #status, unknown1, model, fwversion, mcucode, serialn, flashSize = b'r.strip("\xff\x00").split(',')'
         status, unknown1, model, fwversion, mcucode, serialn, flashSize = r.split(b',')
         print('Status: ' + status.split(b' ')[0].decode("utf-8"))
         screentype=model.split(b' ')[0][0:10]
@@ -287,9 +286,26 @@ def prenom(Searchcall):
             print(prenom)                   
 #recuperation Frequence dans JSON
 
+def get_gpio(port):
+    global gpioptt
+    global gpiosql
+
+    svxconfig="/etc/spotnik/svxlink.cfg"
+    config = configparser.RawConfigParser()
+    config.read(svxconfig)
+    
+    if port=="sql":
+        gpioptt = config.get('Tx1', 'PTT_PIN')
+        log(gpioptt,"white")
+        return(gpioptt)
+    if port=="ptt":
+        gpiosql = config.get('Rx1', 'GPIO_SQL_PIN')
+        log(gpiosql,"white")
+        return(gpiosql)
+
 def get_frequency():
     global frequence
-    #recherche code IMAO dans config.json
+    
     with open(Json, 'r') as c:
         afind= json.load(c)
         frequence=afind['rx_qrg']
@@ -297,7 +313,6 @@ def get_frequency():
 #recuperation indicatif dans Json       
 def get_callsign():
     global indicatif
-    #recherche code IMAO dans config.json
     with open(Json, 'r') as d:
         afind= json.load(d)
         call=afind['callsign']

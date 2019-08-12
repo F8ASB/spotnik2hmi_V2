@@ -42,7 +42,8 @@ firstboot= True
 #recuperation indicatif et frequence    
 callsign = get_callsign()
 freq = get_frequency()
-
+#nbgpioptt = get_gpio(ptt)
+#nbgpiosql = get_gpio(sql)
 #adresse IP
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
