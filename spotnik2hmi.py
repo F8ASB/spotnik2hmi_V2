@@ -543,7 +543,9 @@ while True:
 #TRAFIC#        
     if s.find("trafic")!= -1:
         log("Page trafic","red")
-
+        ecrire("Txt_date.txt",date)
+        ecrire("Txt_heure.txt",heureS)
+        
         if salon_current=="TEC":
 
             calltrafic_current=d.salon["TEC"]['call_current']
@@ -580,8 +582,7 @@ while True:
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
         
-        ecrire("Txt_date.txt",date)
-        ecrire("Txt_heure.txt",heureS)    
+            
 
     
 

@@ -286,7 +286,7 @@ def prenom(Searchcall):
             print(prenom)                   
 #recuperation Frequence dans JSON
 
-def get_gpio(port):
+def get_gpio(portinfo):
     global gpioptt
     global gpiosql
 
@@ -294,11 +294,11 @@ def get_gpio(port):
     config = configparser.RawConfigParser()
     config.read(svxconfig)
     
-    if port=="sql":
+    if portinfo=="sql":
         gpioptt = config.get('Tx1', 'PTT_PIN')
         log(gpioptt,"white")
         return(gpioptt)
-    if port=="ptt":
+    if portinfo=="ptt":
         gpiosql = config.get('Rx1', 'GPIO_SQL_PIN')
         log(gpiosql,"white")
         return(gpiosql)
