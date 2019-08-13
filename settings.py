@@ -24,7 +24,7 @@ svxconfig="/etc/spotnik/svxlink.cfg"
 cheminversion= open("/etc/spotnik/version", "r")
 version = cheminversion.read()
 version = version.strip()
-conf="/etc/NetworkManager/system-connections/SPOTNIK"
+confwifi="/etc/NetworkManager/system-connections/SPOTNIK"
 
 #Chemin log a suivre
 svxlogfile = "/tmp/svxlink.log"   #SVXLink log file 

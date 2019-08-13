@@ -42,8 +42,11 @@ firstboot= True
 #recuperation indicatif et frequence    
 callsign = get_callsign()
 freq = get_frequency()
-#nbgpioptt = get_gpio(ptt)
-#nbgpiosql = get_gpio(sql)
+
+#recuperation GPIO dans les parametres
+nbgpioptt = get_gpioptt()
+nbgpiosql = get_gpiosql()
+
 #adresse IP
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
@@ -298,7 +301,7 @@ while True:
 #Gestion salon Perroquet TX et RX
     if tn.find("default") != -1 and salon_current=="PER":
         
-        p= open("/sys/class/gpio/gpio18/value","r")
+        p= open("/sys/class/gpio/"+nbgpiosql+"/value","r")
         gpiorx_value = p.read()
         
         if gpiorx_value.find("1") != -1 and statutradio!="RX":
@@ -314,7 +317,7 @@ while True:
 
         p.close()
 
-        q= open("/sys/class/gpio/gpio17/value","r")
+        q= open("/sys/class/gpio/"+nbgpioptt+"/value","r")
         gpiotx_value = q.read()
         
         if gpiotx_value.find("1") != -1 and statutradio!="TX":
@@ -588,7 +591,7 @@ while True:
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
-        og("Page dashboard","red")
+        log("Page dashboard","red")
         
 #MENU#
     if s.find("menu")!= -1:

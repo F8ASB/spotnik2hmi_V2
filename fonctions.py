@@ -286,22 +286,31 @@ def prenom(Searchcall):
             print(prenom)                   
 #recuperation Frequence dans JSON
 
-def get_gpio(portinfo):
+def get_gpioptt():
     global gpioptt
-    global gpiosql
-
+   
     svxconfig="/etc/spotnik/svxlink.cfg"
     config = configparser.RawConfigParser()
     config.read(svxconfig)
+
+    gpioptt = config.get('Tx1', 'PTT_PIN')
+    log(gpioptt,"white")
     
-    if portinfo=="sql":
-        gpioptt = config.get('Tx1', 'PTT_PIN')
-        log(gpioptt,"white")
-        return(gpioptt)
-    if portinfo=="ptt":
-        gpiosql = config.get('Rx1', 'GPIO_SQL_PIN')
-        log(gpiosql,"white")
-        return(gpiosql)
+    
+    return(gpioptt)
+
+def get_gpiosql():
+    global gpiosql
+   
+    svxconfig="/etc/spotnik/svxlink.cfg"
+    config = configparser.RawConfigParser()
+    config.read(svxconfig)
+
+    gpiosql = config.get('Rx1', 'GPIO_SQL_PIN')
+    log(gpiosql,"white")
+
+    
+    #return(gpiosql)
 
 def get_frequency():
     global frequence
@@ -329,22 +338,25 @@ def console(cmd):
 
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
-#        cfg = conf.ConfigParser()
-        # cfg.read(conf)
-        # cfg.set('connection', 'id', wifiid)
-        # cfg.set('wifi', 'ssid', wifiid)
-        # cfg.set('wifi-security', 'psk', wifipass)
-        # cfg.write(open(conf,'w'))
+    #ecriture fichier /etc/NetworkManager/system-connections/SPOTNIK
+    log("Ecriture fichier SPOTNIK + fichier Gui",yellow)
+    cfg = d.confwifi.ConfigParser()
+    cfg.read(d.confwifi)
+    cfg.set('connection', 'id', wifiid)
+    cfg.set('wifi', 'ssid', wifiid)
+    cfg.set('wifi-security', 'psk', wifipass)
+    cfg.write(open(d.confwifi,'w'))
 
-        #lecture de donnees JSON
-        with open(Json, 'r') as f:
-            config = json.load(f)
-        #editer la donnee
-        config['wifi_ssid'] = wifiid
-        config['wpa_key'] = wifipass
-        #write it back to the file
-        with open(Json, 'w') as f:
-            json.dump(config, f)
+    #lecture de donnees JSON
+    with open(Json, 'r') as f:
+        config = json.load(f)
+    #editer la donnee
+    config['wifi_ssid'] = wifiid
+    config['wpa_key'] = wifipass
+    #write it back to the file
+    with open(Json, 'w') as f:
+        json.dump(config, f)
+
 #Fonction ecriture texte sur Nextion ex: ecrire(t0.txt,"hello word")
 def ecrire(champ,texte):
     wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
