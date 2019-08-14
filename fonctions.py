@@ -35,7 +35,7 @@ try:
     from urllib.request import urlopen
 except ImportError:
     from urllib2 import urlopen
-
+from subprocess import Popen, PIPE
 #librairie Speedtest
 import speedtest
 
@@ -72,7 +72,10 @@ import alsaaudio
 
 #Fonction pour lancement routin console
 
-from subprocess import Popen, PIPE
+#***************
+#* GESTION LOG *
+#***************
+
 def debugON():
     global DEBUG
     DEBUG=True
@@ -90,6 +93,10 @@ def log(s,color):
             print ('\x1b[7;30;47m'+"DEBUG: "+s+'\x1b[0m')
         if color=="none":
             print (s)   
+
+#***************
+#* GESTION COM *
+#***************
 
 def portcom(portseriel,vitesse):
     global port
@@ -113,6 +120,16 @@ def portcom(portseriel,vitesse):
         screentype=model.split(b' ')[0][0:10]
         log('Model: ' + screentype.decode("utf-8"),"white")
 
+#*************************
+#* GESTION ECRAN NEXTION *
+#*************************
+
+def resetHMI():
+    global port
+    log("Reset HMI ...","white")
+    rstcmd=b'rest' + eof
+    port.write(rstcmd)
+
 def updatehmi():
 
     log("MAJ ECRAN HMI","red")
@@ -120,6 +137,41 @@ def updatehmi():
     log(porthmi,"white")
     os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype.decode("utf-8") +'.tft '+ '/dev/'+porthmi)
 
+def setdim(dimv):
+    log("dim debut","white")
+    dimsend ="dim="+str(dimv)+eof
+    port.write(b'dimsend')
+    log("dim fin","white")
+
+def hmiReadline():
+    global port
+    rcv = port.readline()
+    myString = str(rcv)
+    return myString
+
+#Fonction ecriture texte sur Nextion ex: ecrire(t0.txt,"hello word")
+def ecrire(champ,texte):
+    wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
+    port.write(wcmd)
+    infoserialtxt=champ+"=" +texte
+    log(infoserialtxt,"blue")
+#Fonction ecriture valeur sur ecran
+def ecrireval(champ,valeur):
+    wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
+    port.write(wcmdval)
+    infoserialval=champ+"=" +valeur
+    log(infoserialval,"blue") 
+    
+#Fonction appel de page
+def gopage(choixnompage):
+    appelpage = b'page ' + str.encode(choixnompage)+eof
+    port.write(appelpage)
+    infoserialpage="page " +choixnompage
+    log(infoserialpage,"yellow")
+
+#*************************
+#* GESTION TEST INTERNET *
+#*************************
 
 def getspeednet():
 
@@ -153,20 +205,10 @@ def getspeednet():
     ecrire("speednet.t4.txt",str(e))
     log(("Ping: "+str(e) + " ms"),"white")
 
-def resetHMI():
-    global port
-    log("Reset HMI ...","white")
-    rstcmd=b'rest' + eof
-    port.write(rstcmd)
+#***************************
+#* GESTION PARAMETRE AUDIO *
+#***************************
      
-#Fonction reglage dim du nextion
-def setdim(dimv):
-    log("dim debut","white")
-    dimsend ="dim="+str(dimv)+eof
-    port.write(b'dimsend')
-    log("dim fin","white")
-
-#Fonction info parametres Audio
 #recuperation info niveau 
 def GetAudioInfo(interfaceaudio):
     
@@ -202,22 +244,10 @@ def requete(valeur):
     requetesend = str.encode(valeur)+eof
     port.write(requetesend)
     log(valeur,"blue")
-    
-#Fonction suivre le log svxlink
-def follow(thefile):
-    thefile.seek(0,2)      # Go to the end of the file
-    while True:
-         line = thefile.readline()
-         if not line:
-             time.sleep(0.1)    # Sleep briefly
-             continue
-         yield line
 
-def hmiReadline():
-    global port
-    rcv = port.readline()
-    myString = str(rcv)
-    return myString
+#****************************
+#* REQUETE VERSION SOFTWARE *
+#****************************
 
 def checkversion():
         r =""
@@ -231,17 +261,16 @@ def checkversion():
         ecrire("maj.Txt_Vhmi.txt",hmiversion)
         ecrire("maj.Txt_Vscript.txt",scriptversion)        
 
+#**************************
+#* REQUETE INFOS SYSTEMES *
+#**************************
+
 def getCPUuse():
 
     CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
     log(("CPU Usage = " + CPU_Pct),"white")
     return(CPU_Pct)
-
-#Return information sur espace disque                     
-# Index 0: total disk space                                                         
-# Index 1: used disk space                                                          
-# Index 2: remaining disk space                                                     
-# Index 3: percentage of disk used                                                  
+                                                 
 def getDiskSpace():
     p = os.popen("df -h /")
     i = 0
@@ -250,7 +279,11 @@ def getDiskSpace():
         line = p.readline()
         if i==2:
             disk_space=(line.split()[4])
-            return(disk_space[:-1]+" %")    
+            return(disk_space[:-1]+" %") 
+
+#********************* 
+#* GESTION DEMARRAGE *
+#*********************  
 
 #Fonction de control d'extension au demarrage
 def usage():
@@ -267,27 +300,7 @@ if len(sys.argv) > 2:
     log("Ok","white")
 else:
     usage()
-
-#Fonction envoyer un code DTMF au system
-def dtmf(code):
-    
-    b = open("/tmp/svxlink_dtmf_ctrl_pty","w")
-    b.write(code)
-    log(("code DTMF: "+code),"white")
-    b.close()
-
-#Fonction envoyer le prenom selon le call
-def prenom(Searchcall):
-
-    callcut = Searchcall.split (" ")
-    Searchprenom = callcut[1]
-    print(Searchprenom)
-    lines = csv.reader(open("amat_annuaire.csv","rb"),delimiter=";")
-
-    for indicatif,nom,prenom,adresse,ville,cp in lines:
-        if indicatif==Searchprenom:
-            print(prenom)                   
-#recuperation Frequence dans JSON
+#recuperation GPIO en fonction
 
 def get_gpioptt():
     global gpioptt
@@ -298,8 +311,6 @@ def get_gpioptt():
 
     gpioptt = config.get('Tx1', 'PTT_PIN')
     log(gpioptt,"white")
-    
-    
     return(gpioptt)
 
 def get_gpiosql():
@@ -311,10 +322,9 @@ def get_gpiosql():
 
     gpiosql = config.get('Rx1', 'GPIO_SQL_PIN')
     log(gpiosql,"white")
+    return(gpiosql)
 
-    
-    #return(gpiosql)
-
+#recuperation frquence dans Json
 def get_frequency():
     global frequence
     
@@ -322,6 +332,7 @@ def get_frequency():
         afind= json.load(c)
         frequence=afind['rx_qrg']
         return(frequence)
+
 #recuperation indicatif dans Json       
 def get_callsign():
     global indicatif
@@ -331,13 +342,82 @@ def get_callsign():
         dept = afind['Departement']
         band = afind['band_type']
         indicatif = "("+dept+") "+call+" "+band
-        return(indicatif)        
+        return(indicatif)  
+
+#regarde la version Raspberry
+def getrevision():
+
+  # Extract board revision from cpuinfo file
+    myrevision = "0000"
+    try:
+        f = open('/proc/cpuinfo','r')
+        for line in f:
+            if line[0:8]=='Revision':
+                length=len(line)
+                myrevision = line[11:length-1]
+        f.close()
+    except:
+        myrevision = "0000"
+
+    return myrevision 
+
+#Logo de demarrage
+
+def logo(Current_version):
+    print(" ")
+    print('\x1b[7;30;43m'+"                                           .-''-.                                " +'\x1b[0m')                                   
+    print('\x1b[7;30;43m'+"                                         .' .-.  )  " +'\x1b[0m')
+    print('\x1b[7;30;43m'+"                                        / .'  / /" +'\x1b[0m')
+    print('\x1b[7;30;47m'+"  ____  ____   ___ _____ _   _ ___ _  _" +'\x1b[7;30;43m'+"(_/   / /"+'\x1b[7;30;47m'+"      _   _ __  __ ___ " +'\x1b[0m')
+    print('\x1b[7;30;47m'+" / ___||  _ \ / _ \_   _| \ | |_ _| |/ / " +'\x1b[7;30;43m'+"   / /     "+'\x1b[7;30;47m'+" | | | |  \/  |_ _|" +'\x1b[0m')
+    print('\x1b[7;30;47m'+" \___ \| |_) | | | || | |  \| || || ' /  " +'\x1b[7;30;43m'+"  / /  "+'\x1b[7;30;47m'+"     | |_| | |\/| || | " +'\x1b[0m')
+    print('\x1b[7;30;47m'+"  ___) |  __/| |_| || | | |\  || || . \ " +'\x1b[7;30;43m'+"  . '       "+'\x1b[7;30;47m'+" |  _  | |  | || | " +'\x1b[0m')
+    print('\x1b[7;30;47m'+" |____/|_|    \___/ |_| |_| \_|___|_|\_\ " +'\x1b[7;30;43m'+"/ /    _.-')"+'\x1b[7;30;47m'+"|_| |_|_|  |_|___|" +'\x1b[0m')
+    print('\x1b[7;30;43m'+"                                       .' '  _.'.-'' " +'\x1b[0m')
+    print('\x1b[7;30;43m'+"                                      /  /.-'_.'          Version:" + d.versionDash +'\x1b[0m')                
+    print('\x1b[7;30;43m'+"                                     /    _.'  TEAM:"+ '\x1b[0m' +'\x1b[3;37;44m' + "/F0DEI"+ '\x1b[0m' +'\x1b[6;30;47m' + "/F5SWB"+ '\x1b[0m' + '\x1b[6;37;41m' + "/F8ASB"+ '\x1b[0m')               
+    print('\x1b[7;30;43m'+"                                    ( _.-'              " +'\x1b[0m')             
+
+
+#********************** 
+#* GESTION ENVOI DTMF *
+#**********************  
+
+def dtmf(code):
+    
+    b = open("/tmp/svxlink_dtmf_ctrl_pty","w")
+    b.write(code)
+    log(("code DTMF: "+code),"white")
+    b.close()
+
+#***************************
+#*  RECHERCHE PRENOM OM FR *
+#***************************
+
+def prenom(Searchcall):
+
+    callcut = Searchcall.split (" ")
+    Searchprenom = callcut[1]
+    print(Searchprenom)
+    lines = csv.reader(open("amat_annuaire.csv","rb"),delimiter=";")
+
+    for indicatif,nom,prenom,adresse,ville,cp in lines:
+        if indicatif==Searchprenom:
+            print(prenom)                   
+
+#***************************
+#*  RECHERCHE PRENOM OM FR *
+#***************************
 
 #Fonction envoyer des commande console
 def console(cmd):
     p = Popen(cmd, shell=True, stdout=PIPE)
     out, err = p.communicate()
     return (p.returncode, out, err)
+
+#**************** 
+#* GESTION WIFI *
+#****************
 
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
@@ -353,29 +433,12 @@ def wifi(wifiid,wifipass):
     #lecture de donnees JSON
     with open(Json, 'r') as f:
         config = json.load(f)
-    #editer la donnee
     config['wifi_ssid'] = wifiid
     config['wpa_key'] = wifipass
-    #write it back to the file
+    #ecriture de donnees JSON
     with open(Json, 'w') as f:
         json.dump(config, f)
-
-def getrevision():
-
-  # Extract board revision from cpuinfo file
-    myrevision = "0000"
-    try:
-        f = open('/proc/cpuinfo','r')
-        for line in f:
-            if line[0:8]=='Revision':
-                length=len(line)
-                myrevision = line[11:length-1]
-        f.close()
-    except:
-        myrevision = "0000"
-
-    return myrevision      
-
+ 
 #Fonction ecriture wifi RPI3B+
 def wifi3bplus(ssid,password):
     log("Ecriture fichier wpa_supplicant.conf + fichier Gui",yellow)
@@ -399,29 +462,9 @@ def wifi3bplus(ssid,password):
 #renommage du ficher wpa_supplicant.conf.new en wpa_supplicant.conf
     os.rename(d.pathwpasupplicant+'wpa_supplicant.conf.new', d.pathwpasupplicant+'wpa_supplicant.conf')
     
-
-
-#Fonction ecriture texte sur Nextion ex: ecrire(t0.txt,"hello word")
-def ecrire(champ,texte):
-    wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
-    port.write(wcmd)
-    infoserialtxt=champ+"=" +texte
-    log(infoserialtxt,"blue")
-
-def ecrireval(champ,valeur):
-    wcmdval = str.encode(champ)+b'='+str.encode(valeur)+ eof
-    port.write(wcmdval)
-    infoserialval=champ+"=" +valeur
-    log(infoserialval,"blue") 
-    
-
-
-#Fonction appel de page
-def gopage(choixnompage):
-    appelpage = b'page ' + str.encode(choixnompage)+eof
-    port.write(appelpage)
-    infoserialpage="page " +choixnompage
-    log(infoserialpage,"yellow")
+#********************
+#*  RECHERCHE METEO *
+#********************
 
 #Fonction recherche de nom de ville selon code ICAO
 def getcity():
@@ -472,18 +515,4 @@ def get_meteo():
         Pression = pression[:-2]+'hPa'
         ecrire("meteo.t2.txt",str(Pression))
 
-def logo(Current_version):
-    print(" ")
-    print('\x1b[7;30;43m'+"                                           .-''-.                                " +'\x1b[0m')                                   
-    print('\x1b[7;30;43m'+"                                         .' .-.  )  " +'\x1b[0m')
-    print('\x1b[7;30;43m'+"                                        / .'  / /" +'\x1b[0m')
-    print('\x1b[7;30;47m'+"  ____  ____   ___ _____ _   _ ___ _  _" +'\x1b[7;30;43m'+"(_/   / /"+'\x1b[7;30;47m'+"      _   _ __  __ ___ " +'\x1b[0m')
-    print('\x1b[7;30;47m'+" / ___||  _ \ / _ \_   _| \ | |_ _| |/ / " +'\x1b[7;30;43m'+"   / /     "+'\x1b[7;30;47m'+" | | | |  \/  |_ _|" +'\x1b[0m')
-    print('\x1b[7;30;47m'+" \___ \| |_) | | | || | |  \| || || ' /  " +'\x1b[7;30;43m'+"  / /  "+'\x1b[7;30;47m'+"     | |_| | |\/| || | " +'\x1b[0m')
-    print('\x1b[7;30;47m'+"  ___) |  __/| |_| || | | |\  || || . \ " +'\x1b[7;30;43m'+"  . '       "+'\x1b[7;30;47m'+" |  _  | |  | || | " +'\x1b[0m')
-    print('\x1b[7;30;47m'+" |____/|_|    \___/ |_| |_| \_|___|_|\_\ " +'\x1b[7;30;43m'+"/ /    _.-')"+'\x1b[7;30;47m'+"|_| |_|_|  |_|___|" +'\x1b[0m')
-    print('\x1b[7;30;43m'+"                                       .' '  _.'.-'' " +'\x1b[0m')
-    print('\x1b[7;30;43m'+"                                      /  /.-'_.'          Version:" + d.versionDash +'\x1b[0m')                
-    print('\x1b[7;30;43m'+"                                     /    _.'  TEAM:"+ '\x1b[0m' +'\x1b[3;37;44m' + "/F0DEI"+ '\x1b[0m' +'\x1b[6;30;47m' + "/F5SWB"+ '\x1b[0m' + '\x1b[6;37;41m' + "/F8ASB"+ '\x1b[0m')               
-    print('\x1b[7;30;43m'+"                                    ( _.-'              " +'\x1b[0m')             
-    
+
