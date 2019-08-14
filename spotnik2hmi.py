@@ -33,6 +33,7 @@ dateold=""
 heureSold=""
 statutradio=""
 firstboot= True
+rpi3bplus=False
 #audiooutinfo=0
 #audioininfo=0
 #routine ouverture fichier de config
@@ -77,7 +78,17 @@ else:
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]   
     log(("Peripherique audio Out: "+audioOut),"white")
-print(board)
+    log(board,"white")
+    
+    #Detection RPI 3 B+
+    revision=getrevision()
+
+    if revision=="a020d3":
+        log("RASPBERRY 3B+ DETECTION","white")
+        rpi3bplus=True
+    else:
+        log("pas de 3B+","white")
+    
 
 #Envoi des infos 
 logo(d.versionDash)
@@ -361,8 +372,13 @@ while True:
 
 #OUIWIFI
     if s.find("ouimajwifi")!= -1:
-        wifi(newssid,newpass)
-        log("ECRITURE INFO WIFI DANS JSON","red")
+        
+        if rpi3bplus==True:
+            wifi3bplus(newssid,newpass)
+        else:
+            wifi(newssid,newpass)
+        log("ECRITURE INFO WIFI DANS JSON + CONFIG","red")
+        
         gopage("reglage")
 #
 #Gestion commande du Nextion

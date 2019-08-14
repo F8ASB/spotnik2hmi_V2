@@ -357,6 +357,47 @@ def wifi(wifiid,wifipass):
     with open(Json, 'w') as f:
         json.dump(config, f)
 
+def getrevision():
+
+  # Extract board revision from cpuinfo file
+    myrevision = "0000"
+    try:
+        f = open('/proc/cpuinfo','r')
+        for line in f:
+            if line[0:8]=='Revision':
+                length=len(line)
+                myrevision = line[11:length-1]
+        f.close()
+    except:
+        myrevision = "0000"
+
+    return myrevision      
+
+#Fonction ecriture wifi RPI3B+
+def wifi3bplus(ssid,password):
+    log("Ecriture fichier wpa_supplicant.conf + fichier Gui",yellow)
+    cfg = d.confwifi.ConfigParser()
+    cfg.read(d.confwifi)
+    cfg.set('connection', 'id', wifiid)
+    cfg.set('wifi', 'ssid', wifiid)
+    cfg.set('wifi-security', 'psk', wifipass)
+    cfg.write(open(d.confwifi,'w'))
+
+    header4="    ssid="+ssid+'"'
+    header5="    psk="+password+'"'
+
+#Sauvegarde de wpa_supplicant.conf existant et renommage en wpa_supplicant.conf.old
+    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf', pathwpasupplicant+'wpa_supplicant.conf.old')
+#creation d'un nouveau fichier wpa_supplicant.conf.new
+    fichier = open(d.pathwpasupplicant+"wpa_supplicant.conf.new", "a")
+    lines="%s \n %s \n %s \n %s \n %s \n %s \n %s \n" % (d.header1, d.header2, d.header3, header4, header5, d.header6, d.header7)
+    fichier.write(lines)
+    fichier.close()
+#renommage du ficher wpa_supplicant.conf.new en wpa_supplicant.conf
+    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf.new', d.pathwpasupplicant+'wpa_supplicant.conf')
+    
+
+
 #Fonction ecriture texte sur Nextion ex: ecrire(t0.txt,"hello word")
 def ecrire(champ,texte):
     wcmd = str.encode(champ)+b'="'+str.encode(texte)+b'"'+ eof
