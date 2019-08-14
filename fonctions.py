@@ -54,6 +54,8 @@ import json
 #Pour ouverture nomenclature
 import csv
 
+DEBUG=False
+
 #Variables:
 #eof = '\xff\xff\xff'
 eof=bytes([0xFF,0xFF,0xFF])
@@ -71,8 +73,9 @@ import alsaaudio
 #Fonction pour lancement routin console
 
 from subprocess import Popen, PIPE
-
-DEBUG=True
+def debugON():
+    global DEBUG
+    DEBUG=True
 
 #Fonction Debug
 def log(s,color):
@@ -96,7 +99,7 @@ def portcom(portseriel,vitesse):
     porthmi=portseriel
 
     port=serial.Serial(port='/dev/'+portseriel,baudrate=vitesse,timeout=1, writeTimeout=1)
-    print("Port serie: " +portseriel+" Vitesse: "+vitesse)
+    log("Port serie: " +portseriel+" Vitesse: "+vitesse,"white")
 
     cmdinfo= eof + b'connect' + eof 
     port.write(cmdinfo)
@@ -104,17 +107,17 @@ def portcom(portseriel,vitesse):
     r = port.read(128)
     
     if b'comok' in r:
-        print(r)
+        log(r,"white")
         status, unknown1, model, fwversion, mcucode, serialn, flashSize = r.split(b',')
-        print('Status: ' + status.split(b' ')[0].decode("utf-8"))
+        log('Status: ' + status.split(b' ')[0].decode("utf-8"),"white")
         screentype=model.split(b' ')[0][0:10]
-        print('Model: ' + screentype.decode("utf-8"))
+        log('Model: ' + screentype.decode("utf-8"),"white")
 
 def updatehmi():
 
     log("MAJ ECRAN HMI","red")
-    print(screentype)
-    print(porthmi)
+    log(screentype,"white")
+    log(porthmi,"white")
     os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/' +screentype.decode("utf-8") +'.tft '+ '/dev/'+porthmi)
 
 
@@ -231,7 +234,7 @@ def checkversion():
 def getCPUuse():
 
     CPU_Pct=str(round(float(os.popen('''grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage }' ''').readline()),2))
-    print(("CPU Usage = " + CPU_Pct))
+    log(("CPU Usage = " + CPU_Pct),"white")
     return(CPU_Pct)
 
 #Return information sur espace disque                     

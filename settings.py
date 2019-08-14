@@ -15,6 +15,8 @@ wifistatut = 0
 dashlist = ""
 monitor = ""
 
+DEBUG = False
+
 #Reglage de luminosite
 #rdim = 10 #ecran sans reception signal
 #txdim = 80 # ecran avec reception station
@@ -38,13 +40,15 @@ callsign = get_callsign()
 freq = get_frequency()
 
 #Info pour fichier wifi rpiB+
-pathwpasupplicant="/home/pi/"
+pathwpasupplicant="/etc/wpa_supplicant/"
 
 header1="ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev"
 header2="update_config=1"
 header3="network={"
 header6="    key_mgmt=WPA-PSK"
 header7="}"
+
+
 
 #liste des salons
 

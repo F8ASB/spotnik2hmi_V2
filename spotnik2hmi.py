@@ -26,6 +26,20 @@ import ssl
 
 
 portcom(sys.argv[1],sys.argv[2])
+
+if len(sys.argv)==4:
+
+    if sys.argv[3]=="DEBUG": 
+        print("MODE DEBUG")
+        debugON()
+
+#if sys.argv[3] =="DEBUG":
+#    print("DEBUGGGGGGGGGGGGGGG")
+    #d.DEBUG=True
+#else:
+#    print("PAS DEBUGGGGGGGGGGGGGGG")
+    #d.DEBUG=False
+
 qsystatut=False
 
 salon_current=""
