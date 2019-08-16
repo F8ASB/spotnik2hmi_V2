@@ -303,6 +303,8 @@ while True:
         salon_current="PER"
         if qsystatut==False and firstboot==False:
             gopage("qsy") 
+        f qsystatut==False and firstboot==True:
+            gopage("Parrot") 
         qsystatut=False
 
     if tn.find("sat") != -1 and salon_current!="SAT":
@@ -357,7 +359,6 @@ while True:
              #requete("vis p3,0")
              ecrireval(Vnbr_ledparrot.val,"0")
              statutradio=""
-
 
         q.close()
 
