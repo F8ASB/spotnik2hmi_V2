@@ -422,13 +422,14 @@ def console(cmd):
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
     #ecriture fichier /etc/NetworkManager/system-connections/SPOTNIK
+    confwifi="/etc/NetworkManager/system-connections/SPOTNIK"
     log("Ecriture fichier SPOTNIK + fichier Gui","yellow")
-    cfg = d.confwifi.ConfigParser()
-    cfg.read(d.confwifi)
+    cfg = confwifi.ConfigParser()
+    cfg.read(confwifi)
     cfg.set('connection', 'id', wifiid)
     cfg.set('wifi', 'ssid', wifiid)
     cfg.set('wifi-security', 'psk', wifipass)
-    cfg.write(open(d.confwifi,'w'))
+    cfg.write(open(confwifi,'w'))
 
     #lecture de donnees JSON
     with open(Json, 'r') as f:
@@ -441,8 +442,9 @@ def wifi(wifiid,wifipass):
  
 #Fonction ecriture wifi RPI3B+
 def wifi3bplus(ssid,password):
+    pathwpasupplicant="/etc/wpa_supplicant/"
     log("Ecriture fichier wpa_supplicant.conf + fichier Gui","yellow")
-    
+
     #lecture de donnees JSON
     with open(Json, 'r') as f:
         config = json.load(f)
@@ -456,14 +458,14 @@ def wifi3bplus(ssid,password):
     header5="    psk="+password+'"'
 
 #Sauvegarde de wpa_supplicant.conf existant et renommage en wpa_supplicant.conf.old
-    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf', d.pathwpasupplicant+'wpa_supplicant.conf.old')
+    os.rename(pathwpasupplicant+'wpa_supplicant.conf', pathwpasupplicant+'wpa_supplicant.conf.old')
 #creation d'un nouveau fichier wpa_supplicant.conf.new
-    fichier = open(d.pathwpasupplicant+"wpa_supplicant.conf.new", "a")
+    fichier = open(pathwpasupplicant+"wpa_supplicant.conf.new", "a")
     lines="%s \n %s \n %s \n %s \n %s \n %s \n %s \n" % (d.header1, d.header2, d.header3, header4, header5, d.header6, d.header7)
     fichier.write(lines)
     fichier.close()
 #renommage du ficher wpa_supplicant.conf.new en wpa_supplicant.conf
-    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf.new', d.pathwpasupplicant+'wpa_supplicant.conf')
+    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf.new', pathwpasupplicant+'wpa_supplicant.conf')
     
 #********************
 #*  RECHERCHE METEO *
