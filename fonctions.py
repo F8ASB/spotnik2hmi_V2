@@ -422,7 +422,7 @@ def console(cmd):
 #Fonction Wifi ECRITURE
 def wifi(wifiid,wifipass):
     #ecriture fichier /etc/NetworkManager/system-connections/SPOTNIK
-    log("Ecriture fichier SPOTNIK + fichier Gui",yellow)
+    log("Ecriture fichier SPOTNIK + fichier Gui","yellow")
     cfg = d.confwifi.ConfigParser()
     cfg.read(d.confwifi)
     cfg.set('connection', 'id', wifiid)

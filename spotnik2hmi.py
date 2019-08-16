@@ -339,7 +339,7 @@ while True:
         elif gpiorx_value.find("0") != -1 and statutradio!="TX" and statutradio!="":
              log("RX OFF","white")
              #requete("vis p2,0")
-             ecrireval(Vnbr_ledparrot.val,"0")
+             ecrireval(Vnbr_parrot.val,"0")
 
              statutradio=""
 
@@ -352,12 +352,12 @@ while True:
              log("Tx ON","white")
              statutradio="TX"
              #requete("vis p3,1")
-             ecrireval(Vnbr_ledparrot.val,"2")
+             ecrireval(Vnbr_parrot.val,"2")
              
         elif gpiotx_value.find("0") != -1 and statutradio!="RX" and statutradio!="":
              log("Tx OFF","white")
              #requete("vis p3,0")
-             ecrireval(Vnbr_ledparrot.val,"0")
+             ecrireval(Vnbr_parrot.val,"0")
              statutradio=""
 
         q.close()
