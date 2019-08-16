@@ -254,7 +254,7 @@ while True:
         ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
             gopage("qsy")
-            qsystatut=False
+        qsystatut=False
         
     if tn.find("fon") != -1 and salon_current!="FON":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
@@ -267,6 +267,7 @@ while True:
     if tn.find("tec") != -1 and salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         salon_current="TEC"
+        ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
@@ -274,6 +275,7 @@ while True:
     if tn.find("int") != -1 and salon_current!="INT":
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         salon_current="INT"
+        ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
@@ -281,6 +283,7 @@ while True:
     if tn.find("bav") != -1 and salon_current!="BAV":
         ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
         salon_current="BAV"
+        ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False
@@ -288,6 +291,7 @@ while True:
     if tn.find("loc") != -1 and salon_current!="LOCAL":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
+        ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
             gopage("qsy")
         qsystatut=False

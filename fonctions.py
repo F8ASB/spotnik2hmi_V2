@@ -441,13 +441,16 @@ def wifi(wifiid,wifipass):
  
 #Fonction ecriture wifi RPI3B+
 def wifi3bplus(ssid,password):
-    log("Ecriture fichier wpa_supplicant.conf + fichier Gui",yellow)
-    cfg = d.confwifi.ConfigParser()
-    cfg.read(d.confwifi)
-    cfg.set('connection', 'id', wifiid)
-    cfg.set('wifi', 'ssid', wifiid)
-    cfg.set('wifi-security', 'psk', wifipass)
-    cfg.write(open(d.confwifi,'w'))
+    log("Ecriture fichier wpa_supplicant.conf + fichier Gui","yellow")
+    
+    #lecture de donnees JSON
+    with open(Json, 'r') as f:
+        config = json.load(f)
+    config['wifi_ssid'] = wifiid
+    config['wpa_key'] = wifipass
+    #ecriture de donnees JSON
+    with open(Json, 'w') as f:
+        json.dump(config, f)    
 
     header4="    ssid="+ssid+'"'
     header5="    psk="+password+'"'
