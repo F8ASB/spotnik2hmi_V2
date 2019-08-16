@@ -293,9 +293,9 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         salon_current="LOC"
         ecrire("trafic.g0.txt","")
-        if qsystatut==False and firstboot==False:
+        #if qsystatut==False and firstboot==False:
             #gopage("qsy")
-        qsystatut=False
+        	qsystatut=False
 
     if tn.find("default") != -1 and salon_current!="PER":
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
