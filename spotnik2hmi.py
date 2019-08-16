@@ -303,7 +303,7 @@ while True:
         salon_current="PER"
         if qsystatut==False and firstboot==False:
             gopage("qsy") 
-        f qsystatut==False and firstboot==True:
+        if qsystatut==False and firstboot==True:
             gopage("Parrot") 
         qsystatut=False
 
