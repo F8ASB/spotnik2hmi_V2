@@ -454,8 +454,8 @@ def wifi3bplus(ssid,password):
     with open(Json, 'w') as f:
         json.dump(config, f)    
 
-    header4="    ssid="+ssid+'"'
-    header5="    psk="+password+'"'
+    header4='    ssid="'+ssid+'"'
+    header5='    psk="'+password+'"'
 
 #Sauvegarde de wpa_supplicant.conf existant et renommage en wpa_supplicant.conf.old
     os.rename(pathwpasupplicant+'wpa_supplicant.conf', pathwpasupplicant+'wpa_supplicant.conf.old')
