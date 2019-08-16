@@ -295,7 +295,7 @@ while True:
         ecrire("trafic.g0.txt","")
         #if qsystatut==False and firstboot==False:
             #gopage("qsy")
-        	qsystatut=False
+        qsystatut=False
 
     if tn.find("default") != -1 and salon_current!="PER":
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
@@ -333,7 +333,7 @@ while True:
              log("RX Detected","white")
              statutradio="RX"
              #requete("vis p2,1")
-             ecrireval(Vnbr_ledparrot.val,"1")
+             ecrireval(Vnbr_parrot.val,"1")
              
 
         elif gpiorx_value.find("0") != -1 and statutradio!="TX" and statutradio!="":
