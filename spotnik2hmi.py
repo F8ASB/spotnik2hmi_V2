@@ -126,15 +126,18 @@ log("Maj Call ...","red")
 
 checkversion()
 
+
 #demarrage page trafic ou perroquet
 a = open("/etc/spotnik/network","r")
-    tn = a.read()
+tn = a.read()
 
-    if tn.find("default") != -1 :
-		gopage("parrot")
-	else:
-		gopage("trafic")
+if tn.find("default") != -1 :
+      gopage("parrot")
+else:
+      gopage("trafic")
 a.close()
+
+
 
 os.system ("clear")
 
