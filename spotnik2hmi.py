@@ -96,7 +96,7 @@ else:
     else:
         log("pas de 3B+","white")
  
- os.system('amixer -c 0 set ' +audioOut+ ' unmute')   
+os.system('amixer -c 0 set ' +audioOut+ ' unmute')   
 
 #Envoi des infos 
 logo(d.versionDash)
