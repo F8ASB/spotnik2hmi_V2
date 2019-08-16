@@ -618,10 +618,6 @@ while True:
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
-        
-            
-
-    
 
 #DASHBOARD#
     if s.find("dashboard")!= -1:
