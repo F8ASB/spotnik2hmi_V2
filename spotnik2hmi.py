@@ -95,7 +95,8 @@ else:
         rpi3bplus=True
     else:
         log("pas de 3B+","white")
-    
+ 
+ os.system('amixer -c 0 set ' +audioOut+ ' unmute')   
 
 #Envoi des infos 
 logo(d.versionDash)
@@ -293,7 +294,7 @@ while True:
         salon_current="LOC"
         ecrire("trafic.g0.txt","")
         if qsystatut==False and firstboot==False:
-            gopage("qsy")
+            #gopage("qsy")
         qsystatut=False
 
     if tn.find("default") != -1 and salon_current!="PER":
@@ -387,7 +388,7 @@ while True:
         os.system('shutdown -h now')
 
 #OUIWIFI
-    if s.find("ouimajwifi")!= -1:
+    if s.find("ouimodwifi")!= -1:
         
         if rpi3bplus==True:
             wifi3bplus(newssid,newpass)
