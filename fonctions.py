@@ -446,8 +446,8 @@ def wifi3bplus(ssid,password):
     #lecture de donnees JSON
     with open(Json, 'r') as f:
         config = json.load(f)
-    config['wifi_ssid'] = wifiid
-    config['wpa_key'] = wifipass
+    config['wifi_ssid'] = ssid
+    config['wpa_key'] = password
     #ecriture de donnees JSON
     with open(Json, 'w') as f:
         json.dump(config, f)    
