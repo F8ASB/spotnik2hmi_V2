@@ -324,7 +324,7 @@ def get_gpiosql():
     log(gpiosql,"white")
     return(gpiosql)
 
-#recuperation frquence dans Json
+#recuperation frequence dans Json
 def get_frequency():
     global frequence
     
@@ -406,7 +406,7 @@ def prenom(Searchcall):
             print(prenom)                   
 
 #***************************
-#*  RECHERCHE PRENOM OM FR *
+#*  ENVOI COMMANDE SHELL   *
 #***************************
 
 #Fonction envoyer des commande console
@@ -453,7 +453,7 @@ def wifi3bplus(ssid,password):
     header5="    psk="+password+'"'
 
 #Sauvegarde de wpa_supplicant.conf existant et renommage en wpa_supplicant.conf.old
-    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf', pathwpasupplicant+'wpa_supplicant.conf.old')
+    os.rename(d.pathwpasupplicant+'wpa_supplicant.conf', d.pathwpasupplicant+'wpa_supplicant.conf.old')
 #creation d'un nouveau fichier wpa_supplicant.conf.new
     fichier = open(d.pathwpasupplicant+"wpa_supplicant.conf.new", "a")
     lines="%s \n %s \n %s \n %s \n %s \n %s \n %s \n" % (d.header1, d.header2, d.header3, header4, header5, d.header6, d.header7)

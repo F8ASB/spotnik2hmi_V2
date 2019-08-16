@@ -33,13 +33,6 @@ if len(sys.argv)==4:
         print("MODE DEBUG")
         debugON()
 
-#if sys.argv[3] =="DEBUG":
-#    print("DEBUGGGGGGGGGGGGGGG")
-    #d.DEBUG=True
-#else:
-#    print("PAS DEBUGGGGGGGGGGGGGGG")
-    #d.DEBUG=False
-
 qsystatut=False
 
 salon_current=""
