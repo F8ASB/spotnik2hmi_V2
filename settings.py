@@ -9,17 +9,18 @@ from fonctions import *
 #Variables
 eof = "\xff\xff\xff"
 today = datetime.now()
-
 versionDash = "2.3c"
 wifistatut = 0
 dashlist = ""
 monitor = ""
-
+qsystatut=False
+salon_current=""
+dateold=""
+heureSold=""
+statutradio=""
+firstboot= True
+rpi3bplus=False
 DEBUG = False
-
-#Reglage de luminosite
-#rdim = 10 #ecran sans reception signal
-#txdim = 80 # ecran avec reception station
 
 #Chemins fichiers
 svxconfig="/etc/spotnik/svxlink.cfg"
@@ -49,8 +50,9 @@ header6="    key_mgmt=WPA-PSK"
 header7="}"
 
 
-
-#liste des salons
+#*******************************
+#* liste des salons + variable *
+#*******************************
 
 salon = {
     'RRF': {

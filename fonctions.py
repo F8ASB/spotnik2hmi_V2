@@ -13,7 +13,7 @@
 #`--'  `--'  `------''--'   '--'   `--'   `--'        `-----' `--'  `--'   #
 #                                 TEAM: F0DEI,F5SWB,F8ASB      #    
 ############################################################################
-#import echolink
+
 import settings as d
 import serial
 import time
