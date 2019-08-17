@@ -539,6 +539,9 @@ while True:
 #******************
 #* detection page *
 #******************       
+#PAGE REGLAGES#
+    if s.find("page reglages")!= -1:
+        log("Page reglages","red")
 
 #Numkaypad#
     if s.find("keypadnum")!= -1:
@@ -642,52 +645,52 @@ while True:
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 #INFO#  
-        if s.find("info")!= -1:
-            print("Detection bouton info")
-            cput = '"'+cputemp+' C'+'"' 
-            ecrire("info.t14.txt",cputemp)
-            print("Station: "+d.callsign)
-            Freq = str(d.freq)+ ' Mhz'
-            print("Frequence: "+d.freq)
-            ecrire("info.t15.txt",Freq)
-            print("Spotnik: "+d.version)
-            ecrire("info.t10.txt",d.version)
-            print("Script Version: "+d.versionDash)
-            ecrire("info.t16.txt",d.versionDash)
-            print("Occupation disk: "+(occupdisk))
-            ecrire("info.t13.txt",occupdisk)
-            print("IP: "+ip)
-            ecrire("info.t0.txt",ip)
-            print("occupation systeme: "+str(chargecpu))
-            ecrire("info.t12.txt",str(chargecpu)+" %")
+    if s.find("info")!= -1:
+        print("Detection bouton info")
+        cput = '"'+cputemp+' C'+'"' 
+        ecrire("info.t14.txt",cputemp)
+        print("Station: "+d.callsign)
+        Freq = str(d.freq)+ ' Mhz'
+        print("Frequence: "+d.freq)
+        ecrire("info.t15.txt",Freq)
+        print("Spotnik: "+d.version)
+        ecrire("info.t10.txt",d.version)
+        print("Script Version: "+d.versionDash)
+        ecrire("info.t16.txt",d.versionDash)
+        print("Occupation disk: "+(occupdisk))
+        ecrire("info.t13.txt",occupdisk)
+        print("IP: "+ip)
+        ecrire("info.t0.txt",ip)
+        print("occupation systeme: "+str(chargecpu))
+        ecrire("info.t12.txt",str(chargecpu)+" %")
 #WIFI#
-        if s.find("pagewifi")!= -1:
+    if s.find("pagewifi")!= -1:
 
-            log("Page wifi","red")
-            Json="/etc/spotnik/config.json"
-            if d.wifistatut == 0:
-                with open(Json, 'r') as a:
-                    infojson = json.load(a)
-                    wifi_ssid = infojson['wifi_ssid']
-                    wifi_pass = infojson['wpa_key']
-                    print("Envoi SSID actuel sur Nextion: "+wifi_ssid)
-                    print("Envoi PASS actuel sur Nextion: "+wifi_pass)
-                    ecrire("wifi.t1.txt",str(wifi_ssid))
-                    ecrire("wifi.t0.txt",str(wifi_pass))
-                    d.wifistatut = 1   
+        log("Page wifi","red")
+        Json="/etc/spotnik/config.json"
+        if d.wifistatut == 0:
+            with open(Json, 'r') as a:
+                infojson = json.load(a)
+                wifi_ssid = infojson['wifi_ssid']
+                wifi_pass = infojson['wpa_key']
+                print("Envoi SSID actuel sur Nextion: "+wifi_ssid)
+                print("Envoi PASS actuel sur Nextion: "+wifi_pass)
+                ecrire("wifi.t1.txt",str(wifi_ssid))
+                ecrire("wifi.t0.txt",str(wifi_pass))
+                d.wifistatut = 1   
 
 #PAGE MAJ 
-        if s.find("checkversion")!= -1:
-            log("PAGE MAJ","red")
-            checkversion()
+    if s.find("checkversion")!= -1:
+        log("PAGE MAJ","red")
+        checkversion()
 
 #PAGE UPDATE
-        if s.find("majpython")!= -1:
+    if s.find("majpython")!= -1:
 
-            os.system('sh /opt/spotnik/spotnik2hmi_V2/maj.sh')
-        
-        if s.find("majnextion")!= -1:
-            updatehmi()     
+        os.system('sh /opt/spotnik/spotnik2hmi_V2/maj.sh')
+    
+    if s.find("majnextion")!= -1:
+        updatehmi()     
 
 #***************
 #* gestion QSY *
