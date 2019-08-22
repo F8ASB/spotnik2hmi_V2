@@ -562,7 +562,7 @@ while True:
 #DASHBOARD#
     if s.find("dashboard")!= -1:
         log("Page dashboard","red")
-        log(listdash,"white")
+        
         if len(listdash) == 12:
             ecrire("Txt_Dash12.txt",listdash[0])
             ecrire("Txt_Dash11.txt",listdash[1])
