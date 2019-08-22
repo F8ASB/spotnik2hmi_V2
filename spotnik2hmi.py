@@ -187,8 +187,8 @@ while True:
                 #Stockage station pour dashboard
                 infodash=d.today.strftime('%H:%M ')+ str(d.salon[key]['call_current']) +"-"+key
                 listdash.append(infodash)
-                if len(listdash) == 12:
-                    del listdash[11]
+                if len(listdash) == 13:
+                    del listdash[12]
                 
         else:            
             if d.salon[key]['transmit'] is True:
