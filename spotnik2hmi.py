@@ -24,6 +24,9 @@ import csv
 import os
 import ssl
 
+#creation liste pour Dashboard
+listdash =[]
+
 #Envoi des information port com selon arguments script
 portcom(sys.argv[1],sys.argv[2])
 
@@ -129,8 +132,6 @@ else:
       gopage("trafic")
 a.close()
 
-
-
 os.system ("clear")
 
 while True:
@@ -183,6 +184,12 @@ while True:
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 ecrire("dashboard.Vtxt_dash.txt",str(dash))
                 print(d.monitor)
+                #Stockage station pour dashboard
+                infodash=d.today.strftime('%H:%M ')+ str(d.salon[key]['call_current']) +"-"+key
+                listdash.append(infodash)
+                if len(listdash) == 13:
+                    del listdash[13]
+                
         else:            
             if d.salon[key]['transmit'] is True:
                 d.salon[key]['call_current'] = ''
@@ -191,6 +198,7 @@ while True:
                 d.salon[key]['transmit'] = False
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 print(d.monitor)
+        
 
 #*************************************************
 #* Boucle gestions liste Nodes F8ASB + F4HWN DEV *
@@ -414,7 +422,7 @@ while True:
             wifi(newssid,newpass)
         log("ECRITURE INFO WIFI DANS JSON + CONFIG","red")
         
-        gopage("reglage")
+        gopage("reglages")
 
 #*******************************
 #* Gestion commande du Nextion *
@@ -530,10 +538,13 @@ while True:
         log("UNMUTE","white")
         os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
 
-
-
-
-
+#ENVOI DASHBOARD
+    if s.find("listdash")!= -1 and d.salon_current!="RRF" and d.salon_current!="FON":
+        log("List dash","red")
+        if d.salon_current=="RRF" or d.salon_current=="FON"or d.salon_current=="SAT"or d.salon_current=="ECH"or d.salon_current=="PER":
+            ecrire("trafic.g0.txt","")
+        else:    
+            ecrire("trafic.g0.txt",str(d.salon[d.salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1]) 
 
 
 #******************
@@ -547,16 +558,109 @@ while True:
     if s.find("keypadnum")!= -1:
         log("Page clavier numerique","red")
 
-#DASHBOARD#
-    if s.find("listdash")!= -1 and d.salon_current!="RRF" and d.salon_current!="FON":
-        log("List dash","red")
-        if d.salon_current=="RRF" or d.salon_current=="FON"or d.salon_current=="SAT"or d.salon_current=="ECH"or d.salon_current=="PER":
-            ecrire("trafic.g0.txt","")
-        else:    
-            ecrire("trafic.g0.txt",str(d.salon[d.salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1]) 
+
 #DASHBOARD#
     if s.find("dashboard")!= -1:
         log("Page dashboard","red")
+        log(listdash,"white")
+        if len(listdash) == 12:
+            ecrire("Txt_Dash12.txt",listdash[0])
+            ecrire("Txt_Dash11.txt",listdash[1])
+            ecrire("Txt_Dash10.txt",listdash[2])
+            ecrire("Txt_Dash9.txt",listdash[3])
+            ecrire("Txt_Dash8.txt",listdash[4])
+            ecrire("Txt_Dash7.txt",listdash[5])
+            ecrire("Txt_Dash6.txt",listdash[6])
+            ecrire("Txt_Dash5.txt",listdash[7])
+            ecrire("Txt_Dash4.txt",listdash[8])
+            ecrire("Txt_Dash3.txt",listdash[9])
+            ecrire("Txt_Dash2.txt",listdash[10])
+            ecrire("Txt_Dash1.txt",listdash[11])
+        if len(listdash) == 11:
+            ecrire("Txt_Dash11.txt",listdash[0])
+            ecrire("Txt_Dash10.txt",listdash[1])
+            ecrire("Txt_Dash9.txt",listdash[2])
+            ecrire("Txt_Dash8.txt",listdash[3])
+            ecrire("Txt_Dash7.txt",listdash[4])
+            ecrire("Txt_Dash6.txt",listdash[5])
+            ecrire("Txt_Dash5.txt",listdash[6])
+            ecrire("Txt_Dash4.txt",listdash[7])
+            ecrire("Txt_Dash3.txt",listdash[8])
+            ecrire("Txt_Dash2.txt",listdash[9])
+            ecrire("Txt_Dash1.txt",listdash[10])
+        if len(listdash) == 10:
+            ecrire("Txt_Dash10.txt",listdash[0])
+            ecrire("Txt_Dash9.txt",listdash[1])
+            ecrire("Txt_Dash8.txt",listdash[2])
+            ecrire("Txt_Dash7.txt",listdash[3])
+            ecrire("Txt_Dash6.txt",listdash[4])
+            ecrire("Txt_Dash5.txt",listdash[5])
+            ecrire("Txt_Dash4.txt",listdash[6])
+            ecrire("Txt_Dash3.txt",listdash[7])
+            ecrire("Txt_Dash2.txt",listdash[8])
+            ecrire("Txt_Dash1.txt",listdash[9])
+        if len(listdash) == 9:
+            ecrire("Txt_Dash9.txt",listdash[0])
+            ecrire("Txt_Dash8.txt",listdash[1])
+            ecrire("Txt_Dash7.txt",listdash[2])
+            ecrire("Txt_Dash6.txt",listdash[3])
+            ecrire("Txt_Dash5.txt",listdash[4])
+            ecrire("Txt_Dash4.txt",listdash[5])
+            ecrire("Txt_Dash3.txt",listdash[6])
+            ecrire("Txt_Dash2.txt",listdash[7])
+            ecrire("Txt_Dash1.txt",listdash[8])
+        if len(listdash) == 8:
+            ecrire("Txt_Dash8.txt",listdash[0])
+            ecrire("Txt_Dash7.txt",listdash[1])
+            ecrire("Txt_Dash6.txt",listdash[2])
+            ecrire("Txt_Dash5.txt",listdash[3])
+            ecrire("Txt_Dash4.txt",listdash[4])
+            ecrire("Txt_Dash3.txt",listdash[5])
+            ecrire("Txt_Dash2.txt",listdash[6])
+            ecrire("Txt_Dash1.txt",listdash[7])
+        if len(listdash) == 7:
+            ecrire("Txt_Dash7.txt",listdash[0])
+            ecrire("Txt_Dash6.txt",listdash[1])
+            ecrire("Txt_Dash5.txt",listdash[2])
+            ecrire("Txt_Dash4.txt",listdash[3])
+            ecrire("Txt_Dash3.txt",listdash[4])
+            ecrire("Txt_Dash2.txt",listdash[5])
+            ecrire("Txt_Dash1.txt",listdash[6])
+        if len(listdash) == 6:
+            ecrire("Txt_Dash6.txt",listdash[0])
+            ecrire("Txt_Dash5.txt",listdash[1])
+            ecrire("Txt_Dash4.txt",listdash[2])
+            ecrire("Txt_Dash3.txt",listdash[3])
+            ecrire("Txt_Dash2.txt",listdash[4])
+            ecrire("Txt_Dash1.txt",listdash[5])
+
+        if len(listdash) == 5:
+            ecrire("Txt_Dash5.txt",listdash[0])
+            ecrire("Txt_Dash4.txt",listdash[1])
+            ecrire("Txt_Dash3.txt",listdash[2])
+            ecrire("Txt_Dash2.txt",listdash[3])
+            ecrire("Txt_Dash1.txt",listdash[4])
+
+        if len(listdash) == 4:
+            ecrire("Txt_Dash4.txt",listdash[0])
+            ecrire("Txt_Dash3.txt",listdash[1])
+            ecrire("Txt_Dash2.txt",listdash[2])
+            ecrire("Txt_Dash1.txt",listdash[3])
+            
+        
+        if len(listdash) == 3:
+            
+            ecrire("Txt_Dash3.txt",listdash[0])
+            ecrire("Txt_Dash2.txt",listdash[1])
+            ecrire("Txt_Dash1.txt",listdash[2])
+        
+        if len(listdash) == 2:
+            ecrire("Txt_Dash2.txt",listdash[0])
+            ecrire("Txt_Dash1.txt",listdash[1])
+        if len(listdash) == 1:
+            ecrire("Txt_Dash1.txt",listdash[0])
+
+
         
 #MENU#
     if s.find("menu")!= -1:
