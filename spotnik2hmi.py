@@ -76,6 +76,7 @@ else:
     audioOut=audioinfo[1]   
     log(("Peripherique audio Out: "+audioOut),"white")
     log(board,"white")
+    os.system('amixer -c 0 set ' +audioOut+ ' unmute') 
     
     #Detection RPI 3 B+
     revision=getrevision()
@@ -85,9 +86,7 @@ else:
         d.rpi3bplus=True
     else:
         log("pas de 3B+","white")
- 
-os.system('amixer -c 0 set ' +audioOut+ ' unmute')   
-
+    
 #Envoi des infos 
 logo(d.versionDash)
 
