@@ -267,7 +267,7 @@ while True:
     a = open("/etc/spotnik/network","r")
     tn = a.read()
 
-    if tn.find("rrf") != -1 and d.d.salon_current!="RRF":
+    if tn.find("rrf") != -1 and d.salon_current!="RRF":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         d.salon_current="RRF"
         ecrire("trafic.g0.txt","")
@@ -275,7 +275,7 @@ while True:
             gopage("qsy")
         d.qsystatut=False
         
-    if tn.find("fon") != -1 and d.d.salon_current!="FON":
+    if tn.find("fon") != -1 and d.salon_current!="FON":
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
         d.salon_current="FON"
         ecrire("trafic.g0.txt","")
@@ -283,7 +283,7 @@ while True:
             gopage("qsy")
         d.qsystatut=False
     
-    if tn.find("tec") != -1 and d.d.salon_current!="TEC":
+    if tn.find("tec") != -1 and d.salon_current!="TEC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         d.salon_current="TEC"
         ecrire("trafic.g0.txt","")
@@ -307,12 +307,12 @@ while True:
             gopage("qsy")
         d.qsystatut=False
 
-    if tn.find("loc") != -1 and d.salon_current!="LOCAL":
+    if tn.find("loc") != -1 and d.salon_current!="LOC":
         ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
         d.salon_current="LOC"
         ecrire("trafic.g0.txt","")
-        #if d.qsystatut==False and d.firstboot==False:
-            #gopage("qsy")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
         d.qsystatut=False
 
     if tn.find("default") != -1 and d.salon_current!="PER":
