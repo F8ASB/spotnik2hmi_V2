@@ -803,38 +803,45 @@ while True:
     if s.find("qsyrrf")!= -1:
         d.qsystatut=True
         log("QSY SALON RRF","red")
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
         os.system("/etc/spotnik/restart.rrf")
 #QSYFON#
     if s.find("qsyfon")!= -1:
         d.qsystatut=True
         log("QSY FON","red")
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")
         os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
     if s.find("qsytech")!= -1:
         d.qsystatut=True
         log("QSY SALON TECH","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         os.system("/etc/spotnik/restart.tec")
 #QSYINTER#
     if s.find("qsyinter")!= -1:
         d.qsystatut=True
         log("QSY INTER","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
         os.system("/etc/spotnik/restart.int")
-#QSYSSTV#
+#QSYBAV#
     if s.find("qsybav")!= -1:
         d.qsystatut=True
         log("QSY BAVARDAGE","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")
         #dtmf("100#")
         os.system("/etc/spotnik/restart.bav")
-#QSYCODECS#
+#QSYLOCAL#
     if s.find("qsyloc")!= -1:
         d.qsystatut=True
         log("QSY LOCAL","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")
         #dtmf("101#")
         os.system("/etc/spotnik/restart.loc")
 #QSYSAT#
     if s.find("qsysat")!= -1:
         d.qsystatut=True
         log("QSY SAT","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
         #dtmf("102#")
         os.system("/etc/spotnik/restart.sat")
 
@@ -846,6 +853,7 @@ while True:
     if s.find("qsyperroquet")!= -1:
         d.qsystatut=True
         log("QSY PERROQUET","red")
+        ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         os.system("/etc/spotnik/restart.default")
         
                
