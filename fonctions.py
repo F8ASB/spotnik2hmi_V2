@@ -223,11 +223,11 @@ def GetAudioInfo(interfaceaudio):
     log("Lecture du niveau audio In Alsamixer: "+str(levelIn),"white")
     log("Lecture du niveau audio Out Alsamixer: "+str(levelOut),"white")
 
-    ecrireval("hIn.val",str(levelIn))
-    ecrireval("nIn.val",str(levelIn))
+    #ecrireval("hIn.val",str(levelIn))
+    ecrireval("boot.Vtxt_nIn.val",str(levelIn))
     #levelOutcor=round(int(levelOut)/1.240)
-    ecrireval("hOut.val",str(levelOut))
-    ecrireval("nOut.val",str(levelOut))
+    #ecrireval("hOut.val",str(levelOut))
+    ecrireval("boot.Vtxt_nOut.val",str(levelOut))
 
 
 #Fonction reglage des niveaux    

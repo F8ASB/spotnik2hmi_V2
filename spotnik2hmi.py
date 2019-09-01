@@ -104,6 +104,10 @@ sleep(1);
 ecrire("boot.va0.txt",d.callsign)
 ecrire("boot.vascript.txt",d.versionDash)
 ecrire("boot.vaverspotnik.txt",d.version)
+date = (d.today.strftime('%d-%m-%Y'))
+ecrire("boot.Vtxt_dateinit.txt",date)
+heureS =(d.today.strftime('%H:%M'))
+ecrire("boot.Vtxt_heureinit.txt",heureS)
 
 #envoi indicatif
 log("Maj Call ...","red")
@@ -111,7 +115,7 @@ log("Maj Call ...","red")
 #Reglage niveau audio visible si Raspberry
 if board =='Raspberry Pi':
     ecrireval("trafic.vasound.val","1")
-
+    GetAudioInfo(audioOut)
 sleep(4);
 
 
@@ -145,9 +149,11 @@ while True:
     heureS =(d.today.strftime('%H:%M'))
     if date != d.dateold:
         ecrire("Txt_date.txt",date)
+        ecrire("boot.Vtxt_dateinit.txt",date)
         d.dateold=date
     if heureS != d.heureSold:
         ecrire("Txt_heure.txt",heureS)
+        ecrire("boot.Vtxt_heureinit.txt",heureS)
         d.heureSold= heureS
 
     requete("vis p9,0")
