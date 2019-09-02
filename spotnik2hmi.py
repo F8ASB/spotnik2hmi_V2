@@ -676,14 +676,35 @@ while True:
 #MONITOR#
     if s.find("monitor")!= -1:
         log("Page monitor","red")
+        #Envoi liste des connectes
         ecrire("monitor.Txt_nbrrrf.txt",str(len(d.salon['RRF']['node_list'])))
         ecrire("monitor.Txt_nbrtec.txt",str(len(d.salon['TEC']['node_list'])))
         ecrire("monitor.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
         ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
         ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
         ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
+        #Envoi station en cours de TX
+        calltrafic_currentRRF=d.salon["RRF"]['call_current']
+        ecrire("monitor.Txt_Txrrf.txt","")
+        ecrire("monitor.Txt_Txrrf.txt",calltrafic_currentRRF)
+        calltrafic_currentTEC=d.salon["TEC"]['call_current']
+        ecrire("monitor.Txt_Txtec.txt","")
+        ecrire("monitor.Txt_Txtec.txt",calltrafic_currentTEC)
+        calltrafic_currentBAV=d.salon["BAV"]['call_current']
+        ecrire("monitor.Txt_Txbav.txt","")
+        ecrire("monitor.Txt_Txbav.txt",calltrafic_currentBAV)
+        calltrafic_currentINT=d.salon["INT"]['call_current']
+        ecrire("monitor.Txt_Txint.Txt","")
+        ecrire("monitor.Txt_Txint.Txt",calltrafic_currentINT)
+        calltrafic_currentLOC=d.salon["LOC"]['call_current']
+        ecrire("monitor.Txt_Txloc.txt","")
+        ecrire("monitor.Txt_Txloc.txt",calltrafic_currentLOC)
+        calltrafic_currentFON=d.salon["FON"]['call_current']
+        ecrire("monitor.Txt_Txfon.txt","")
+        ecrire("monitor.Txt_Txfon.txt",calltrafic_currentFON)
+
 #PAGE SCAN
-if s.find("Pagescan")!= -1:
+    if s.find("Pagescan")!= -1:
         log("Page scanner","red")
 #MAJSCAN#
     if s.find("majscan")!= -1:
@@ -698,6 +719,21 @@ if s.find("Pagescan")!= -1:
         ecrire("scan.Txt_nbrloc.txt",str(len(d.salon['LOC']['node_list'])))
         ecrire("scan.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
         ecrire("scan.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
+
+        #Envoi station en cours de TX
+        calltrafic_currentTEC=d.salon["TEC"]['call_current']
+        ecrire("scan.Txt_Txtec.txt","")
+        ecrire("scan.Txt_Txtec.txt",calltrafic_currentTEC)
+        calltrafic_currentINT=d.salon["INT"]['call_current']
+        ecrire("scan.Txt_Txint.Txt","")
+        ecrire("scan.Txt_Txint.Txt",calltrafic_currentINT)
+        calltrafic_currentBAV=d.salon["BAV"]['call_current']
+        ecrire("scan.Txt_Txbav.txt","")
+        ecrire("scan.Txt_Txbav.txt",calltrafic_currentBAV)
+        calltrafic_currentLOC=d.salon["LOC"]['call_current']
+        ecrire("scan.Txt_Txloc.txt","")
+        ecrire("scan.Txt_Txloc.txt",calltrafic_currentLOC)
+        
 #BALISE#
     if s.find("balise")!= -1:
         print("Balise vocale")
