@@ -682,10 +682,12 @@ while True:
         ecrire("monitor.Txt_nbrint.txt",str(len(d.salon['INT']['node_list'])))
         ecrire("monitor.Txt_nbrbav.txt",str(len(d.salon['BAV']['node_list'])))
         ecrire("monitor.Txt_nbrfon.txt",str(len(d.salon['FON']['node_list'])))
-
-#SCAN#
-    if s.find("scan")!= -1:
-        log("Page scan","red")
+#PAGE SCAN
+if s.find("Pagescan")!= -1:
+        log("Page scanner","red")
+#MAJSCAN#
+    if s.find("majscan")!= -1:
+        log("majscan","red")
 
         ecrire("scan.Txt_listtec.txt",str(d.salon['TEC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
         ecrire("scan.Txt_listloc.txt",str(d.salon['LOC']['node_list']).replace("'",'').replace(", ",',')[1:-1])
