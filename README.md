@@ -41,7 +41,7 @@ Cette documentation considère que vous partez de l'installation d’une image d
 Télécharger le fichier **install.sh**
 
 ```
-wget https://raw.githubusercontent.com/F8ASB/spotnik2hmi/master/install.sh
+wget https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/install.sh
 ```
 
 Le rendre exécutable avec la commande:
