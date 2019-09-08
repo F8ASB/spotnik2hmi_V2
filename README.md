@@ -106,8 +106,6 @@ Les informations affichées sur le Nextion sont reprises de ce qui est entré da
 Vérifier que les dashboard sont fonctionnels:
 
 * RRF:<http://rrf.f5nlg.ovh>
-* TEC:https://adresse IP du hotspot ou sur <http://rrf.f5nlg.ovh:82>
-* FON:<http://fon.f1tzo.com:81>
 
 ### Quelle est le temps de chargement du fichier sur l'écran Nextion?
 Si on utilise le menu le temps de chargement est d'environ 10min selon le type d'écran.L'interêt de cette installation c'est qu'elle est simple et qu'elle vous permet de valider que l'écran communique bien avec votre système.
