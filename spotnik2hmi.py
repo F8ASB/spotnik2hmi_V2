@@ -51,10 +51,7 @@ s.connect(("8.8.8.8", 80))
 ip= (s.getsockname()[0])
 s.close()
 
-#temperature CPU
-f = open("/sys/class/thermal/thermal_zone0/temp", "r")
-t = f.readline ()
-cputemp = t[0:2]
+
 
 #Memoire SD libre
 disk= getDiskSpace()
@@ -68,8 +65,17 @@ chargecpu= getCPUuse()
 tmp = os.popen("uname -a").readline()
 if 'sun8i' in tmp:
     board = 'Orange Pi'
+    #temperature CPU
+    f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
+    t = f.readline ()
+    cputemp = t[0:2]
 else:
     board = 'Raspberry Pi'
+    #temperature CPU
+    f = open("/sys/class/thermal/thermal_zone0/temp", "r")
+    t = f.readline ()
+    cputemp = t[0:2]
+    
     #peripheriques audio Out
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
@@ -195,7 +201,7 @@ while True:
                 #print (len(listdash))
                 if len(listdash) == 13:
                     #del listdash[12]
-                	listdash.pop(0)
+                    listdash.pop(0)
                 
 
         else:            
@@ -796,9 +802,24 @@ while True:
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 #INFO#  
     if s.find("info")!= -1:
-        print("Detection bouton info")
-        cput = '"'+cputemp+' C'+'"' 
-        ecrire("info.t14.txt",cputemp)
+        log("Page info","red")
+        #lecture t° CPU temps reel
+        if board == 'Orange Pi':
+    
+            f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
+            t = f.readline ()
+            cputemp = t[0:2]
+        
+        else:
+            
+            f = open("/sys/class/thermal/thermal_zone0/temp", "r")
+            t = f.readline ()
+            cputemp = t[0:2]
+            
+            cput = cputemp+' C' 
+        print ("T° CPU: "+cput+" °C")
+        ecrire("info.t14.txt",cput)
+        
         print("Station: "+d.callsign)
         Freq = str(d.freq)+ ' Mhz'
         print("Frequence: "+d.freq)
