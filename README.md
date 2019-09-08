@@ -3,7 +3,7 @@
 
 Software for Nextion and Spotnik Hamradio RRF Network
 
-![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/boot.jpg)
+![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/bootV2.jpg)
 
 
 ## HISTORIQUE
