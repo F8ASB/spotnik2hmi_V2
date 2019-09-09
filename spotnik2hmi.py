@@ -809,14 +809,15 @@ while True:
             f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
             t = f.readline ()
             cputemp = t[0:2]
+            cput = cputemp+' C' 
         
         else:
             
             f = open("/sys/class/thermal/thermal_zone0/temp", "r")
             t = f.readline ()
             cputemp = t[0:2]
-            
             cput = cputemp+' C' 
+        
         print ("T° CPU: "+cput+" °C")
         ecrire("info.t14.txt",cput)
         
