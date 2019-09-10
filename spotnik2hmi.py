@@ -36,6 +36,8 @@ if len(sys.argv)==4:
     if sys.argv[3]=="DEBUG": 
         print("MODE DEBUG")
         debugON()
+#definition du nom de l'application
+set_procname('Spotnik2hmi')
 
 #recuperation indicatif et frequence    
 callsign = get_callsign()
