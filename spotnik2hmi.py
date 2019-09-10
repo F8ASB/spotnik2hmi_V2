@@ -37,7 +37,7 @@ if len(sys.argv)==4:
         print("MODE DEBUG")
         debugON()
 #definition du nom de l'application
-set_procname('Spotnik2hmi')
+set_procname('spotnik2hmi')
 
 #recuperation indicatif et frequence    
 callsign = get_callsign()
@@ -65,7 +65,7 @@ chargecpu= getCPUuse()
 #Detection carte
 
 tmp = os.popen("uname -a").readline()
-if 'sun8i' in tmp:
+if 'sun8i' or 'sunxi' in tmp:
     board = 'Orange Pi'
     #temperature CPU
     f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
@@ -83,7 +83,7 @@ else:
     audioinfo= ReqaudioOut.split("'")
     audioOut=audioinfo[1]   
     log(("Peripherique audio Out: "+audioOut),"white")
-    log(board,"white")
+    
     os.system('amixer -c 0 set ' +audioOut+ ' unmute') 
     
     #Detection RPI 3 B+
@@ -94,7 +94,7 @@ else:
         d.rpi3bplus=True
     else:
         log("pas de 3B+","white")
-    
+log(board,"white")    
 #Envoi des infos 
 logo(d.versionDash)
 
