@@ -36,6 +36,7 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 # apt-get install libpython3-dev
 # apt-get install libasound2-dev
 # pip3 install pyalsaaudio
+# pip3 install requests
 
 # Sur image Raspberry (Buster)
 
