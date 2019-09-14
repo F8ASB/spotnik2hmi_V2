@@ -64,9 +64,9 @@ L'installation du script s'effectura.
 
 Relancer le ./install.sh et cette fois ci choisir NEXTION
 
-Le choix Nextion permet de programmer l'écran Nextion directement depuis le script, le chargement dure environ 10min. Le protocole simple utilisé pour le transfert de fichier peut entrainer des coupures de transmission.
+Le choix Nextion permet de programmer l'écran Nextion directement depuis le script, le chargement dure environ 20min. Le protocole simple utilisé pour le transfert de fichier peut entrainer des coupures de transmission.
 Vous pouvez également choisir de mettre le fichier .tft directement dans une carte SD et la mettre sur le lecteur de l'écran.
-Il faut absolument connaitre le port sur lequel est relié l'écran et le type d'écran (voir au dos de celui-ci)
+Il faut absolument connaitre le port sur lequel est relié l'écran et disposer d'un ecran avec comme reference NX4832K035.
 
 Une fois que tout est fini faire un reboot du système en tapant:
 ```
@@ -101,7 +101,7 @@ sudo python3 /opt/spotnik/spotnik2hmi_V2/spotnik2hmi.py (choix du com) (vitesse)
 Vous aurez toutes les commandes en monitoring.
 
 #### Je rentre les informations par le menu ssh mais elles n'apparaissent pas dans le Nextion ou elles sont différentes.
-Les informations affichées sur le Nextion sont reprises de ce qui est entré dans l'interface web GUI de la distribution spotnik 1.9.
+Les informations affichées sur le Nextion sont reprises de ce qui est entré dans l'interface web GUI de la distribution spotnik.
 ### Le script plante ou ne fonctionne pas quand je change de salon (tec/fon):
 Vérifier que les dashboard sont fonctionnels:
 
