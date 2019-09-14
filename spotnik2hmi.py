@@ -65,13 +65,13 @@ chargecpu= getCPUuse()
 #Detection carte
 
 tmp = os.popen("uname -a").readline()
-if 'sun'in tmp:
+if 'sunxi'in tmp:
     board = 'Orange Pi'
     #temperature CPU
     f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
     t = f.readline ()
     cputemp = t[0:2]
-if 'arm' in tmp:
+if 'raspi' in tmp:
     board = 'Raspberry Pi'
     #temperature CPU
     f = open("/sys/class/thermal/thermal_zone0/temp", "r")
