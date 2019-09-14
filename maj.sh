@@ -14,6 +14,5 @@ wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spo
 wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/maj.sh
 #Telechargement HMI
 wget -P /opt/spotnik/spotnik2hmi_V2/nextion/ https://github.com/F8ASB/spotnik2hmi_V2/blob/master/nextion/NX4832K035.tft 
-wget -P /opt/spotnik/spotnik2hmi_V2/nextion/ https://github.com/F8ASB/spotnik2hmi_V2/blob/master/nextion/NX4832T035.tft 
 sleep 5
 reboot
