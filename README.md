@@ -90,13 +90,13 @@ Vérifier dans le fichier /etc/rc.local (fichier de démarrage) que le lancemen
 Lancer le script à la main pour voir si la communication est opérationnelle.
 
 ```
-sudo python /opt/spotnik/spotnik2hmi/spotnik2hmi.py (choix du com) (vitesse)
+sudo python3 /opt/spotnik/spotnik2hmi_V2/spotnik2hmi.py (choix du com) (vitesse)
 ```
 #### Comment vérifier quelle est l'erreur qui entraine l'arrêt du script spotnik2hmi?
 Il faut lancer le script en manuel en ssh depuis une console.
 Taper la commande 
 ```
-sudo python /opt/spotnik/spotnik2hmi/spotnik2hmi.py (choix du com) (vitesse)
+sudo python3 /opt/spotnik/spotnik2hmi_V2/spotnik2hmi.py (choix du com) (vitesse)
 ```
 Vous aurez toutes les commandes en monitoring.
 
@@ -139,11 +139,7 @@ Quand vous lancer le script le port et la vitesse sont des variables qui doivent
 
 
 ### Comment mettre à jour mon script spotnik2hmi et mon écran?
-Il suffit de se positionner dans le répertoire du script  /opt/spotnik/spotnik2hmi/ et de lancer la commande
-```
-git pull
-```
-Toutefois il sera nécessaire de mettre à jour également le programme de l'écran si celui-ci à évolué. Pour ce faire relancer la procédure d'installation et choisissez uniquement la partie nextion. Ce qui écrasera l'ancienne version automatique lors du chargement dans celui-ci.
+Sur cette nouvelle version, vous pouvez faire les mise à jour directement depuis l'écran. Depuis l'ecran, cliquer sur le Smetre en haut à gauche,puis sur l'icone système (engrenage sur la droite), puis sur update. L'écran vous donnera les mise à jour disponibles. Un reboot sera lancer automatiquement après.
 
 ### Je constate une latence avant que l'indicatif s'affiche sur l'écran.
 Le script va lire la page du Dashboard pour extraire l'indicatif, votre qualité de connexion internet et le temps de traitement explique cette latence</p>
