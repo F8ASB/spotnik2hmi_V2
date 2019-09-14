@@ -76,7 +76,7 @@ Rendez-vous sur le GUI, pour entrer votre indicatif.
 
 ## INTERFACE LOGICIEL D'INSTALLATION
 ![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/choix_install.png)
-![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/type_ecran.png)
+![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/type_ecranV3.png)
 ![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/choix_port.png)
 
 ## FAQ
