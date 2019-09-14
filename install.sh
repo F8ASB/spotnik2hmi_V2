@@ -75,7 +75,7 @@ if [ $exitstatus = 0 ]; then
 
 sed -i '/make start/a \python3 '$pathinstall'/spotnik2hmi.py '$PORT' 9600' /etc/rc.local
 
-sed -i '/make start/a \sleep 10' /etc/rc.local
+sed -i '/make start/a \sleep 20' /etc/rc.local
 else
     echo "Vous avez annulé"
 fi
