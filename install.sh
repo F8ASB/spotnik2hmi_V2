@@ -45,6 +45,16 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 # pip3 install speedtest-cli
 # pip3 install pyalsaaudio
 
+apt-get update
+apt-get upgrade
+apt-get install python3-serial
+apt install python3-pip
+pip3 install speedtest-cli
+apt-get install libpython3-dev
+apt-get install libasound2-dev
+pip3 install pyalsaaudio
+pip3 install requests
+
 echo "INSTALLATION scripts python"
 git clone https://github.com/F8ASB/spotnik2hmi_V2.git $pathinstall
 
