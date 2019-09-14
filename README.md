@@ -65,7 +65,9 @@ L'installation du script s'effectura.
 Relancer le ./install.sh et cette fois ci choisir NEXTION
 
 Le choix Nextion permet de programmer l'écran Nextion directement depuis le script, le chargement dure environ 20min. Le protocole simple utilisé pour le transfert de fichier peut entrainer des coupures de transmission.
-Vous pouvez également choisir de mettre le fichier .tft directement dans une carte SD et la mettre sur le lecteur de l'écran.<https://github.com/F8ASB/spotnik2hmi_V2/raw/master/nextion/NX4832K035.tft>
+Vous pouvez également choisir de mettre le fichier .tft directement dans une carte SD et la mettre sur le lecteur de l'écran.
+<https://github.com/F8ASB/spotnik2hmi_V2/raw/master/nextion/NX4832K035.tft>
+
 Il faut absolument connaitre le port sur lequel est relié l'écran et disposer d'un ecran avec comme reference NX4832K035.
 
 Une fois que tout est fini faire un reboot du système en tapant:
