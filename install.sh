@@ -36,7 +36,6 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 # apt-get install libpython3-dev
 # apt-get install libasound2-dev
 # pip3 install pyalsaaudio
-# pip3 install requests
 
 # Sur image Raspberry (Buster)
 
@@ -45,16 +44,6 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 # apt install python3-pip
 # pip3 install speedtest-cli
 # pip3 install pyalsaaudio
-
-apt-get update
-apt-get upgrade
-apt-get install python3-serial
-apt install python3-pip
-pip3 install speedtest-cli
-apt-get install libpython3-dev
-apt-get install libasound2-dev
-pip3 install pyalsaaudio
-pip3 install requests
 
 echo "INSTALLATION scripts python"
 git clone https://github.com/F8ASB/spotnik2hmi_V2.git $pathinstall
@@ -99,8 +88,7 @@ fi
 
 ECRAN=$(whiptail --title "Choix type d'ecran NEXTION" --radiolist \
 "Quel Type d'ecran ?" 15 60 4 \
-"NX4832K035.tft" "Ecran 3,5 Enhanced" OFF \
-"NX4832T035.tft" "Ecran 3,5 Basic" ON 3>&1 1>&2 2>&3)
+"NX4832K035.tft" "Ecran 3,5 Enhanced" ON 3>&1 1>&2 2>&3)
  
 exitstatus=$?
 if [ $exitstatus = 0 ]; then

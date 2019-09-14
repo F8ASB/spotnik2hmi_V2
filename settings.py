@@ -9,7 +9,7 @@ from fonctions import *
 #Variables
 eof = "\xff\xff\xff"
 today = datetime.now()
-versionDash = "2.5"
+versionDash = "3.00"
 wifistatut = 0
 dashlist = ""
 monitor = ""
