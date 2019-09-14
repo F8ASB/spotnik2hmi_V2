@@ -65,7 +65,7 @@ chargecpu= getCPUuse()
 #Detection carte
 
 tmp = os.popen("uname -a").readline()
-if 'sunxi'in tmp:
+if 'sun8i' or 'sunxi' in tmp:
     board = 'Orange Pi'
     #temperature CPU
     f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
