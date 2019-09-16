@@ -71,7 +71,7 @@ if 'sun8i' or 'sunxi' in tmp:
     f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
     t = f.readline ()
     cputemp = t[0:2]
-if 'sun8i' or 'sunxi' not in tmp:
+else:
     board = 'Raspberry Pi'
     #temperature CPU
     f = open("/sys/class/thermal/thermal_zone0/temp", "r")
