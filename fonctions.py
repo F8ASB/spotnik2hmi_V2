@@ -392,8 +392,12 @@ def logo(Current_version):
 #**********************  
 
 def dtmf(code):
-    
-    b = open("/tmp/svxlink_dtmf_ctrl_pty","w")
+    print(d.version)
+    if d.version =="2.0":
+        b = open("/tmp/svxlink_dtmf_ctrl_pty","w")
+    else:
+        b = open("/tmp/dtmf_uhf","w")
+
     b.write(code)
     log(("code DTMF: "+code),"white")
     b.close()
