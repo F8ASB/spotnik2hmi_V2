@@ -63,15 +63,14 @@ occupdisk = str(disk)
 chargecpu= getCPUuse()
 
 #Detection carte
-
-tmp = os.popen("uname -a").readline()
-if 'sun8i' or 'sunxi' in tmp:
+revision=getrevision()
+if revision =="0000":
     board = 'Orange Pi'
     #temperature CPU
     f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
     t = f.readline ()
     cputemp = t[0:2]
-else:
+if revision !="0000":
     board = 'Raspberry Pi'
     #temperature CPU
     f = open("/sys/class/thermal/thermal_zone0/temp", "r")
