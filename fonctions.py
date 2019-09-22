@@ -127,6 +127,10 @@ def portcom(portseriel,vitesse):
         log('Status: ' + status.split(b' ')[0].decode("utf-8"),"white")
         screentype=model.split(b' ')[0][0:10]
         log('Model: ' + screentype.decode("utf-8"),"white")
+        print(screentype.decode("utf-8"))
+    else:
+        print('\x1b[7;37;41m'+"VOTRE ECRAN N'EST PAS ACCESSIBLE, MERCI DE VERIFIER VOTRE CABLAGE !"+'\x1b[0m')
+        sys.exit()
 
 #*************************
 #* GESTION ECRAN NEXTION *
