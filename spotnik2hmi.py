@@ -672,40 +672,11 @@ while True:
         ecrire("Txt_date.txt",date)
         ecrire("Txt_heure.txt",heureS)
         
-        if d.salon_current=="TEC":
-
-            calltrafic_current=d.salon["TEC"]['call_current']
+        if d.salon_current in ["TEC", "RRF", "FON", "INT", "BAV", "LOC"]:
+            calltrafic_current=d.salon[d.salon_current]['call_current']
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
-        if d.salon_current=="RRF":
-
-            calltrafic_current=d.salon["RRF"]['call_current']
-            ecrire("trafic.Txt_call.txt","")
-            ecrire("trafic.Txt_call.txt",calltrafic_current)
-        if d.salon_current=="FON":
-
-            calltrafic_current=d.salon["FON"]['call_current']
-            ecrire("trafic.Txt_call.txt","")
-            ecrire("trafic.Txt_call.txt",calltrafic_current)
-        
-        if d.salon_current=="INT":
-
-            calltrafic_current=d.salon["INT"]['call_current']
-            ecrire("trafic.Txt_call.txt","")
-            ecrire("trafic.Txt_call.txt",calltrafic_current)
-        
-        if d.salon_current=="BAV":
-
-            calltrafic_current=d.salon["BAV"]['call_current']
-            ecrire("trafic.Txt_call.txt","")
-            ecrire("trafic.Txt_call.txt",calltrafic_current)
-
-        if d.salon_current=="LOC":
-
-            calltrafic_current=d.salon["LOC"]['call_current']
-            ecrire("trafic.Txt_call.txt","")
-            ecrire("trafic.Txt_call.txt",calltrafic_current)
 #INFO#  
     if s.find("info")!= -1:
         log("Page info","red")
