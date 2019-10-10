@@ -577,106 +577,11 @@ while True:
 #DASHBOARD#
     if s.find("dashboard")!= -1:
         log("Page dashboard","red")
-        
-        if len(listdash) == 12:
-            ecrire("Txt_Dash12.txt",listdash[0])
-            ecrire("Txt_Dash11.txt",listdash[1])
-            ecrire("Txt_Dash10.txt",listdash[2])
-            ecrire("Txt_Dash9.txt",listdash[3])
-            ecrire("Txt_Dash8.txt",listdash[4])
-            ecrire("Txt_Dash7.txt",listdash[5])
-            ecrire("Txt_Dash6.txt",listdash[6])
-            ecrire("Txt_Dash5.txt",listdash[7])
-            ecrire("Txt_Dash4.txt",listdash[8])
-            ecrire("Txt_Dash3.txt",listdash[9])
-            ecrire("Txt_Dash2.txt",listdash[10])
-            ecrire("Txt_Dash1.txt",listdash[11])
-        if len(listdash) == 11:
-            ecrire("Txt_Dash11.txt",listdash[0])
-            ecrire("Txt_Dash10.txt",listdash[1])
-            ecrire("Txt_Dash9.txt",listdash[2])
-            ecrire("Txt_Dash8.txt",listdash[3])
-            ecrire("Txt_Dash7.txt",listdash[4])
-            ecrire("Txt_Dash6.txt",listdash[5])
-            ecrire("Txt_Dash5.txt",listdash[6])
-            ecrire("Txt_Dash4.txt",listdash[7])
-            ecrire("Txt_Dash3.txt",listdash[8])
-            ecrire("Txt_Dash2.txt",listdash[9])
-            ecrire("Txt_Dash1.txt",listdash[10])
-        if len(listdash) == 10:
-            ecrire("Txt_Dash10.txt",listdash[0])
-            ecrire("Txt_Dash9.txt",listdash[1])
-            ecrire("Txt_Dash8.txt",listdash[2])
-            ecrire("Txt_Dash7.txt",listdash[3])
-            ecrire("Txt_Dash6.txt",listdash[4])
-            ecrire("Txt_Dash5.txt",listdash[5])
-            ecrire("Txt_Dash4.txt",listdash[6])
-            ecrire("Txt_Dash3.txt",listdash[7])
-            ecrire("Txt_Dash2.txt",listdash[8])
-            ecrire("Txt_Dash1.txt",listdash[9])
-        if len(listdash) == 9:
-            ecrire("Txt_Dash9.txt",listdash[0])
-            ecrire("Txt_Dash8.txt",listdash[1])
-            ecrire("Txt_Dash7.txt",listdash[2])
-            ecrire("Txt_Dash6.txt",listdash[3])
-            ecrire("Txt_Dash5.txt",listdash[4])
-            ecrire("Txt_Dash4.txt",listdash[5])
-            ecrire("Txt_Dash3.txt",listdash[6])
-            ecrire("Txt_Dash2.txt",listdash[7])
-            ecrire("Txt_Dash1.txt",listdash[8])
-        if len(listdash) == 8:
-            ecrire("Txt_Dash8.txt",listdash[0])
-            ecrire("Txt_Dash7.txt",listdash[1])
-            ecrire("Txt_Dash6.txt",listdash[2])
-            ecrire("Txt_Dash5.txt",listdash[3])
-            ecrire("Txt_Dash4.txt",listdash[4])
-            ecrire("Txt_Dash3.txt",listdash[5])
-            ecrire("Txt_Dash2.txt",listdash[6])
-            ecrire("Txt_Dash1.txt",listdash[7])
-        if len(listdash) == 7:
-            ecrire("Txt_Dash7.txt",listdash[0])
-            ecrire("Txt_Dash6.txt",listdash[1])
-            ecrire("Txt_Dash5.txt",listdash[2])
-            ecrire("Txt_Dash4.txt",listdash[3])
-            ecrire("Txt_Dash3.txt",listdash[4])
-            ecrire("Txt_Dash2.txt",listdash[5])
-            ecrire("Txt_Dash1.txt",listdash[6])
-        if len(listdash) == 6:
-            ecrire("Txt_Dash6.txt",listdash[0])
-            ecrire("Txt_Dash5.txt",listdash[1])
-            ecrire("Txt_Dash4.txt",listdash[2])
-            ecrire("Txt_Dash3.txt",listdash[3])
-            ecrire("Txt_Dash2.txt",listdash[4])
-            ecrire("Txt_Dash1.txt",listdash[5])
 
-        if len(listdash) == 5:
-            ecrire("Txt_Dash5.txt",listdash[0])
-            ecrire("Txt_Dash4.txt",listdash[1])
-            ecrire("Txt_Dash3.txt",listdash[2])
-            ecrire("Txt_Dash2.txt",listdash[3])
-            ecrire("Txt_Dash1.txt",listdash[4])
-
-        if len(listdash) == 4:
-            ecrire("Txt_Dash4.txt",listdash[0])
-            ecrire("Txt_Dash3.txt",listdash[1])
-            ecrire("Txt_Dash2.txt",listdash[2])
-            ecrire("Txt_Dash1.txt",listdash[3])
+        length = len(listdash)
+        for i in xrange(0, length):
+            ecrire('Txt_Dash' + str(length - i) + '.txt', listdash[i])
             
-        
-        if len(listdash) == 3:
-            
-            ecrire("Txt_Dash3.txt",listdash[0])
-            ecrire("Txt_Dash2.txt",listdash[1])
-            ecrire("Txt_Dash1.txt",listdash[2])
-        
-        if len(listdash) == 2:
-            ecrire("Txt_Dash2.txt",listdash[0])
-            ecrire("Txt_Dash1.txt",listdash[1])
-        if len(listdash) == 1:
-            ecrire("Txt_Dash1.txt",listdash[0])
-
-
-        
 #MENU#
     if s.find("menu")!= -1:
         log("Page menu","red")
