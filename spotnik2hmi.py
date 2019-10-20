@@ -93,7 +93,14 @@ if revision !="0000":
         d.rpi3bplus=True
     else:
         log("pas de 3B+","white")
-log(board,"white")    
+log(board,"white") 
+
+# Detection Raptor 
+# Programme de Armel F4HWN
+# https://github.com/armel/RRFRaptor
+
+raptor = os.path.isdir('/opt/RRFRaptor')
+
 #Envoi des infos 
 logo(d.versionDash)
 
@@ -124,6 +131,15 @@ if board =='Raspberry Pi':
     ecrireval("trafic.vasound.val","1")
     GetAudioInfo(audioOut)
 sleep(4);
+
+#Gestion bouton Raptor visble si disponible
+
+if raptor == 'true':
+	ecrireval("scanner.Vnb_raptor.val","1")
+	log("Raptor disponible","white") 
+else:
+	ecrireval("scanner.Vnb_raptor.val","0")
+	log("Raptor non disponible","white") 
 
 
 #verification si nouvelle version disponible
@@ -438,6 +454,15 @@ while True:
         log("ECRITURE INFO WIFI DANS JSON + CONFIG","red")
         
         gopage("reglages")
+
+#RAPTOR#
+    if s.find("raptorstart")!= -1:
+        log("raptor ON","red")
+        os.system('/opt/RRFRaptor/RRFRaptor.sh start')
+    
+    if s.find("raptorstop")!= -1:
+        log("raptor OFF","red")
+        os.system('/opt/RRFRaptor/RRFRaptor.sh stop')    
 
 #*******************************
 #* Gestion commande du Nextion *
