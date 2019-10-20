@@ -100,6 +100,7 @@ log(board,"white")
 # https://github.com/armel/RRFRaptor
 
 raptor = os.path.isdir('/opt/RRFRaptor')
+print(raptor)
 
 #Envoi des infos 
 logo(d.versionDash)
@@ -134,7 +135,7 @@ sleep(4);
 
 #Gestion bouton Raptor visble si disponible
 
-if raptor == 'true':
+if raptor:
 	ecrireval("scanner.Vnb_raptor.val","1")
 	log("Raptor disponible","white") 
 else:
