@@ -459,11 +459,11 @@ while True:
 #RAPTOR#
     if s.find("raptorstart")!= -1:
         log("raptor ON","red")
-        dtmf("200#")
-    
+        os.system('/opt/RRFRaptor/RRFRaptor.sh')
+
     if s.find("raptorstop")!= -1:
         log("raptor OFF","red")
-        dtmf("200#")    
+        os.system('/opt/RRFRaptor/RRFRaptor.sh')
 
 #*******************************
 #* Gestion commande du Nextion *
