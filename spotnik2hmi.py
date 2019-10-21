@@ -136,10 +136,10 @@ sleep(4);
 #Gestion bouton Raptor visble si disponible
 
 if raptor:
-	ecrireval("scanner.Vnb_raptor.val","1")
+	ecrireval("scan.Vnb_raptor.val","1")
 	log("Raptor disponible","white") 
 else:
-	ecrireval("scanner.Vnb_raptor.val","0")
+	ecrireval("scan.Vnb_raptor.val","0")
 	log("Raptor non disponible","white") 
 
 
