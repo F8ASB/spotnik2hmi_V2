@@ -64,7 +64,7 @@ chmod +x $pathinstall/spotnik2hmi.py
 echo "INSTALLATION UTILITAIRE METAR"
 git clone https://github.com/python-metar/python-metar.git $pathinstall/python-metar/
 
-chmod +x $pathinstall/python-metar#get_report.py
+chmod +x $pathinstall/python-metar/get_report.py
 
 PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
 "Sur quoi raccorder vous le Nextion?" 15 60 4 \
