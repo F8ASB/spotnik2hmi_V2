@@ -20,6 +20,7 @@ wget -P /opt/spotnik/spotnik2hmi_V2/nextion/ https://github.com/F8ASB/spotnik2hm
 
 #Dans /etc/spotnik/
 wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Divers_files/restart.exp
+chmod +x /etc/spotnik/restart.exp
 wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sexp.wav
 wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sreg.wav
 
