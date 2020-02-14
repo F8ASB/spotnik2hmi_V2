@@ -146,8 +146,8 @@ def resetHMI():
 def updatehmi():
 
     log("MAJ ECRAN HMI","red")
-    log(screentype,"white")
-    log(porthmi,"white")
+  #  log(str(screentype),"white")
+  #  log(str(porthmi),"white")
     os.system ('python /opt/spotnik/spotnik2hmi_V2/nextion/nextion.py '+'/opt/spotnik/spotnik2hmi_V2/nextion/NX4832K035.tft '+ '/dev/'+porthmi)
 
 def setdim(dimv):
