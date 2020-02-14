@@ -9,7 +9,7 @@ from fonctions import *
 #Variables
 eof = "\xff\xff\xff"
 today = datetime.now()
-versionDash = "3.00"
+versionDash = "3.50"
 wifistatut = 0
 dashlist = ""
 monitor = ""
@@ -21,6 +21,10 @@ statutradio=""
 firstboot= True
 rpi3bplus=False
 DEBUG = False
+d.audioOut=""
+d.audioIn=""
+soundcard=""
+database=""
 
 #Chemins fichiers
 svxconfig="/etc/spotnik/svxlink.cfg"
@@ -28,6 +32,8 @@ cheminversion= open("/etc/spotnik/version", "r")
 version = cheminversion.read()
 version = version.strip()
 confwifi="/etc/NetworkManager/system-connections/SPOTNIK"
+full_amat_data="/opt/spotnik/spotnik2hmi_V2/datas/amat_FR.dat"
+cache_amat_data="/opt/spotnik/spotnik2hmi_V2/datas/cache_amat_FR.dat"
 
 #Chemin log a suivre
 svxlogfile = "/tmp/svxlink.log"   #SVXLink log file 
@@ -116,8 +122,31 @@ salon = {
     },
 
     'FON': {
-#        #'url': 'http://fon.f1tzo.com:8080/api/svxlink/testFON',
         'url': 'http://rrf.f5nlg.ovh/api/svxlink/FON', 
+        'transmit': True, 
+        'call_current': '', 
+        'call_previous': '',
+        'node_list': '',
+        'node_list_old': '',
+        'node_list_in': '',
+        'node_count': '',
+        'node_list_out': ''
+    },
+
+    'EXP': {
+        'url': 'http://rrf.f5nlg.ovh/api/svxlink/experimental', 
+        'transmit': True, 
+        'call_current': '', 
+        'call_previous': '',
+        'node_list': '',
+        'node_list_old': '',
+        'node_list_in': '',
+        'node_count': '',
+        'node_list_out': ''
+    },
+    
+    'REG': {
+        'url': 'http://f5swb.homeip.net:8008/api/svxlink/REG', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',

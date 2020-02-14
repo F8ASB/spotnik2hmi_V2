@@ -77,30 +77,37 @@ if revision !="0000":
     t = f.readline ()
     cputemp = t[0:2]
     
-    #peripheriques audio Out
+#Test presence carte son WM8960 ou autre
+
+subcmd=os.popen('aplay -l','r')
+if (subcmd.read().find('8960'))!= -1:
+    print("DETECTION WM8960")
+    d.audioOut='Headphone'
+    d.audioIn="Capture"
+    d.soundcard="WM8960"
+    os.system("amixer -c 0 set 'Right Output Mixer PCM' unmute")
+    os.system("amixer -c 0 set 'Left Output Mixer PCM' unmute")
+else:
     ReqaudioOut=os.popen("amixer scontrols", "r").read()
     audioinfo= ReqaudioOut.split("'")
-    audioOut=audioinfo[1]   
-    log(("Peripherique audio Out: "+audioOut),"white")
+    d.audioOut=audioinfo[1]
+    d.audioIn="Mic"
+    d.soundcard="USB SOUND"
+    os.system('amixer -c 0 set ' +d.audioOut+ ' unmute')
     
-    os.system('amixer -c 0 set ' +audioOut+ ' unmute') 
-    
-    #Detection RPI 3 B+
-    revision=getrevision()
+log(("Peripherique audio Out: "+d.audioOut),"white")
+ 
 
-    if revision=="a020d3":
-        log("RASPBERRY 3B+ DETECTION","white")
-        d.rpi3bplus=True
-    else:
-        log("pas de 3B+","white")
+  #Detection RPI 3 B+
+revision=getrevision()
+
+if revision=="a020d3":
+    log("RASPBERRY 3B+ DETECTION","white")
+    d.rpi3bplus=True
+else:
+    log("pas de 3B+","white")
+
 log(board,"white") 
-
-# Detection Raptor 
-# Programme de Armel F4HWN
-# https://github.com/armel/RRFRaptor
-
-raptor = os.path.isdir('/opt/RRFRaptor')
-print(raptor)
 
 #Envoi des infos 
 logo(d.versionDash)
@@ -110,6 +117,9 @@ print("     +    "+"Proc: "+(str(chargecpu))+"%   " + "CPU: "+cputemp+"°C"+ "  
 print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
 print("     +   " +"Station: "+d.callsign + "       Frequence: "+d.freq+" Mhz"+"    +")
 print("     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")
+
+#test version database OM
+datacheckversion()
 
 #reset de l'ecran
 resetHMI()
@@ -130,18 +140,27 @@ log("Maj Call ...","red")
 #Reglage niveau audio visible si Raspberry
 if board =='Raspberry Pi':
     ecrireval("trafic.vasound.val","1")
-    GetAudioInfo(audioOut)
+    GetAudioInfoOut(d.audioOut)
+    GetAudioInfoIn(d.audioIn)
+
 sleep(4);
 
+
+# Detection Raptor 
+# Programme de Armel F4HWN
+# https://github.com/armel/RRFRaptor
+
+#detection presence repertoire RRFRaptor
+raptor = os.path.isdir('/opt/RRFRaptor')
+
 #Gestion bouton Raptor visble si disponible
-
 if raptor:
-	ecrireval("scan.Vnb_raptor.val","1")
-	log("Raptor disponible","white") 
+    ecrireval("scan.Vnb_raptor.val","1")
+    log("Raptor disponible","white") 
+    raptortest()
 else:
-	ecrireval("scan.Vnb_raptor.val","0")
-	log("Raptor non disponible","white") 
-
+    ecrireval("scan.Vnb_raptor.val","0")
+    log("Raptor non disponible","white") 
 
 #verification si nouvelle version disponible
 checkversion()
@@ -184,6 +203,9 @@ while True:
 
     timestamp = d.today.strftime('%d-%m-%Y %H:%M:%S')
 
+    if raptor:
+        raptortest()
+
     for key in d.salon:
 
         try:
@@ -192,7 +214,8 @@ while True:
         except requests.exceptions.ConnectionError as errc:
             print(('Error Connecting:', errc))
         except requests.exceptions.Timeout as errt:
-            print(('Timeout Error:', errt))    
+            print(('Timeout Error:', errt)) 
+               
 #***********************************
 #*  Transmitter en cours sur salon *
 #***********************************
@@ -213,15 +236,21 @@ while True:
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 ecrire("dashboard.Vtxt_dash.txt",str(dash))
                 print(d.monitor)
+                envoistatut()
+                
+                #print(str(d.salon["RRF"]['transmit'])
+
                 #Stockage station pour dashboard
                 infodash=d.today.strftime('%H:%M ')+ str(d.salon[key]['call_current']) +"-"+key
                 listdash.append(infodash)
+                if key == d.salon_current:
+                	Infocall(d.salon[key]['call_current'])
+                
                 #print (len(listdash))
                 if len(listdash) == 13:
                     #del listdash[12]
                     listdash.pop(0)
                 
-
         else:            
             if d.salon[key]['transmit'] is True:
                 d.salon[key]['call_current'] = ''
@@ -230,6 +259,7 @@ while True:
                 d.salon[key]['transmit'] = False
                 ecrire("monitor.Txt_statut.txt",d.monitor)
                 print(d.monitor)
+                envoistatut()
         
 
 #*************************************************
@@ -245,7 +275,7 @@ while True:
 
         d.salon[key]['node_list'] = tmp.split(',')
 
-        for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON']:
+        for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON', 'EXP','REG']:
             if n in d.salon[key]['node_list']:
                 d.salon[key]['node_list'].remove(n)
 
@@ -359,9 +389,33 @@ while True:
         d.qsystatut=False
 
     if tn.find("sat") != -1 and d.salon_current!="SAT":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
         ecrire("trafic.g0.txt","") 
         d.salon_current="SAT"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("exp") != -1 and d.salon_current!="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="EXP"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("fdv") != -1 and d.salon_current!="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP. DV")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="EXP"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("reg") != -1 and d.salon_current!="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="REG"
         if d.qsystatut==False and d.firstboot==False:
             gopage("qsy")
         d.qsystatut=False   
@@ -490,102 +544,67 @@ while True:
         gopage("confirm")
         ecrire("confirm.t0.txt","CONFIRMER LA MAJ WIFI ?")  
 
-
-
 #MAJAUDIO
     if s.find("MAJAUDIO")!= -1:
   
-        log("MAJ AUDIO....","red")
-        requete("get nOut.val")
-
-        while 1:
-            s = hmiReadline()
-            log(s,"blue")
-            sa=s[2:]
-            log(sa,"blue")
-   
-            
-            
-            if len(sa)<71:
-                if sa[2:3] == "x":
-                    log(("Niveau audio out: "+ str(int(sa[3:5], 16))),"white")  
-                    audiooutinfo=str(int(sa[3:5], 16))
-                    break
-                elif sa[2:3] == "t":
-                    log("Niveau audio out: "+ "9","white")  
-                    audiooutinfo=9
-                    break
-                elif sa[2:3] == "n":
-                    log("Niveau audio out: "+ "10","white") 
-                    audiooutinfo=10
-                    break
-                elif sa[2:3] == "r":
-                    log("Niveau audio out: "+ "13","white") 
-                    audiooutinfo=13
-                    break
-                else:
-                    log(("Niveau audio out: "+ str(ord(sa[1]))),"white")    
-                    audiooutinfo=str(ord(sa[1]))
-                    break
-        
-        time.sleep(1)
-
-        requete("get nIn.val")
-
-        while 1:
-
-            s = hmiReadline()
-            log(s,"blue")
-            sb=s[2:]
-            log(sb,"blue")
-
-            if len(sb)<71:
-                if sb[2:3] == "x":
-                    log(("Niveau audio in: "+ str(int(sb[3:5], 16))),"white")   
-                    audioininfo=str(int(sb[3:5], 16))
-                    setAudio(audioOut,audiooutinfo,audioininfo)
-                    break
-                elif sb[2:3] == "t":
-                    log("Niveau audio in: "+ "9","white")   
-                    audioininfo=9
-                    setAudio(audioOut,audiooutinfo,audioininfo)
-                    break
-                elif sb[2:3] == "n":
-                    log("Niveau audio in: "+ "10","white")  
-                    audioininfo=10
-                    setAudio(audioOut,audiooutinfo,audioininfo)
-                    break
-                elif sb[2:3] == "r":
-                    log("Niveau audio in: "+ "13","white")  
-                    audioininfo=13
-                    setAudio(audioOut,audiooutinfo,audioininfo)
-                    break
-                else:
-                    log(("Niveau audio in: "+ str(ord(sb[1]))),"white") 
-                    audioininfo=str(ord(sb[1]))
-                    setAudio(audioOut,audiooutinfo,audioininfo)
-                    break       
-
-
-
+        log("MAJ AUDIO....","red")        
 
 #MUTE AUDIO
     if s.find("MUTEON")!= -1:
         log("MUTE","white")
-        os.system('amixer -c 0 set ' +audioOut+ ' mute')
+        if d.soundcard=="WM8960":
+            os.system("amixer -c 0 set 'Right Output Mixer PCM' mute")
+            os.system("amixer -c 0 set 'Left Output Mixer PCM' mute")
+        else:
+            os.system('amixer -c 0 set ' +d.audioOut+ ' mute')
 
 #UNMUTE AUDIO
     if s.find("MUTEOFF")!= -1:
         log("UNMUTE","white")
-        os.system('amixer -c 0 set ' +audioOut+ ' unmute')         
+        if d.soundcard=="WM8960":
+            os.system("amixer -c 0 set 'Right Output Mixer PCM' unmute")
+            os.system("amixer -c 0 set 'Left Output Mixer PCM' unmute")
+            
+        else:
+            os.system('amixer -c 0 set ' +d.audioOut+ ' unmute')
+
+#NIVEAU AUDIO IN
+    if s.find("Audioin")!= -1: 
+        log(s[s.find("Audioin")+7:(len(s)-13)],"white")
+        levelIn=(s[25:(len(s)-13)])
+        
+        try:
+            setAudioIn(d.audioIn,levelIn)
+
+        except ValueError:
+            log("Erreur valeur audio","red")
+            ecrireval("mixer.Vnb_mixer.val","0")
+        
+
+#NIVEAU AUDIO OUT      
+    if s.find("Audioout")!= -1: 
+        log(s[s.find("Audioout")+8:(len(s)-13)],"white")
+        levelOut=(s[s.find("Audioout")+8:(len(s)-13)])
+        
+        try:
+            setAudioOut(d.audioOut,levelOut)
+
+        except ValueError:
+            log("Erreur valeur audio","red")
+            ecrireval("mixer.Vnb_mixer.val","0")
+           
 
 #ENVOI DASHBOARD
-    if s.find("listdash")!= -1 and d.salon_current!="RRF" and d.salon_current!="FON":
+    if s.find("listdash")!= -1 and d.salon_current!="RRF":
         log("List dash","red")
-        if d.salon_current=="RRF" or d.salon_current=="FON"or d.salon_current=="SAT"or d.salon_current=="ECH"or d.salon_current=="PER":
+        if d.salon_current=="RRF" or d.salon_current=="SAT"or d.salon_current=="ECH"or d.salon_current=="PER":
             ecrire("trafic.g0.txt","")
         else:    
             ecrire("trafic.g0.txt",str(d.salon[d.salon_current]['node_list']).replace("'",'').replace(", ",',')[1:-1]) 
+#INFO STATUTS SUR SALON
+    if s.find("statutsalon")!= -1:
+        log("INFOSTATUT","white")
+        envoistatut()
 
 
 #******************
@@ -603,11 +622,12 @@ while True:
 #DASHBOARD#
     if s.find("dashboard")!= -1:
         log("Page dashboard","red")
-
         length = len(listdash)
-        for i in xrange(0, length):
+        for i in range(0, length):
             ecrire('Txt_Dash' + str(length - i) + '.txt', listdash[i])
-            
+ 
+   
+
 #MENU#
     if s.find("menu")!= -1:
         log("Page menu","red")
@@ -644,6 +664,14 @@ while True:
 #PAGE SCAN
     if s.find("Pagescan")!= -1:
         log("Page scanner","red")
+
+#PAGE INFO STATION
+    if s.find("infostation")!= -1:
+        log("Page info Station","red")
+        ecrire("infostation.V_verdbase.txt",str(d.database))
+        datacheckversion()
+        ecrire("infostation.V_verdbase.txt",str(d.database))
+
 #MAJSCAN#
     if s.find("majscan")!= -1:
         log("majscan","red")
@@ -690,7 +718,7 @@ while True:
 #MIXER#
     if s.find("mixer")!= -1:
         log("Detection page mixer","red")
-        GetAudioInfo(audioOut)
+        
                         
 #TRAFIC#        
     if s.find("trafic")!= -1:
@@ -704,7 +732,7 @@ while True:
             ecrire("trafic.Txt_call.txt",calltrafic_current)
 
 #INFO#  
-    if s.find("info")!= -1:
+    if s.find("infosystem")!= -1:
         log("Page info","red")
         #lecture t° CPU temps reel
         if board == 'Orange Pi':
@@ -712,14 +740,14 @@ while True:
             f = open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r")
             t = f.readline ()
             cputemp = t[0:2]
-            cput = cputemp+' C' 
+            cput = cputemp 
         
         else:
             
             f = open("/sys/class/thermal/thermal_zone0/temp", "r")
             t = f.readline ()
             cputemp = t[0:2]
-            cput = cputemp+' C' 
+            cput = cputemp
         
         print ("T° CPU: "+cput+" °C")
         ecrire("info.t14.txt",cput)
@@ -736,8 +764,10 @@ while True:
         ecrire("info.t13.txt",occupdisk)
         print("IP: "+ip)
         ecrire("info.t0.txt",ip)
-        print("occupation systeme: "+str(chargecpu))
+        print("Ocupation systeme: "+str(chargecpu))
         ecrire("info.t12.txt",str(chargecpu)+" %")
+        print("Database: "+str(d.database))
+        ecrire("info.V_verdbase.txt",str(d.database))
 #WIFI#
     if s.find("pagewifi")!= -1:
 
@@ -784,13 +814,13 @@ while True:
         ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")
         os.system("/etc/spotnik/restart.fon")
 #QSYSALONTECH#
-    if s.find("qsytech")!= -1:
+    if s.find("qsytec")!= -1:
         d.qsystatut=True
         log("QSY SALON TECH","red")
         ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
         os.system("/etc/spotnik/restart.tec")
 #QSYINTER#
-    if s.find("qsyinter")!= -1:
+    if s.find("qsyint")!= -1:
         d.qsystatut=True
         log("QSY INTER","red")
         ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
@@ -813,20 +843,41 @@ while True:
     if s.find("qsysat")!= -1:
         d.qsystatut=True
         log("QSY SAT","red")
-        ecrire("monitor.Vtxt_saloncon.txt","SALON SATELLITE")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
         #dtmf("102#")
         os.system("/etc/spotnik/restart.sat")
+#QSYEXP#
+    if s.find("qsyexp")!= -1:
+        d.qsystatut=True
+        log("QSY EXP","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
+        #dtmf("102#")
+        os.system("/etc/spotnik/restart.exp")
+#QSYREGION#
+    if s.find("qsyreg")!= -1:
+        d.qsystatut=True
+        log("QSY EXP","red")
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
+        #dtmf("102#")
+        os.system("/etc/spotnik/restart.reg")
+
+#QSYECHOLINK#
+    if s.find("qsyel")!= -1:
+        log("QSY ECHOLINK","red")
+        #dtmf("51#")
+        os.system("/etc/spotnik/restart.el")
 
 #DONNMETEO#
     if s.find("dmeteo")!= -1:
         log("BULETIN METEO","red")
         dtmf("*51#")
 #PERROQUET
-    if s.find("qsyperroquet")!= -1:
+    if s.find("qsydefault")!= -1:
         d.qsystatut=True
         log("QSY PERROQUET","red")
         ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
         os.system("/etc/spotnik/restart.default")
+
         
                
     d.firstboot= False

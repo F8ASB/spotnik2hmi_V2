@@ -11,7 +11,7 @@
 #|  |\    |  |  .--'   .'    \_)   |  |  ,|  |_.'  \ |  | |  ||  |\    |   #
 #|  | \   |  |  `---. /  .'.  \    |  | (_|  |      `'  '-'  '|  | \   |   #
 #`--'  `--'  `------''--'   '--'   `--'   `--'        `-----' `--'  `--'   #
-#                                 TEAM: F0DEI,F5SWB,F8ASB      #    
+#                                 TEAM: F0DEI,F5SWB,F8ASB                  #    
 ############################################################################
 
 import settings as d
@@ -53,6 +53,7 @@ import io
 import json
 #Pour ouverture nomenclature
 import csv
+import re
 
 DEBUG=False
 
@@ -92,9 +93,9 @@ def debugON():
 def log(s,color):
     if DEBUG:
         if color=="red":
-            print ('\x1b[7;30;41m'+"DEBUG: "+s+'\x1b[0m')
+            print ('\x1b[47;1;31m'+"DEBUG: "+s+'\x1b[0m')
         if color=="blue":
-            print ('\x1b[7;34;40m'+"DEBUG: "+s+'\x1b[0m')
+            print ('\x1b[47;1;34m'+"DEBUG: "+s+'\x1b[0m')
         if color=="yellow":
             print ('\x1b[7;30;43m'+"DEBUG: "+s+'\x1b[0m')
         if color=="white":
@@ -181,6 +182,41 @@ def gopage(choixnompage):
     infoserialpage="page " +choixnompage
     log(infoserialpage,"yellow")
 
+#Gestion des statuts en TX des salon
+def envoistatut():
+
+    if d.salon["RRF"]['transmit'] is True:
+        rrfstatut = 1                    
+    else:
+        rrfstatut = 0
+    if d.salon["BAV"]['transmit'] is True:
+        bavstatut = 1                    
+    else:
+        bavstatut = 0
+    if d.salon["TEC"]['transmit'] is True:
+        tecstatut = 1                    
+    else:
+        tecstatut = 0
+    if d.salon["INT"]['transmit'] is True:
+        intstatut = 1                    
+    else:
+        intstatut = 0
+    if d.salon["LOC"]['transmit'] is True:
+        locstatut = 1                    
+    else:
+        locstatut = 0
+    if d.salon["FON"]['transmit'] is True:
+        fonstatut = 1                    
+    else:
+        fonstatut = 0
+    
+    #Genere un trame de 6 0 ou 1 selon etat
+    #l'ordre RRF/BAVARDAGE/TECHNIQUE/INTERNATIONNAL/LOCAL/FON
+    # 000000   => aucun trafic
+    # 100000   => trafic sur salon RRF
+
+    ecrire("trafic.Vtxt_status.txt",(str(rrfstatut)+str(bavstatut)+str(tecstatut)+str(intstatut)+str(locstatut)+str(fonstatut)))
+
 #*************************
 #* GESTION TEST INTERNET *
 #*************************
@@ -220,37 +256,47 @@ def getspeednet():
 #***************************
 #* GESTION PARAMETRE AUDIO *
 #***************************
+ 
+def GetAudioInfoOut(interfaceaudioOUT):
      
-#recuperation info niveau 
-def GetAudioInfo(interfaceaudio):
-    
-    templevelOut = subprocess.check_output('amixer -c 0 get ' + interfaceaudio +" -M", shell=True)
+    templevelOut = subprocess.check_output('amixer -c 0 get ' + interfaceaudioOUT +" -M", shell=True)
     templevelOut =  str(templevelOut).split('[')
     levelOut=templevelOut[1][:-3]
-
-    lIn= alsaaudio.Mixer(control='Mic')
-    templevelIn=lIn.getvolume()
-    levelIn=str(templevelIn).strip('[]')
-    
-    log("Lecture du niveau audio In Alsamixer: "+str(levelIn),"white")
+    #ecrireval("boot.Vtxt_nOut.val",str(levelOut))
+    ecrireval("mixer.V_mout.val",str(levelOut))
     log("Lecture du niveau audio Out Alsamixer: "+str(levelOut),"white")
 
-    #ecrireval("hIn.val",str(levelIn))
-    ecrireval("boot.Vtxt_nIn.val",str(levelIn))
-    #levelOutcor=round(int(levelOut)/1.240)
-    #ecrireval("hOut.val",str(levelOut))
-    ecrireval("boot.Vtxt_nOut.val",str(levelOut))
+def GetAudioInfoIn(interfaceaudioIN):
+    if interfaceaudioIN =="Capture":
+        templevelIn = subprocess.check_output('amixer -c 0 get ' + interfaceaudioIN +" -M", shell=True)
+        templevelIn =  str(templevelIn).split('[')  
+        levelIn=templevelIn[1][:-3]
+    else:
+        templevelIn = subprocess.check_output('amixer -c 0 get ' + interfaceaudioIN +" -M", shell=True)
+        templevelIn =  str(templevelIn).split('[')
+        levelIn=templevelIn[1][:-3]  
 
+    #ecrireval("boot.Vtxt_nIn.val",str(levelIn))
+    ecrireval("mixer.V_min.val",str(levelIn))
+    log("Lecture du niveau audio In Alsamixer: "+str(levelIn),"white")
+    
 
-#Fonction reglage des niveaux    
-def setAudio(interfaceaudio,levelOut,levelIn):
-    lIn= alsaaudio.Mixer(control='Mic')
-    levelOutcor = int(levelOut)*1
-    os.system('amixer -c 0 set' + " Mic " + str(levelIn) + "%")
+#Fonction reglage des niveaux IN  
+def setAudioIn(interfaceaudio,levelIn):
+    #lIn= alsaaudio.Mixer(control=d.audioIn)
+    os.system('amixer -c 0 set ' + d.audioIn +" "+ str(levelIn) + "%")
+    log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
     log(("Reglage du niveau audio In: "+str(levelIn)+"%"),"white")
+    ecrireval("mixer.Vnb_mixer.val","1")
+    
+
+#Fonction reglage des niveaux OUT    
+def setAudioOut(interfaceaudio,levelOut):
+    levelOutcor = int(levelOut)*1
     log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
     os.system('amixer -c 0 set ' + interfaceaudio +" -M "+ str(levelOutcor) + "%")
     log(("Reglage du niveau audio Out: "+str(levelOut)+"%"),"white")
+    ecrireval("mixer.Vnb_mixer.val","1")
 
 def requete(valeur):
     requetesend = str.encode(valeur)+eof
@@ -391,6 +437,44 @@ def logo(Current_version):
     print('\x1b[7;30;43m'+"                                    ( _.-'              " +'\x1b[0m')             
 
 
+
+#***********************
+# GESTION MAJ DATABASE *
+#***********************
+
+def datacheckversion():
+#lecture de la version sur le web disponible
+        v =""
+        v = requests.get('https://raw.githubusercontent.com/F4ICR/datas/master/database_version')
+
+        infodataversion = v.text.replace("\n","").split(':')
+        database_version = infodataversion[1]
+        print("La version Database disponible est: "+database_version)
+#lecture de la version actuel
+        dbactuel = open("/opt/spotnik/spotnik2hmi_V2/datas/database_version", "r")
+        db= dbactuel.read()
+        dbactuel.close
+        dataversionactuel = db.replace("\n","").split(':')
+        print("La version Database actuelle est: " +dataversionactuel[1])
+
+        if infodataversion[1] != dataversionactuel[1] :
+            majdb()
+        else:
+            print("DATABASE A JOUR")
+            d.database=infodataversion[1]
+
+def majdb():
+       print("*** DATABASE NON ACTUALISE ***")
+       print("SUPPRESSION DES ANCIENS FICHIERS...")
+       os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/database_version')
+       os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/cache_amat_FR.dat')
+       os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/amat_FR.dat')
+       print("TELECHARGEMENT en cours...")
+       os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/database_version')
+       os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/cache_amat_FR.dat')
+       os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/amat_FR.dat')
+
+
 #********************** 
 #* GESTION ENVOI DTMF *
 #**********************  
@@ -407,19 +491,118 @@ def dtmf(code):
     b.close()
 
 #***************************
-#*  RECHERCHE PRENOM OM FR *
+#*  RECHERCHE INFOS OM FR  *
 #***************************
 
-def prenom(Searchcall):
+def Infocall(Searchcall):
 
-    callcut = Searchcall.split (" ")
-    Searchprenom = callcut[1]
-    print(Searchprenom)
-    lines = csv.reader(open("amat_annuaire.csv","rb"),delimiter=";")
+    #Verificaion du format de l'indicatif
+    pattern = '\(([^)]+)\) ([^)]+) (H|V|U|R|T10M|T6M|T|10M|6M)'
 
-    for indicatif,nom,prenom,adresse,ville,cp in lines:
-        if indicatif==Searchprenom:
-            print(prenom)                   
+    check = re.match(pattern, Searchcall)
+
+    if check:
+        log(('Indicatif valide :' + '--->' + check.groups()[1]),"white")
+        ckcall=check.groups()[1]
+        recherche_call(ckcall,d.cache_amat_data)
+
+    else:
+        log(('Indicatif invalide: '+Searchcall),"white")
+        ecrireval("trafic.Vnb_info.val","0")
+    #Ecriture dans fichier novalid
+        fichiernovalid = open('/opt/spotnik/spotnik2hmi_V2/datas/novalid.dat', "a")
+        lignenovalid=Searchcall
+        fichiernovalid.write(lignenovalid+'\n')
+        fichiernovalid.close()
+
+def recherche_call(callachercher,database):
+    if database == d.cache_amat_data and os.path.isfile(d.cache_amat_data)==True:
+        
+        log('Recherche dans liste call en cache',"white")
+        log(database,"white")
+    else:
+        log('Recherche dans liste call complete',"white")
+        log(database,"white")
+        if os.path.isfile(d.cache_amat_data)==False:
+            fichiercache = open(d.cache_amat_data, "w")
+            fichiercache.close()
+
+    with open(database) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=';')
+        indicatifs = []
+        noms = []
+        prenoms = []
+        typeaccess = []
+        villes = []
+        codes = []
+        payss = []
+
+        for row in readCSV:
+            indicatif = row[0]
+            nom = row[1]
+            prenom = row[2]
+            typeacces = row[3]
+            ville = row[4]
+            code = row[5]
+            pays = row[6]
+
+            indicatifs.append(indicatif)
+            noms.append(nom)
+            prenoms.append(prenom)
+            typeaccess.append(typeacces)
+            villes.append(ville)
+            codes.append(code)
+            payss.append(pays)
+
+    try:
+        recherchecall = indicatifs.index(callachercher)
+        
+        log(('Database position: '+str(recherchecall)),"white")
+           
+        theprenom = prenoms[recherchecall]
+        thenom = noms[recherchecall]
+        thetypeacces = typeaccess[recherchecall]
+        thecode = codes[recherchecall]
+        theville = villes[recherchecall]
+        thepays = payss[recherchecall]
+
+        log(("Indicatif: "+callachercher),"white")
+        log(('Nom: '+thenom),"white")
+        log(('Prenom: '+theprenom),"white")
+        log(('Type acces: '+thetypeacces),"white")
+        log(('CP: '+thecode),"white")
+        log(('Ville: '+theville),"white")
+        log(('pays: '+thepays),"white")
+
+        ecrire("infostation.Txt_callinfo.txt",str(callachercher))
+        ecrire("infostation.Txt_prenom.txt",str(theprenom))
+        ecrire("infostation.Txt_code.txt",str(thecode))
+        ecrire("infostation.Txt_ville.txt",str(theville))
+        ecrireval("infostation.Vnb_info.val",str(thetypeacces))
+        ecrire("infostation.Txt_pays.txt",str(thepays))
+
+        ecrireval("trafic.Vnb_info.val","1")
+
+        if database == d.full_amat_data:
+            fichiercache = open(d.cache_amat_data, "a")
+            ligneaecrire=callachercher+";"+thenom+";"+theprenom+";"+thetypeacces+";"+theville+";"+thecode+";"+thepays
+            fichiercache.write(ligneaecrire+'\n')
+            fichiercache.close()
+
+    except:
+
+        if database == d.cache_amat_data:
+            
+            recherche_call(callachercher,d.full_amat_data)
+            
+        else:
+            log('Indicatif inconnu',"white")
+            #Ecriture dans fichier inconnu
+            fichierunknow = open('/opt/spotnik/spotnik2hmi_V2/datas/unknow.dat', "a")
+            fichierunknow.write(callachercher+'\n')
+            fichierunknow.close()
+            ecrireval("trafic.Vnb_info.val","0")
+    
 
 #***************************
 #*  ENVOI COMMANDE SHELL   *
@@ -517,6 +700,19 @@ def get_meteo():
         fichier.close()
         result = console('/opt/spotnik/spotnik2hmi_V2/python-metar/get_report.py '+ airport+ '>> /tmp/meteo.txt')
         log(str(result),"white")
+        control_meteo()
+
+#Suite à des manques de datas Metar, je teste si le fichier meteo.txt est conforme
+def control_meteo():
+        m = open("/tmp/meteo.txt","r")
+        meteofile= m.read()
+        if meteofile.find("Unparsed groups in body") != -1:
+            log("Error fichier Meteo","white")
+        else:
+            read_meteo()
+
+#Lecture des datas meteo
+def read_meteo():    
         #routine ouverture fichier de config
         config = configparser.RawConfigParser()
         config.read('/tmp/meteo.txt')
@@ -529,12 +725,26 @@ def get_meteo():
         heure = buletin.split(':')
         heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
         log((pression[:-2]),"white")
-        log(rose,"white")
-        log(temperature,"white")
-        ecrire("meteo.t1.txt",str(temperature))
+        log((rose[:-2]+" °C"),"white")
+        log((temperature[:-2]+" °C"),"white")
+        ecrire("meteo.t1.txt",str(temperature[:-2]))
         ecrire("meteo.t3.txt",str(heure))
-        ecrire("meteo.t4.txt",str(rose))
+        ecrire("meteo.t4.txt",str(rose[:-2]))
         Pression = pression[:-2]+'hPa'
         ecrire("meteo.t2.txt",str(Pression))
+
+#*********************
+#* TEST RAPTOR ACTIF *
+#*********************
+
+def raptortest():
+    raptor_status = os.popen( 'pgrep -f -c \'python /opt/RRFRaptor/RRFRaptor.py\'' ).read()
+    raptor_status = raptor_status.strip()
+    if raptor_status == '2':
+        ecrireval("scan.Vnb_rapstate.val","1")
+        log("Raptor ON","white")
+    else:
+        ecrireval("scan.Vnb_rapstate.val","0")
+        log("Raptor OFF","white")
 
 
