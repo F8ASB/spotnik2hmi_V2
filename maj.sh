@@ -12,7 +12,26 @@ wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spo
 wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/install.sh 
 wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/settings.py
 wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/maj.sh
+
 #Telechargement HMI
 wget -P /opt/spotnik/spotnik2hmi_V2/nextion/ https://github.com/F8ASB/spotnik2hmi_V2/blob/master/nextion/NX4832K035.tft 
+
+#Telechargement nouveaux fichiers
+
+#Dans /etc/spotnik/
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Divers_files/restart.exp
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sexp.wav
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sreg.wav
+
+#Fichier son Raptor
+rm /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/*.*
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Sounds_Raptor/active.wav
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Sounds_Raptor/desactive.wav
+
+#Fichiers Database
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/amat_FR.dat
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/cache_amat_FR.dat
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/database_version
+
 sleep 5
 reboot
