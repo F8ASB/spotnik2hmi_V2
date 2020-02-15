@@ -66,6 +66,24 @@ git clone https://github.com/python-metar/python-metar.git $pathinstall/python-m
 
 chmod +x $pathinstall/python-metar/get_report.py
 
+#Dans /etc/spotnik/
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Divers_files/restart.exp
+chmod +x /etc/spotnik/restart.exp
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sexp.wav
+wget -P /etc/spotnik/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/sounds_salons/Sreg.wav
+
+#Fichier son Raptor
+rm /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/*.*
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Sounds_Raptor/active.wav
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/Sounds_Raptor/ https://raw.githubusercontent.com/F8ASB/package_spotnik/master/Sounds_Raptor/desactive.wav
+
+#Fichiers Database
+rm /opt/spotnik/spotnik2hmi_V2/datas/amat_annuaire.csv
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/amat_FR.dat
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/cache_amat_FR.dat
+wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/database_version
+
+
 PORT=$(whiptail --title "Choix du Port de communication" --radiolist \
 "Sur quoi raccorder vous le Nextion?" 15 60 4 \
 "ttyAMA0" "Sur Raspberry Pi " ON \
