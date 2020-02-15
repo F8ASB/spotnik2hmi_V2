@@ -792,7 +792,7 @@ while True:
 #PAGE UPDATE
     if s.find("majpython")!= -1:
 
-        os.system('sh /opt/spotnik/spotnik2hmi_V2/maj.sh')
+        os.system('bash /opt/spotnik/spotnik2hmi_V2/maj.sh')
     
     if s.find("majnextion")!= -1:
         updatehmi()     
