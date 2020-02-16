@@ -45,8 +45,8 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 # pip3 install speedtest-cli
 # pip3 install pyalsaaudio
 
-apt-get update
-apt-get upgrade
+#apt-get update
+#apt-get upgrade
 apt-get install python3-serial
 apt install python3-pip
 pip3 install speedtest-cli
