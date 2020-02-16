@@ -41,7 +41,7 @@ Cette documentation considère que vous partez de l'installation d’une image d
 
 En mode Root
 
-Procéder à la mise à jour du système:
+Procéder à la mise à jour du système si necessaire:
 ```
 apt-get update
 apt-get upgrade
