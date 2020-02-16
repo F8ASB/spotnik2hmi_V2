@@ -39,6 +39,14 @@ Il y a 2 pin avec du 5V à vous de choisir celui que vous souhaitez utiliser
 
 Cette documentation considère que vous partez de l'installation d’une image du **Spotnik 1.9** disponible sur le site de F5NLG et fonctionnelle sur Raspberry ou Orange Pi. Penser à etendre la carte SD par le menu raspi-config et selectionner 7 - Advanced option puis A1 Expand filesystem
 
+En mode Root
+
+Procéder à la mise à jour du système:
+```
+apt-get update
+apt-get upgrade
+```
+
 Télécharger le fichier **install.sh**
 
 ```
