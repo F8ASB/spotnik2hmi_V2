@@ -47,6 +47,7 @@ echo "INSTALLATION DEPENDANCE PYTHON"
 
 #apt-get update
 #apt-get upgrade
+rm - rf /opt/spotnik/spotnik2hmi_V2
 apt-get install python3-serial
 apt install python3-pip
 pip3 install speedtest-cli
