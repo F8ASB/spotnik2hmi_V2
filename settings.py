@@ -9,7 +9,7 @@ from fonctions import *
 #Variables
 eof = "\xff\xff\xff"
 today = datetime.now()
-versionDash = "3.56"
+versionDash = "3.6"
 wifistatut = 0
 dashlist = ""
 monitor = ""
@@ -152,18 +152,19 @@ salon = {
         'node_count': '',
         'node_list_out': ''
     },
+
+    # 'REG': {
+    #     'url': 'http://f5swb.homeip.net:8008/api/svxlink/REG',  
+    #     'transmit': True, 
+    #     'call_current': '', 
+    #     'call_previous': '',
+    #     'node_list': '',
+    #     'node_list_old': '',
+    #     'node_list_in': '',
+    #     'node_count': '',
+    #     'node_list_out': ''
+    # }
     
-    'REG': {
-        'url': 'http://f5swb.homeip.net:8008/api/svxlink/REG',  
-        'transmit': True, 
-        'call_current': '', 
-        'call_previous': '',
-        'node_list': '',
-        'node_list_old': '',
-        'node_list_in': '',
-        'node_count': '',
-        'node_list_out': ''
-    }
 }
 
 search_start = ''
