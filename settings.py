@@ -9,22 +9,29 @@ from fonctions import *
 #Variables
 eof = "\xff\xff\xff"
 today = datetime.now()
-versionDash = "3.50"
+versionDash = "3.56"
 wifistatut = 0
 dashlist = ""
 monitor = ""
-qsystatut=False
-salon_current=""
-dateold=""
-heureSold=""
-statutradio=""
-firstboot= True
-rpi3bplus=False
+qsystatut = False
+salon_current = ""
+dateold =""
+heureSold =""
+statutradio =""
+firstboot = True
+rpi3bplus =False
 DEBUG = False
-d.audioOut=""
-d.audioIn=""
-soundcard=""
-database=""
+d.audioOut = ""
+d.audioIn = ""
+soundcard = ""
+database = ""
+API = True
+noerror = True
+nbgpioptt = ""
+nbgpiosql = ""  
+heureS =  ""
+d.key = ""
+alerte = 0
 
 #Chemins fichiers
 svxconfig="/etc/spotnik/svxlink.cfg"
@@ -34,6 +41,7 @@ version = version.strip()
 confwifi="/etc/NetworkManager/system-connections/SPOTNIK"
 full_amat_data="/opt/spotnik/spotnik2hmi_V2/datas/amat_FR.dat"
 cache_amat_data="/opt/spotnik/spotnik2hmi_V2/datas/cache_amat_FR.dat"
+soundsh="/etc/spotnik/svxsound.sh"
 
 #Chemin log a suivre
 svxlogfile = "/tmp/svxlink.log"   #SVXLink log file 
@@ -146,7 +154,7 @@ salon = {
     },
     
     'REG': {
-        'url': 'http://f5swb.homeip.net:8008/api/svxlink/REG', 
+        'url': 'http://f5swb.homeip.net:8008/api/svxlink/REG',  
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',

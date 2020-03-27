@@ -44,16 +44,14 @@ callsign = get_callsign()
 freq = get_frequency()
 
 #recuperation GPIO dans les parametres
-nbgpioptt = get_gpioptt()
-nbgpiosql = get_gpiosql()
+d.nbgpioptt = get_gpioptt()
+d.nbgpiosql = get_gpiosql()
 
 #adresse IP
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 ip= (s.getsockname()[0])
 s.close()
-
-
 
 #Memoire SD libre
 disk= getDiskSpace()
@@ -123,16 +121,16 @@ datacheckversion()
 
 #reset de l'ecran
 resetHMI()
-
 sleep(1);
+
 #Envoi des informations callsign et version au HMI
 ecrire("boot.va0.txt",d.callsign)
 ecrire("boot.vascript.txt",d.versionDash)
 ecrire("boot.vaverspotnik.txt",d.version)
 date = (d.today.strftime('%d-%m-%Y'))
 ecrire("boot.Vtxt_dateinit.txt",date)
-heureS =(d.today.strftime('%H:%M'))
-ecrire("boot.Vtxt_heureinit.txt",heureS)
+d.heureS =(d.today.strftime('%H:%M'))
+ecrire("boot.Vtxt_heureinit.txt",d.heureS)
 
 #envoi indicatif
 log("Maj Call ...","red")
@@ -189,17 +187,18 @@ while True:
     d.today = datetime.now()
     locale.setlocale(locale.LC_TIME,'') 
     date = (d.today.strftime('%d-%m-%Y'))
-    heureS =(d.today.strftime('%H:%M'))
+    d.heureS =(d.today.strftime('%H:%M'))
     if date != d.dateold:
         ecrire("Txt_date.txt",date)
-        ecrire("boot.Vtxt_dateinit.txt",date)
+   
         d.dateold=date
-    if heureS != d.heureSold:
-        ecrire("Txt_heure.txt",heureS)
-        ecrire("boot.Vtxt_heureinit.txt",heureS)
-        d.heureSold= heureS
+    if d.heureS != d.heureSold:
+        ecrire("Txt_heure.txt",d.heureS)
 
-    requete("vis p9,0")
+        d.heureSold= d.heureS
+
+    #requete("vis p9,0")
+    ecrireval("trafic.Vnb_led.val","0")
 
     timestamp = d.today.strftime('%d-%m-%Y %H:%M:%S')
 
@@ -207,270 +206,160 @@ while True:
         raptortest()
 
     for key in d.salon:
-
+        d.key = key
         try:
             r = requests.get(d.salon[key]['url'], verify=False, timeout=10)
-            page = r.text
+
         except requests.exceptions.ConnectionError as errc:
             print(('Error Connecting:', errc))
+            if d.key == d.salon_current:
+                d.noerror=False
+                is_connected()
+                page = ""
+            
         except requests.exceptions.Timeout as errt:
             print(('Timeout Error:', errt)) 
+            if d.key == d.salon_current:
+                d.noerror=False
+                is_connected()
+                page = ""
+        else:
+            page = r.text
+            
+            #print("PAS D'ERREUR DE SERVEUR :"+str(d.key))
+            if d.key == d.salon_current:
+                if d.noerror==False:
+                    d.noerror=True
+                    d.alerte=0
+                    gopage("trafic")
+        
                
 #***********************************
 #*  Transmitter en cours sur salon *
 #***********************************
 
-        search_start = page.find('TXmit":"')            # Search this pattern
-        search_start += 8                               # Shift...
-        search_stop = page.find('"', search_start)      # And close it...
+        if d.noerror:
+            search_start = page.find('TXmit":"')            # Search this pattern
+            search_start += 8                               # Shift...
+            search_stop = page.find('"', search_start)      # And close it...
 
-        if search_stop != search_start:
-            d.salon[key]['transmit'] = True
 
-            d.salon[key]['call_current'] = page[search_start:search_stop]
 
-            if (d.salon[key]['call_previous'] != d.salon[key]['call_current']):
-                d.monitor = timestamp + " " + key + " T " + str(d.salon[key]['call_current'])
-                dash = heureS +" " + str(d.salon[key]['call_current'])+"-" + key
-                d.salon[key]['call_previous'] = d.salon[key]['call_current']
-                ecrire("monitor.Txt_statut.txt",d.monitor)
-                ecrire("dashboard.Vtxt_dash.txt",str(dash))
-                print(d.monitor)
-                envoistatut()
-                
-                #print(str(d.salon["RRF"]['transmit'])
+            if search_stop != search_start:
+                d.salon[key]['transmit'] = True
 
-                #Stockage station pour dashboard
-                infodash=d.today.strftime('%H:%M ')+ str(d.salon[key]['call_current']) +"-"+key
-                listdash.append(infodash)
-                if key == d.salon_current:
-                	Infocall(d.salon[key]['call_current'])
-                
-                #print (len(listdash))
-                if len(listdash) == 13:
-                    #del listdash[12]
-                    listdash.pop(0)
-                
-        else:            
-            if d.salon[key]['transmit'] is True:
-                d.salon[key]['call_current'] = ''
-                d.salon[key]['call_previous'] = ''
-                d.monitor = timestamp + " " + key + " T OFF"
-                d.salon[key]['transmit'] = False
-                ecrire("monitor.Txt_statut.txt",d.monitor)
-                print(d.monitor)
-                envoistatut()
-        
+                d.salon[key]['call_current'] = page[search_start:search_stop]
 
-#*************************************************
-#* Boucle gestions liste Nodes F8ASB + F4HWN DEV *
-#*************************************************
-
-        search_start = page.find('nodes":[')                    
-        search_start += 9                                       
-        search_stop = page.find('],"TXmit"', search_start)      
-
-        tmp = page[search_start:search_stop]
-        tmp = tmp.replace('"', '')
-
-        d.salon[key]['node_list'] = tmp.split(',')
-
-        for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON', 'EXP','REG']:
-            if n in d.salon[key]['node_list']:
-                d.salon[key]['node_list'].remove(n)
-
-        if d.salon[key]['node_list_old'] == []:
-            d.salon[key]['node_list_old'] = d.salon[key]['node_list']
-
-        else:
-            if d.salon[key]['node_list_old'] != d.salon[key]['node_list']:
-                # Nodes out
-                if (list(set(d.salon[key]['node_list_old']) - set(d.salon[key]['node_list']))):
-                    d.salon[key]['node_list_out'] = list(set(d.salon[key]['node_list_old']) - set(d.salon[key]['node_list']))
-
-                    for n in d.salon[key]['node_list_out']:
-                        if n in d.salon[key]['node_list_in']:
-                            d.salon[key]['node_list_in'].remove(n)
-
-                    d.salon[key]['node_list_out'] = sorted(d.salon[key]['node_list_out'])
-                    if len(d.salon[key]['node_list_out']) > d.MOVE_MAX:
-                        d.monitor = timestamp + ' ' + key + ' > ' + str(','.join(d.salon[key]['node_list_out'][:(d.MOVE_MAX)])) + '...'
+                if (d.salon[key]['call_previous'] != d.salon[key]['call_current']):
+                    d.monitor = timestamp + " " + key + " T " + str(d.salon[key]['call_current'])
+                    dash = d.heureS +" " + str(d.salon[key]['call_current'])+"-" + key
+                    d.salon[key]['call_previous'] = d.salon[key]['call_current']
+                    if d.API:
                         ecrire("monitor.Txt_statut.txt",d.monitor)
-                    else:
-                        d.monitor = timestamp + ' ' + key + ' > ' + str(','.join(d.salon[key]['node_list_out']))
-                        ecrire("monitor.Txt_statut.txt",d.monitor)
-                # Nodes in    
-                if (list(set(d.salon[key]['node_list']) - set(d.salon[key]['node_list_old']))):
-                    d.salon[key]['node_list_in'] = list(set(d.salon[key]['node_list']) - set(d.salon[key]['node_list_old']))
+                        ecrire("dashboard.Vtxt_dash.txt",str(dash))
+                        print(d.monitor)
+                        envoistatut()
+                    
+                    #print(str(d.salon["RRF"]['transmit'])
 
-                    for n in d.salon[key]['node_list_in']:
-                        if n in d.salon[key]['node_list_out']:
-                            d.salon[key]['node_list_out'].remove(n)
-
-                    d.salon[key]['node_list_in'] = sorted(d.salon[key]['node_list_in'])
-                    if len(d.salon[key]['node_list_in']) > d.MOVE_MAX:
-                        d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in'][:(d.MOVE_MAX)])) + '...'
+                    #Stockage station pour dashboard
+                    infodash=d.today.strftime('%H:%M ')+ str(d.salon[key]['call_current']) +"-"+key
+                    listdash.append(infodash)
+                    if d.API:
+                        if key == d.salon_current:
+                            Infocall(d.salon[key]['call_current'])
+                    
+                    #print (len(listdash))
+                    if len(listdash) == 13:
+                        #del listdash[12]
+                        listdash.pop(0)
+                    
+            else:            
+                if d.salon[key]['transmit'] is True:
+                    d.salon[key]['call_current'] = ''
+                    d.salon[key]['call_previous'] = ''
+                    d.monitor = timestamp + " " + key + " T OFF"
+                    d.salon[key]['transmit'] = False
+                    if d.API:
                         ecrire("monitor.Txt_statut.txt",d.monitor)
                         print(d.monitor)
-                    else:
-                        d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in']))
-                        ecrire("monitor.Txt_statut.txt",d.monitor)
-                        print(d.monitor)
-                # Nodes count
-                d.salon[key]['node_count'] = len(d.salon[key]['node_list'])
-                d.monitor = timestamp + ' ' + key + ' = ' + str(d.salon[key]['node_count'])
+                        envoistatut()
+            
+
+    #*************************************************
+    #* Boucle gestions liste Nodes F8ASB + F4HWN DEV *
+    #*************************************************
+
+            search_start = page.find('nodes":[')                    
+            search_start += 9                                       
+            search_stop = page.find('],"TXmit"', search_start)      
+
+            tmp = page[search_start:search_stop]
+            tmp = tmp.replace('"', '')
+
+            
+                
+
+            d.salon[key]['node_list'] = tmp.split(',')
+
+            #for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON', 'EXP', 'REG']:
+            for n in ['RRF', 'RRF2', 'RRF3', 'TECHNIQUE', 'BAVARDAGE', 'INTERNATIONAL', 'LOCAL', 'FON', 'EXP']:    
+                if n in d.salon[key]['node_list']:
+                    d.salon[key]['node_list'].remove(n)
+
+            if d.salon[key]['node_list_old'] == []:
                 d.salon[key]['node_list_old'] = d.salon[key]['node_list']
-                print(d.monitor)
-                ecrire("monitor.Txt_statut.txt",d.monitor)
+
+            else:
+                if d.salon[key]['node_list_old'] != d.salon[key]['node_list']:
+                    # Nodes out
+                    if (list(set(d.salon[key]['node_list_old']) - set(d.salon[key]['node_list']))):
+                        d.salon[key]['node_list_out'] = list(set(d.salon[key]['node_list_old']) - set(d.salon[key]['node_list']))
+
+                        for n in d.salon[key]['node_list_out']:
+                            if n in d.salon[key]['node_list_in']:
+                                d.salon[key]['node_list_in'].remove(n)
+
+                        d.salon[key]['node_list_out'] = sorted(d.salon[key]['node_list_out'])
+                        if len(d.salon[key]['node_list_out']) > d.MOVE_MAX:
+                            d.monitor = timestamp + ' ' + key + ' > ' + str(','.join(d.salon[key]['node_list_out'][:(d.MOVE_MAX)])) + '...'
+                            ecrire("monitor.Txt_statut.txt",d.monitor)
+                        else:
+                            d.monitor = timestamp + ' ' + key + ' > ' + str(','.join(d.salon[key]['node_list_out']))
+                            ecrire("monitor.Txt_statut.txt",d.monitor)
+                    # Nodes in    
+                    if (list(set(d.salon[key]['node_list']) - set(d.salon[key]['node_list_old']))):
+                        d.salon[key]['node_list_in'] = list(set(d.salon[key]['node_list']) - set(d.salon[key]['node_list_old']))
+
+                        for n in d.salon[key]['node_list_in']:
+                            if n in d.salon[key]['node_list_out']:
+                                d.salon[key]['node_list_out'].remove(n)
+
+                        d.salon[key]['node_list_in'] = sorted(d.salon[key]['node_list_in'])
+                        if len(d.salon[key]['node_list_in']) > d.MOVE_MAX:
+                            d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in'][:(d.MOVE_MAX)])) + '...'
+                            ecrire("monitor.Txt_statut.txt",d.monitor)
+                            print(d.monitor)
+                        else:
+                            d.monitor = timestamp + ' ' + key + ' < ' + str(','.join(d.salon[key]['node_list_in']))
+                            ecrire("monitor.Txt_statut.txt",d.monitor)
+                            print(d.monitor)
+                    # Nodes count
+                    d.salon[key]['node_count'] = len(d.salon[key]['node_list'])
+                    d.monitor = timestamp + ' ' + key + ' = ' + str(d.salon[key]['node_count'])
+                    d.salon[key]['node_list_old'] = d.salon[key]['node_list']
+                    print(d.monitor)
+                    ecrire("monitor.Txt_statut.txt",d.monitor)
+
 
 #*****************************
 #* DETECTION CONNEXION SALON *
 #*****************************
-
-    a = open("/etc/spotnik/network","r")
-    tn = a.read()
-
-    if tn.find("rrf") != -1 and d.salon_current!="RRF":
-        ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
-        d.salon_current="RRF"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
-        
-    if tn.find("fon") != -1 and d.salon_current!="FON":
-        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
-        d.salon_current="FON"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
     
-    if tn.find("tec") != -1 and d.salon_current!="TEC":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
-        d.salon_current="TEC"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
+    voirsalon()            
 
-    if tn.find("int") != -1 and d.salon_current!="INT":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
-        d.salon_current="INT"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
 
-    if tn.find("bav") != -1 and d.salon_current!="BAV":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
-        d.salon_current="BAV"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
-
-    if tn.find("loc") != -1 and d.salon_current!="LOC":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
-        d.salon_current="LOC"
-        ecrire("trafic.g0.txt","")
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
-
-    if tn.find("default") != -1 and d.salon_current!="PER":
-        ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
-        ecrire("trafic.g0.txt","")
-        d.salon_current="PER"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy") 
-        if d.qsystatut==False and d.firstboot==True:
-            gopage("Parrot") 
-        d.qsystatut=False
-
-    if tn.find("sat") != -1 and d.salon_current!="SAT":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
-        ecrire("trafic.g0.txt","") 
-        d.salon_current="SAT"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False   
-
-    if tn.find("exp") != -1 and d.salon_current!="EXP":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
-        ecrire("trafic.g0.txt","") 
-        d.salon_current="EXP"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False   
-
-    if tn.find("fdv") != -1 and d.salon_current!="EXP":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP. DV")
-        ecrire("trafic.g0.txt","") 
-        d.salon_current="EXP"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False   
-
-    if tn.find("reg") != -1 and d.salon_current!="REG":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
-        ecrire("trafic.g0.txt","") 
-        d.salon_current="REG"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False   
-
-    if tn.find("el") != -1 and d.salon_current!="ECH":
-        ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
-        ecrire("trafic.g0.txt","")
-        d.salon_current="ECH"
-        if d.qsystatut==False and d.firstboot==False:
-            gopage("qsy")
-        d.qsystatut=False
-#***********************************
-#*Gestion salon Perroquet TX et RX *
-#***********************************
-
-    if tn.find("default") != -1 and d.salon_current=="PER":
-        
-        p= open("/sys/class/gpio/"+nbgpiosql+"/value","r")
-        gpiorx_value = p.read()
-        
-        if gpiorx_value.find("1") != -1 and d.statutradio!="RX":
-             log("RX Detected","white")
-             d.statutradio="RX"
-             #requete("vis p2,1")
-             ecrireval("Vnbr_parrot.val","1")
-             
-
-        elif gpiorx_value.find("0") != -1 and d.statutradio!="TX" and d.statutradio!="":
-             log("RX OFF","white")
-             #requete("vis p2,0")
-             ecrireval("Vnbr_parrot.val","0")
-
-             d.statutradio=""
-
-        p.close()
-
-        q= open("/sys/class/gpio/"+nbgpioptt+"/value","r")
-        gpiotx_value = q.read()
-        
-        if gpiotx_value.find("1") != -1 and d.statutradio!="TX":
-             log("Tx ON","white")
-             d.statutradio="TX"
-             #requete("vis p3,1")
-             ecrireval("Vnbr_parrot.val","2")
-             
-        elif gpiotx_value.find("0") != -1 and d.statutradio!="RX" and d.statutradio!="":
-             log("Tx OFF","white")
-             #requete("vis p3,0")
-             ecrireval("Vnbr_parrot.val","0")
-             d.statutradio=""
-
-        q.close()
-
-    a.close()
-
+    
 #****************************************************
 #* Gestion des commandes serie reception du Nextion *
 #****************************************************
@@ -570,32 +459,41 @@ while True:
 
 #NIVEAU AUDIO IN
     if s.find("Audioin")!= -1: 
-        log(s[s.find("Audioin")+7:(len(s)-13)],"white")
-        levelIn=(s[25:(len(s)-13)])
         
-        try:
-            setAudioIn(d.audioIn,levelIn)
+        log(s[s.find("Audioin")+7:(len(s)-13)],"white")
+        levelIn=(s[s.find("Audioin")+7:(len(s)-13)])
+        if len(levelIn)<=3:
+            try:
+                setAudioIn(d.audioIn,levelIn)
 
-        except ValueError:
+            except ValueError:
+                log("Erreur valeur audio","red")
+                ecrireval("mixer.Vnb_mixer.val","0")
+        else:
             log("Erreur valeur audio","red")
             ecrireval("mixer.Vnb_mixer.val","0")
         
 
 #NIVEAU AUDIO OUT      
     if s.find("Audioout")!= -1: 
+        
         log(s[s.find("Audioout")+8:(len(s)-13)],"white")
         levelOut=(s[s.find("Audioout")+8:(len(s)-13)])
-        
-        try:
-            setAudioOut(d.audioOut,levelOut)
+        if len(levelOut)<=3:
 
-        except ValueError:
+            try:
+                setAudioOut(d.audioOut,levelOut)
+
+            except ValueError:
+                log("Erreur valeur audio","red")
+                ecrireval("mixer.Vnb_mixer.val","0")
+        else:
             log("Erreur valeur audio","red")
             ecrireval("mixer.Vnb_mixer.val","0")
            
 
 #ENVOI DASHBOARD
-    if s.find("listdash")!= -1 and d.salon_current!="RRF":
+    if s.find("listdash")!= -1 and d.salon_current!="RRF" and d.API==True:
         log("List dash","red")
         if d.salon_current=="RRF" or d.salon_current=="SAT"or d.salon_current=="ECH"or d.salon_current=="PER":
             ecrire("trafic.g0.txt","")
@@ -605,6 +503,18 @@ while True:
     if s.find("statutsalon")!= -1:
         log("INFOSTATUT","white")
         envoistatut()
+
+#INFO STATUTS ECRAN OFF
+    if s.find("ecran off")!= -1:
+        log("ECRAN OFF","red")
+        
+
+#INFO STATUTS ECRAN OFF
+    if s.find("ecran on")!= -1:
+        log("ECRAN ON","red")
+        diresalon()
+        
+        
 
 
 #******************
@@ -631,6 +541,9 @@ while True:
 #MENU#
     if s.find("menu")!= -1:
         log("Page menu","red")
+        voirsalon()
+        ecrire("boot.Vtxt_heureinit.txt",d.heureS)
+
 #MONITOR#
     if s.find("monitor")!= -1:
         log("Page monitor","red")
@@ -724,12 +637,13 @@ while True:
     if s.find("trafic")!= -1:
         log("Page trafic","red")
         ecrire("Txt_date.txt",date)
-        ecrire("Txt_heure.txt",heureS)
+        ecrire("Txt_heure.txt",d.heureS)
         
         if d.salon_current in ["TEC", "RRF", "FON", "INT", "BAV", "LOC"]:
             calltrafic_current=d.salon[d.salon_current]['call_current']
             ecrire("trafic.Txt_call.txt","")
             ecrire("trafic.Txt_call.txt",calltrafic_current)
+
 
 #INFO#  
     if s.find("infosystem")!= -1:
@@ -856,7 +770,7 @@ while True:
 #QSYREGION#
     if s.find("qsyreg")!= -1:
         d.qsystatut=True
-        log("QSY EXP","red")
+        log("QSY REG","red")
         ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
         #dtmf("102#")
         os.system("/etc/spotnik/restart.reg")

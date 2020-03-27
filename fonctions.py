@@ -253,6 +253,35 @@ def getspeednet():
     ecrire("speednet.t4.txt",str(e))
     log(("Ping: "+str(e) + " ms"),"white")
 
+#*************************
+#*  TEST INTERNET DISPO  *
+#*************************
+
+def is_connected():
+    
+    #heureError= '"'+d.heureS+'"'
+    try:
+        # connect to the host -- tells us if the host is actually
+        # reachable
+        socket.create_connection(("www.google.com", 80))
+        log("INTERNET PRESENT PROBLEME SERVEUR "+d.key,"white")
+
+        if d.key == d.salon_current and d.alerte == 0:
+            ecrire("alerte.Txt_alerte.txt","Probleme sur serveur: "+str(d.key))
+            ecrire("alerte.T_alerte.txt",d.heureS)
+            gopage("alerte")
+            d.alerte=1
+        
+    except OSError:
+        log("COUPURE INTERNET: "+str(d.heureS),"white")
+        if d.key == d.salon_current and d.alerte == 0:
+            ecrire("alerte.Txt_alerte.txt","Coupure Internet")
+            ecrire("alerte.T_alerte.txt",d.heureS)
+            gopage("alerte")
+            d.alerte=1
+            pass
+
+
 #***************************
 #* GESTION PARAMETRE AUDIO *
 #***************************
@@ -283,20 +312,41 @@ def GetAudioInfoIn(interfaceaudioIN):
 
 #Fonction reglage des niveaux IN  
 def setAudioIn(interfaceaudio,levelIn):
-    #lIn= alsaaudio.Mixer(control=d.audioIn)
-    os.system('amixer -c 0 set ' + d.audioIn +" "+ str(levelIn) + "%")
-    log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
+    
+    log((">>>>>>>>>>>>>> INFO " + interfaceaudio),"white")
+    os.system('amixer -c 0 set ' + interfaceaudio +" -M " + str(levelIn) + "%")
     log(("Reglage du niveau audio In: "+str(levelIn)+"%"),"white")
     ecrireval("mixer.Vnb_mixer.val","1")
+
+    if d.soundcard == "WM8960":
+        
+        file=open(d.soundsh,"r")
+        lines = file.readlines()
+        file.close()
+        lines [2] = "amixer -c 0 set 'Capture' -M "+ str(levelIn) + "%\n"
+        file=open(d.soundsh,"w")
+        file.writelines(lines)
+        file.close()
     
 
 #Fonction reglage des niveaux OUT    
 def setAudioOut(interfaceaudio,levelOut):
+    
     levelOutcor = int(levelOut)*1
-    log((">>>>>>>>>>>>>> INFO" + interfaceaudio),"white")
+    log((">>>>>>>>>>>>>> INFO " + interfaceaudio),"white")
     os.system('amixer -c 0 set ' + interfaceaudio +" -M "+ str(levelOutcor) + "%")
     log(("Reglage du niveau audio Out: "+str(levelOut)+"%"),"white")
     ecrireval("mixer.Vnb_mixer.val","1")
+   
+    if d.soundcard == "WM8960":
+
+        file=open(d.soundsh,"r")
+        lines = file.readlines()
+        file.close()
+        lines [1] = "amixer -c 0 set 'Headphone' -M "+ str(levelOut) +"%\n"
+        file=open(d.soundsh,"w")
+        file.writelines(lines)
+        file.close()
 
 def requete(valeur):
     requetesend = str.encode(valeur)+eof
@@ -666,6 +716,212 @@ def wifi3bplus(ssid,password):
     fichier.close()
 #renommage du ficher wpa_supplicant.conf.new en wpa_supplicant.conf
     os.rename(d.pathwpasupplicant+'wpa_supplicant.conf.new', pathwpasupplicant+'wpa_supplicant.conf')
+
+#*****************************
+#* DETECTION CONNEXION SALON *
+#*****************************
+def voirsalon():
+
+    a = open("/etc/spotnik/network","r")
+    tn = a.read()
+
+
+    if tn.find("rrf") != -1 and d.salon_current!="RRF":
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
+        d.salon_current="RRF"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+        
+    if tn.find("fon") != -1 and d.salon_current!="FON":
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")    
+        d.salon_current="FON"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+    
+    if tn.find("tec") != -1 and d.salon_current!="TEC":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")
+        d.salon_current="TEC"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+
+    if tn.find("int") != -1 and d.salon_current!="INT":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
+        d.salon_current="INT"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+
+    if tn.find("bav") != -1 and d.salon_current!="BAV":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")    
+        d.salon_current="BAV"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+
+    if tn.find("loc") != -1 and d.salon_current!="LOC":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL")    
+        d.salon_current="LOC"
+        d.API=True
+        ecrire("trafic.g0.txt","")
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+
+    if tn.find("default") != -1 and d.salon_current!="PER":
+        ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
+        ecrire("trafic.g0.txt","")
+        d.salon_current="PER"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy") 
+        if d.qsystatut==False and d.firstboot==True:
+            gopage("Parrot") 
+        d.qsystatut=False
+
+    if tn.find("sat") != -1 and d.salon_current!="SAT":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="SAT"
+        d.API=True
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("exp") != -1 and d.salon_current!="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="EXP"
+        d.API=True
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("fdv") != -1 and d.salon_current!="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP. DV")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="EXP"
+        d.API=True
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False   
+
+    if tn.find("reg") != -1 and d.salon_current!="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="REG"
+        d.API=False
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False 
+        d.region=False
+
+    if tn.find("est") != -1 and d.salon_current!="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
+        ecrire("trafic.g0.txt","") 
+        d.salon_current="REG"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False 
+        d.API=True  
+
+    if tn.find("el") != -1 and d.salon_current!="ECH":
+        ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
+        ecrire("trafic.g0.txt","")
+        d.API=True 
+        d.salon_current="ECH"
+        if d.qsystatut==False and d.firstboot==False:
+            gopage("qsy")
+        d.qsystatut=False
+
+
+#***********************************
+#*Gestion salon Perroquet TX et RX *
+#***********************************
+
+    if tn.find("default") != -1 and d.salon_current=="PER":
+        
+        p= open("/sys/class/gpio/"+d.nbgpiosql+"/value","r")
+        gpiorx_value = p.read()
+        
+        if gpiorx_value.find("1") != -1 and d.statutradio!="RX":
+             log("RX Detected","white")
+             d.statutradio="RX"
+             #requete("vis p2,1")
+             ecrireval("Vnbr_parrot.val","1")
+             
+
+        elif gpiorx_value.find("0") != -1 and d.statutradio!="TX" and d.statutradio!="":
+             log("RX OFF","white")
+             #requete("vis p2,0")
+             ecrireval("Vnbr_parrot.val","0")
+
+             d.statutradio=""
+
+        p.close()
+
+        q= open("/sys/class/gpio/"+d.nbgpioptt+"/value","r")
+        gpiotx_value = q.read()
+        
+        if gpiotx_value.find("1") != -1 and d.statutradio!="TX":
+             log("Tx ON","white")
+             d.statutradio="TX"
+             #requete("vis p3,1")
+             ecrireval("Vnbr_parrot.val","2")
+             
+        elif gpiotx_value.find("0") != -1 and d.statutradio!="RX" and d.statutradio!="":
+             log("Tx OFF","white")
+             #requete("vis p3,0")
+             ecrireval("Vnbr_parrot.val","0")
+             d.statutradio=""
+
+        q.close()
+
+    a.close()    
+
+#*************************
+#*  INFO SALON AU REVEIL *
+#********************
+
+def diresalon():
+    
+    if d.salon_current=="RRF":
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU RRF")
+    if d.salon_current=="FON":
+        ecrire("monitor.Vtxt_saloncon.txt","RESEAU FON")  
+    if d.salon_current=="TEC":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON TECHNIQUE")  
+    if d.salon_current=="INT":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON INTER.")
+    if d.salon_current=="BAV":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON BAVARDAGE")
+    if d.salon_current=="LOC":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON LOCAL") 
+    if d.salon_current=="PER":
+        ecrire("monitor.Vtxt_saloncon.txt","PERROQUET")
+    if d.salon_current=="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP.") 
+    if d.salon_current=="EXP":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON EXP. DV")
+    if d.salon_current=="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL") 
+    if d.salon_current=="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL") 
+    if d.salon_current=="REG":
+        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
+    if d.salon_current=="ECH":
+        ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
     
 #********************
 #*  RECHERCHE METEO *
@@ -689,49 +945,52 @@ def getcity():
 #Fonction Meteo Lecture des donnees Metar + envoi Nextion
 def get_meteo():
     #recherche code IMAO dans config.json
-    with open(Json, 'r') as b:
-        afind= json.load(b)
-        airport =afind['airport_code']
-        #Info ville Aéroport
-        log(("Le code ICAO est: "+airport),"white")
-        getcity()
-        fichier = open("/tmp/meteo.txt", "w")
-        fichier.write("[rapport]")
-        fichier.close()
-        result = console('/opt/spotnik/spotnik2hmi_V2/python-metar/get_report.py '+ airport+ '>> /tmp/meteo.txt')
-        log(str(result),"white")
-        control_meteo()
+    if d.noerror:
+        with open(Json, 'r') as b:
+            afind= json.load(b)
+            airport =afind['airport_code']
+            #Info ville Aéroport
+            log(("Le code ICAO est: "+airport),"white")
+            getcity()
+            fichier = open("/tmp/meteo.txt", "w")
+            fichier.write("[rapport]")
+            fichier.close()
+            result = console('/opt/spotnik/spotnik2hmi_V2/python-metar/get_report.py '+ airport+ '>> /tmp/meteo.txt')
+            log(str(result),"white")
+            control_meteo()
 
 #Suite à des manques de datas Metar, je teste si le fichier meteo.txt est conforme
 def control_meteo():
-        m = open("/tmp/meteo.txt","r")
-        meteofile= m.read()
-        if meteofile.find("Unparsed groups in body") != -1:
-            log("Error fichier Meteo","white")
-        else:
-            read_meteo()
+        if d.noerror:
+            m = open("/tmp/meteo.txt","r")
+            meteofile= m.read()
+            if meteofile.find("Unparsed groups in body") != -1:
+                log("Error fichier Meteo","white")
+            else:
+                read_meteo()
 
 #Lecture des datas meteo
 def read_meteo():    
-        #routine ouverture fichier de config
-        config = configparser.RawConfigParser()
-        config.read('/tmp/meteo.txt')
-        #recuperation indicatif et frequence
-        pression = config.get('rapport', 'pressure')
-        temperature = config.get('rapport', 'temperature')
-        rose = config.get('rapport', 'dew point')
-        buletin = config.get('rapport', 'time')
-        buletin = config.get('rapport', 'time')
-        heure = buletin.split(':')
-        heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
-        log((pression[:-2]),"white")
-        log((rose[:-2]+" °C"),"white")
-        log((temperature[:-2]+" °C"),"white")
-        ecrire("meteo.t1.txt",str(temperature[:-2]))
-        ecrire("meteo.t3.txt",str(heure))
-        ecrire("meteo.t4.txt",str(rose[:-2]))
-        Pression = pression[:-2]+'hPa'
-        ecrire("meteo.t2.txt",str(Pression))
+        if d.noerror:
+            #routine ouverture fichier de config
+            config = configparser.RawConfigParser()
+            config.read('/tmp/meteo.txt')
+            #recuperation indicatif et frequence
+            pression = config.get('rapport', 'pressure')
+            temperature = config.get('rapport', 'temperature')
+            rose = config.get('rapport', 'dew point')
+            buletin = config.get('rapport', 'time')
+            buletin = config.get('rapport', 'time')
+            heure = buletin.split(':')
+            heure = heure[0][-2:] + ":"+heure[1]+ ":"+heure[2][:2]
+            log((pression[:-2]),"white")
+            log((rose[:-2]+" °C"),"white")
+            log((temperature[:-2]+" °C"),"white")
+            ecrire("meteo.t1.txt",str(temperature[:-2]))
+            ecrire("meteo.t3.txt",str(heure))
+            ecrire("meteo.t4.txt",str(rose[:-2]))
+            Pression = pression[:-2]+'hPa'
+            ecrire("meteo.t2.txt",str(Pression))
 
 #*********************
 #* TEST RAPTOR ACTIF *
