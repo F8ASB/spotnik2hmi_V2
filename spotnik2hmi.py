@@ -638,6 +638,7 @@ while True:
         log("Page trafic","red")
         ecrire("Txt_date.txt",date)
         ecrire("Txt_heure.txt",d.heureS)
+        ecrire("info.V_verdbase.txt",str(d.database))
         
         if d.salon_current in ["TEC", "RRF", "FON", "INT", "BAV", "LOC"]:
             calltrafic_current=d.salon[d.salon_current]['call_current']

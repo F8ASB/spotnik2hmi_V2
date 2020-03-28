@@ -509,6 +509,7 @@ def datacheckversion():
 
         if infodataversion[1] != dataversionactuel[1] :
             majdb()
+            d.database=infodataversion[1]
         else:
             print("DATABASE A JOUR")
             d.database=infodataversion[1]
