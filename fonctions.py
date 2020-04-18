@@ -319,14 +319,16 @@ def setAudioIn(interfaceaudio,levelIn):
     ecrireval("mixer.Vnb_mixer.val","1")
 
     if d.soundcard == "WM8960":
+
+        os.system('alsactl --file=/etc/voicecard/wm8960_asound.state store')
         
-        file=open(d.soundsh,"r")
-        lines = file.readlines()
-        file.close()
-        lines [2] = "amixer -c 0 set 'Capture' -M "+ str(levelIn) + "%\n"
-        file=open(d.soundsh,"w")
-        file.writelines(lines)
-        file.close()
+        #file=open(d.soundsh,"r")
+        #lines = file.readlines()
+        #file.close()
+        #lines [2] = "amixer -c 0 set 'Capture' -M "+ str(levelIn) + "%\n"
+        #file=open(d.soundsh,"w")
+        #file.writelines(lines)
+        #file.close()
     
 
 #Fonction reglage des niveaux OUT    
@@ -339,14 +341,16 @@ def setAudioOut(interfaceaudio,levelOut):
     ecrireval("mixer.Vnb_mixer.val","1")
    
     if d.soundcard == "WM8960":
+        
+        os.system('alsactl --file=/etc/voicecard/wm8960_asound.state store')
 
-        file=open(d.soundsh,"r")
-        lines = file.readlines()
-        file.close()
-        lines [1] = "amixer -c 0 set 'Headphone' -M "+ str(levelOut) +"%\n"
-        file=open(d.soundsh,"w")
-        file.writelines(lines)
-        file.close()
+        #file=open(d.soundsh,"r")
+        #lines = file.readlines()
+        #file.close()
+        #lines [1] = "amixer -c 0 set 'Headphone' -M "+ str(levelOut) +"%\n"
+        #file=open(d.soundsh,"w")
+        #file.writelines(lines)
+        #file.close()
 
 def requete(valeur):
     requetesend = str.encode(valeur)+eof
