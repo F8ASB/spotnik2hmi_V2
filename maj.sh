@@ -16,6 +16,9 @@ wget -P /opt/spotnik/spotnik2hmi_V2/ https://raw.githubusercontent.com/F8ASB/spo
 #Telechargement HMI 
 wget -P /opt/spotnik/spotnik2hmi_V2/nextion/ https://github.com/F8ASB/spotnik2hmi_V2/raw/master/nextion/NX4832K035.tft
 
+#Maj icao
+wget -N -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F8ASB/spotnik2hmi_V2/master/datas/icao.cfg
+
 #Telechargement nouveaux fichiers
 
 #Dans /etc/spotnik/
