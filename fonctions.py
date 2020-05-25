@@ -524,6 +524,7 @@ def majdb():
        os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/database_version')
        os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/cache_amat_FR.dat')
        os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/amat_FR.dat')
+       os.system('rm /opt/spotnik/spotnik2hmi_V2/datas/icao.cfg') 
        print("TELECHARGEMENT en cours...")
        os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/database_version')
        os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/cache_amat_FR.dat')
