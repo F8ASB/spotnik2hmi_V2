@@ -528,6 +528,7 @@ def majdb():
        os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/database_version')
        os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/cache_amat_FR.dat')
        os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/amat_FR.dat')
+       os.system('wget -P /opt/spotnik/spotnik2hmi_V2/datas/ https://raw.githubusercontent.com/F4ICR/datas/master/icao.cfg')
 
 
 #********************** 
@@ -1003,6 +1004,8 @@ def read_meteo():
 
 def raptortest():
     raptor_status = os.popen( 'pgrep -f -c \'python /opt/RRFRaptor/RRFRaptor.py\'' ).read()
+    #Decommenter ci-dessous si utilisation python 3, et comment ligne ci-dessus 
+    #raptor_status = os.popen( 'pgrep -f -c \'python /opt/RRFRaptor/RRFRaptor.py\'' ).read()
     raptor_status = raptor_status.strip()
     if raptor_status == '2':
         ecrireval("scan.Vnb_rapstate.val","1")
