@@ -106,6 +106,7 @@ else:
     log("pas de 3B+","white")
 
 log(board,"white") 
+d.board=board
 
 #Envoi des infos 
 logo(d.versionDash)
@@ -794,5 +795,6 @@ while True:
         os.system("/etc/spotnik/restart.default")
 
         
-               
+    if d.firstboot:
+        logct()           
     d.firstboot= False

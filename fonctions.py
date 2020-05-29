@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 ############################################################################
 # .-') _   ('-.  ) (`-.      .-') _                            .-') _      #        
 #    ( OO ) )_(  OO)  ( OO ).   (  OO) )                          ( OO ) ) #
@@ -102,6 +101,13 @@ def log(s,color):
             print ('\x1b[7;30;47m'+"DEBUG: "+s+'\x1b[0m')
         if color=="none":
             print (s)   
+def logct():
+    sock = socket.socket(socket.AF_INET, 
+    socket.SOCK_DGRAM)
+    #29-05-2020;10:11:00;F8ASB;3.00;3.60;Raspberry Pi
+    MESSAGE=str(d.today.strftime('%d-%m-%Y'))+";"+str((d.today.strftime('%H:%M:%S')))+";"+str(d.callsign)+";"+str(d.version)+";"+str(d.versionDash)+";"+str(d.board)
+    sock.sendto(bytes(MESSAGE, "utf-8"), ("51.38.115.164",9254 ))
+    log(MESSAGE,"white")
 
 #***************
 #* GESTION COM *

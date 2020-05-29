@@ -32,6 +32,7 @@ nbgpiosql = ""
 heureS =  ""
 d.key = ""
 alerte = 0
+board = ""
 
 #Chemins fichiers
 svxconfig="/etc/spotnik/svxlink.cfg"
