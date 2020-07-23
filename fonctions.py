@@ -1012,7 +1012,7 @@ def read_meteo():
 def raptortest():
     raptor_status = os.popen( 'pgrep -f -c \'python /opt/RRFRaptor/RRFRaptor.py\'' ).read()
     #Decommenter ci-dessous si utilisation python 3, et comment ligne ci-dessus 
-    #raptor_status = os.popen( 'pgrep -f -c \'python /opt/RRFRaptor/RRFRaptor.py\'' ).read()
+    #raptor_status = os.popen( 'pgrep -f -c \'python3 /opt/RRFRaptor/RRFRaptor.py\'' ).read()
     raptor_status = raptor_status.strip()
     if raptor_status == '2':
         ecrireval("scan.Vnb_rapstate.val","1")
