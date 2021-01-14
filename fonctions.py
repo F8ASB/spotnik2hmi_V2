@@ -929,10 +929,6 @@ def diresalon():
         ecrire("monitor.Vtxt_saloncon.txt","SALON EXP. DV")
     if d.salon_current=="REG":
         ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL") 
-    if d.salon_current=="REG":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL") 
-    if d.salon_current=="REG":
-        ecrire("monitor.Vtxt_saloncon.txt","SALON REGIONAL")
     if d.salon_current=="ECH":
         ecrire("monitor.Vtxt_saloncon.txt","ECHOLINK")
     
