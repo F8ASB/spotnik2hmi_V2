@@ -26,7 +26,7 @@ ENJOY ;)
 #### Câblage Raspberry Pi:
 ![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/branchementUARTRPi.png "Câblage Raspberry Pi")
 #### Câblage Orange Pi Zero sur Uart1:
-![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/branchementUART1.png "Câblage Orange Pi Zero")
+![alt tag](http://blog.f8asb.com/wp-content/uploads/2019/01/branchementUART1.png "Câblage Orange Pi Zero **Il est necessaire d'activer uart1 avec la commande armbian-config en commande SSH**")
 
 Il y a 2 pin avec du 5V à vous de choisir celui que vous souhaitez utiliser
 #### Sur port Usb:
