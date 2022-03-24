@@ -71,7 +71,7 @@ header7="}"
 
 salon = {
     'RRF': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/RRF', 
+        'url': 'http://rrf.f5nlg.ovh:82/api/svxlink/RRF', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -83,7 +83,7 @@ salon = {
     },
 
     'BAV': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/bavardage', 
+        'url': 'http://rrf.f5nlg.ovh:82/api/svxlink/bavardage', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -119,7 +119,7 @@ salon = {
     },
 
     'LOC': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/local', 
+        'url': 'http://rrf.f5nlg.ovh:82/api/svxlink/local', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -131,7 +131,7 @@ salon = {
     },
 
     'FON': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/FON', 
+        'url': 'http://rrf.f5nlg.ovh:82/api/svxlink/FON', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
