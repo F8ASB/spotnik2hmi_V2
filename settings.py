@@ -95,7 +95,7 @@ salon = {
     },
 
     'TEC': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/technique', 
+        'url': 'http://rrf.f5nlg.ovh:82/api/svxlink/technique', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
@@ -143,7 +143,7 @@ salon = {
     },
 
     'EXP': {
-        'url': 'http://rrf.f5nlg.ovh/api/svxlink/experimental', 
+        'url': 'http://rrf.f5nlg.ovh/api:82/svxlink/experimental', 
         'transmit': True, 
         'call_current': '', 
         'call_previous': '',
